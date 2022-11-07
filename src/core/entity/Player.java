@@ -1,13 +1,14 @@
 package core.entity;
 
-import core.Entity;
+import core.Camera;
+import core.Renderer;
 import core.world.World;
 import javafx.event.EventHandler;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.paint.Color;
 import util.math.Mathf;
 
-public class Player extends Entity implements EventHandler<KeyEvent> {
+public class Player extends BaseEntity implements EventHandler<KeyEvent> {
 
 	private float x, y;
 	private float dirX = 0, dirY = 0;
@@ -15,9 +16,9 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 	
 	public Player() {
 		super("player", 1);
-		
-		x = 0;
-		y = 0;
+
+		x = World.getSpawnPointX();
+		y = World.getSpawnPointY();
 	}
 	
 	@Override
@@ -27,8 +28,10 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 		x += unitDir[0] * speed * deltaTime;
 		y += unitDir[1] * speed * deltaTime;
 		
-		gc.setFill(Color.LIGHTGREEN);
-		gc.fillRect(x, y, World.GRID_SIZE, World.GRID_SIZE);
+		Renderer.setFill(Color.LIGHTGREEN);
+		Renderer.fillRect(x, y, World.GRID_SIZE, World.GRID_SIZE);
+		
+		Camera.getInstance().interpolate(x, y, deltaTime);
 	}
 
 	@Override
@@ -47,6 +50,8 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 			case D:
 				dirX = 1;
 				break;
+			default:
+				break;
 			}
 		} else if (e.getEventType() == KeyEvent.KEY_RELEASED) {
 			switch (e.getCode()) {
@@ -61,6 +66,8 @@ public class Player extends Entity implements EventHandler<KeyEvent> {
 				break;
 			case D:
 				dirX = 0;
+				break;
+			default:
 				break;
 			}
 		}

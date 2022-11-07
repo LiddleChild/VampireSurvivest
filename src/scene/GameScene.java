@@ -1,8 +1,8 @@
 package scene;
 
-import core.BehaviorManager;
-import core.Camera;
 import core.Renderer;
+import core.behavior.BehaviorManager;
+import core.entity.Player;
 import core.world.World;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -17,15 +17,22 @@ public class GameScene extends BaseScene {
 	
 	public GameScene() {
 		super();
-
-		World world = new World();
-		Camera camera = new Camera(world);
-		Renderer renderer = new Renderer(camera);
 		
 		canvas = new Canvas(Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		gc = canvas.getGraphicsContext2D();
 		this.addComponent(canvas);
 		
+		Renderer.init(gc);
+		World world = new World();
+		Player player = new Player();
+
+		getScene().setOnKeyPressed(player);
+		getScene().setOnKeyReleased(player);
+		
+		initGameLoop();
+	}
+	
+	private void initGameLoop() {
 		new AnimationTimer() {
 			
 			private long lastTime = System.nanoTime();

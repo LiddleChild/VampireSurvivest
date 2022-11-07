@@ -1,4 +1,4 @@
-package core;
+package core.behavior;
 
 import javafx.scene.canvas.GraphicsContext;
 

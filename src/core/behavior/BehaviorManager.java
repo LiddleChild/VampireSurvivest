@@ -1,4 +1,4 @@
-package core;
+package core.behavior;
 
 import java.util.SortedSet;
 import java.util.TreeSet;
@@ -11,7 +11,7 @@ public class BehaviorManager {
 	private SortedSet<GameBehavior> s;
 	
 	public BehaviorManager() {
-		s = new TreeSet<GameBehavior>();
+		s = new TreeSet<GameBehavior>();		
 	}
 	
 	public void addBehavior(GameBehavior e) {
