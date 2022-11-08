@@ -27,7 +27,6 @@ public class World extends GameBehavior {
 				}
 				
 				Renderer.fillRect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
-				
 			}
 		}
 	}

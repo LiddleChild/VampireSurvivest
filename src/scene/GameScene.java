@@ -9,6 +9,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import logic.Window;
+import util.InputHandler;
 
 public class GameScene extends BaseScene {
 	
@@ -18,16 +19,22 @@ public class GameScene extends BaseScene {
 	public GameScene() {
 		super();
 		
+		// Create canvas
 		canvas = new Canvas(Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
-		gc = canvas.getGraphicsContext2D();
 		this.addComponent(canvas);
+
+		// Grab graphics context
+		gc = canvas.getGraphicsContext2D();
 		
-		Renderer.init(gc);
+		Renderer.initialize(gc);
 		World world = new World();
 		Player player = new Player();
-
-		getScene().setOnKeyPressed(player);
-		getScene().setOnKeyReleased(player);
+		
+		// Initialize input handler
+		InputHandler.initialize();
+		InputHandler handler = new InputHandler();
+		getScene().setOnKeyPressed(handler);
+		getScene().setOnKeyReleased(handler);
 		
 		initGameLoop();
 	}
@@ -37,10 +44,20 @@ public class GameScene extends BaseScene {
 			
 			private long lastTime = System.nanoTime();
 			
+			private float time = 0.f;
+			private int fps = 0;
+			
 			@Override
-			public void handle(long currentTime) {
+			public void handle(long currentTime) {	
 				// Calculate delta time
 				float deltaTime = (currentTime - lastTime) / 1000000000.f;
+				
+//				time += deltaTime;
+//				if (time >= 1.f) {
+//					time -= 1.f;
+//					System.out.println(String.format("FPS: %d", fps));
+//					fps = 0;
+//				}
 				
 				// Clear screen
 				gc.setFill(Color.BLACK);
@@ -49,6 +66,7 @@ public class GameScene extends BaseScene {
 				// Call update
 				BehaviorManager.getInstance().update(deltaTime, gc);
 				
+//				fps++;	
 				lastTime = currentTime;
 			}
 			

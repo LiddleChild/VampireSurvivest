@@ -26,27 +26,6 @@ public class GameLogic extends Application {
 //		stage.setScene(mainMenuScene.getScene());
 		stage.setResizable(false);
 		stage.show();
-		
-		
-//		new AnimationTimer() {
-//			
-//			private long lastTime = System.nanoTime(), time;
-//			private int fps = 0;
-//			
-//			@Override
-//			public void handle(long now) {
-//				time += (now - lastTime);
-//				
-//				if (time >= 1_000_000_000) {
-//					time -= 1_000_000_000;
-//					stage.setTitle(String.format("A Game Window | FPS: %d", fps));
-//					fps = 0;
-//				}
-//				
-//				lastTime = now;
-//				fps++;
-//			}
-//		}.start();
 	}
 	
 	public static void main(String[] args) {
