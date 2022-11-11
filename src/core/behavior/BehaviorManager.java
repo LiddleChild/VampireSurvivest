@@ -11,7 +11,7 @@ public class BehaviorManager {
 	private SortedSet<GameBehavior> s;
 	
 	public BehaviorManager() {
-		s = new TreeSet<GameBehavior>();		
+		s = new TreeSet<GameBehavior>();	
 	}
 	
 	public void addBehavior(GameBehavior e) {

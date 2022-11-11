@@ -5,12 +5,6 @@ import core.behavior.GameBehavior;
 import javafx.scene.paint.Color;
 
 public class World extends GameBehavior {
-	public static final int GRID_SIZE = 48;
-	public static final int WORLD_WIDTH = 15;
-	public static final int WORLD_HEIGHT = 15;
-	
-	private static final int SPAWN_POINT_X = 7;
-	private static final int SPAWN_POINT_Y = 7;
 	
 	public World() {
 		super();
@@ -18,25 +12,20 @@ public class World extends GameBehavior {
 	
 	@Override
 	public void update() {
-		for (int x = 0; x < WORLD_WIDTH; x++) {
-			for (int y = 0; y < WORLD_HEIGHT; y++) {
-				if ((x + y) % 2 == 0) {					
+		for (int x = 0; x < Map.MAP_WIDTH; x++) {
+			for (int y = 0; y < Map.MAP_HEIGHT; y++) {
+				if (Map.getInstance().tileMaps[x][y]) {
+					Renderer.setFill(Color.DARKRED);
+				}
+				else if ((x + y) % 2 == 0) {					
 					Renderer.setFill(Color.DARKGREY);
 				} else {
 					Renderer.setFill(Color.GREY);
 				}
 				
-				Renderer.fillRect(x * GRID_SIZE, y * GRID_SIZE, GRID_SIZE, GRID_SIZE);
+				Renderer.fillRect(x * Map.GRID_SIZE, y * Map.GRID_SIZE, Map.GRID_SIZE, Map.GRID_SIZE);
 			}
 		}
-	}
-
-	public static int getSpawnPointX() {
-		return SPAWN_POINT_X * GRID_SIZE;
-	}
-
-	public static int getSpawnPointY() {
-		return SPAWN_POINT_Y * GRID_SIZE;
 	}
 
 }

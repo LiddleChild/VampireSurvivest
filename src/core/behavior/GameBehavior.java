@@ -1,5 +1,6 @@
 package core.behavior;
 
+import core.collision.HittableObject;
 import javafx.scene.canvas.GraphicsContext;
 
 public abstract class GameBehavior implements Comparable<GameBehavior> {
@@ -21,6 +22,10 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 		this.layer = layer;
 		
 		BehaviorManager.getInstance().addBehavior(this);
+		
+		if (this instanceof HittableObject) {
+			
+		}
 	}
 	
 	public abstract void update();

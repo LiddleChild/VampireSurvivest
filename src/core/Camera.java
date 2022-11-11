@@ -1,43 +1,54 @@
 package core;
 
-import core.world.World;
+import core.world.Map;
 import logic.Window;
+import util.math.Vector2;
 
 public class Camera {
 	private static Camera instance;
 
-	private float x, y;
+	private Vector2 position;
 	
 	private float interpAmount = 0.05f;
 	
 	public Camera() {
-		x = World.getSpawnPointX();
-		y = World.getSpawnPointY();
+		position = new Vector2(
+				Map.SPAWN_POINT_X,
+				Map.SPAWN_POINT_Y);
 	}
 	
-	public void interpolate(float x, float y, float deltaTime) {
-		this.x += interpAmount * (x - this.x);
-		this.y += interpAmount * (y - this.y);
+	public void interpolate(Vector2 vec) {
+		position.addEqual(vec
+				.substract(position)
+				.multiply(interpAmount));
 	}
 	
 	/*
 	 * GETTER & SETTER
 	 */
 	
+	public void setPosition(Vector2 vec) {
+		this.position = vec;
+	}
+	
+	public Vector2 getPosition() {
+		return this.position;
+	}
+	
 	public void setX(float x) {
-		this.x = x;
+		position.x = x;
 	}
 	
 	public float getX() {
-		return -x + ((Window.WINDOW_WIDTH - World.GRID_SIZE) / 2);
+		return -position.x + ((Window.WINDOW_WIDTH - Map.GRID_SIZE) / 2);
 	}
 	
 	public void setY(float y) {
-		this.y = y;
+		position.y = y;
 	}
 	
 	public float getY() {
-		return -y + ((Window.WINDOW_HEIGHT - World.GRID_SIZE) / 2);
+		return -position.y + ((Window.WINDOW_HEIGHT - Map.GRID_SIZE) / 2);
 	}
 	
 	/*

@@ -2,7 +2,6 @@ package logic;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import scene.GameScene;
-import scene.MainMenuScene;
 
 public class GameLogic extends Application {
 	

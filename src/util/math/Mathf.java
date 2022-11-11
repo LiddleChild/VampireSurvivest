@@ -11,9 +11,4 @@ public class Mathf {
 	    return x;
 	}
 	
-	public static float[] unitVector(float x, float y) {
-		float amount = Mathf.invSqrt(x * x + y * y);
-		return new float[]{x * amount, y * amount};
-	}
-	
 }

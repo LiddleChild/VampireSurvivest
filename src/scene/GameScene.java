@@ -52,12 +52,12 @@ public class GameScene extends BaseScene {
 				// Calculate delta time
 				float deltaTime = (currentTime - lastTime) / 1000000000.f;
 				
-//				time += deltaTime;
-//				if (time >= 1.f) {
-//					time -= 1.f;
-//					System.out.println(String.format("FPS: %d", fps));
-//					fps = 0;
-//				}
+				time += deltaTime;
+				if (time >= 1.f) {
+					time -= 1.f;
+					System.out.println(String.format("FPS: %d", fps));
+					fps = 0;
+				}
 				
 				// Clear screen
 				gc.setFill(Color.BLACK);
@@ -66,7 +66,7 @@ public class GameScene extends BaseScene {
 				// Call update
 				BehaviorManager.getInstance().update(deltaTime, gc);
 				
-//				fps++;	
+				fps++;	
 				lastTime = currentTime;
 			}
 			
