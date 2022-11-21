@@ -1,4 +1,4 @@
-package util.math;
+package util;
 
 public class Mathf {
 	
@@ -9,6 +9,12 @@ public class Mathf {
 	    x = Float.intBitsToFloat(i);
 	    x *= (1.5f - xhalf * x * x);
 	    return x;
+	}
+	
+	public static Vector2 round(Vector2 vec) {
+		return new Vector2(
+				Math.round(vec.x),
+				Math.round(vec.y));
 	}
 	
 }

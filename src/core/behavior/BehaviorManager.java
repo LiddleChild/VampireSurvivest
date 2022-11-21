@@ -3,7 +3,9 @@ package core.behavior;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
-import javafx.scene.canvas.GraphicsContext;
+import core.Camera;
+import core.Renderer;
+import javafx.scene.paint.Color;
 
 public class BehaviorManager {
 	private static BehaviorManager instance;
@@ -11,21 +13,27 @@ public class BehaviorManager {
 	private SortedSet<GameBehavior> s;
 	
 	public BehaviorManager() {
-		s = new TreeSet<GameBehavior>();	
+		this.s = new TreeSet<GameBehavior>();
 	}
 	
 	public void addBehavior(GameBehavior e) {
 		s.add(e);
 	}
 	
-	public void update(float deltaTime, GraphicsContext gc) {
+	public void update(float deltaTime) {
+		// Call update to all behaviors
 		for (GameBehavior e : s) {
 			e.updateDeltaTime(deltaTime);
-			e.updateGraphicsContext(gc);
 			e.update();
 		}
+		
+		// Camera update
+		Camera.getInstance().update();
 	}
 	
+	/*
+	 * Singleton pattern
+	 */
 	public static BehaviorManager getInstance() {
 		if (instance == null) {
 			instance = new BehaviorManager();

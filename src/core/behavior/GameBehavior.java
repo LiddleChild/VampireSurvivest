@@ -1,13 +1,9 @@
 package core.behavior;
 
-import core.collision.HittableObject;
-import javafx.scene.canvas.GraphicsContext;
-
 public abstract class GameBehavior implements Comparable<GameBehavior> {
 	
 	private Integer layer;
 
-	protected GraphicsContext gc;
 	protected float deltaTime;
 	
 	/*
@@ -22,10 +18,6 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 		this.layer = layer;
 		
 		BehaviorManager.getInstance().addBehavior(this);
-		
-		if (this instanceof HittableObject) {
-			
-		}
 	}
 	
 	public abstract void update();
@@ -34,13 +26,11 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 		this.deltaTime = dt;
 	}
 	
-	public void updateGraphicsContext(GraphicsContext gc) {
-		this.gc = gc;
-	}
-	
 	@Override
 	public int compareTo(GameBehavior other) {
-		return layer.compareTo(other.layer);
+		int comp = layer.compareTo(other.layer);
+		
+		return (comp != 0) ? comp : Integer.compare(hashCode(), other.hashCode());
 	}
 	
 }

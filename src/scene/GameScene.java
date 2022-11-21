@@ -1,15 +1,14 @@
 package scene;
 
+import core.InputHandler;
 import core.Renderer;
 import core.behavior.BehaviorManager;
-import core.entity.Player;
 import core.world.World;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import logic.Window;
-import util.InputHandler;
 
 public class GameScene extends BaseScene {
 	
@@ -28,7 +27,6 @@ public class GameScene extends BaseScene {
 		
 		Renderer.initialize(gc);
 		World world = new World();
-		Player player = new Player();
 		
 		// Initialize input handler
 		InputHandler.initialize();
@@ -64,7 +62,18 @@ public class GameScene extends BaseScene {
 				gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 				
 				// Call update
-				BehaviorManager.getInstance().update(deltaTime, gc);
+				BehaviorManager.getInstance().update(deltaTime);
+
+//				for (int y = 0; y < 12; y++) {
+//					for (int x = 0; x < 7; x++) {
+//						gc.setFill(new Color(
+//								40 * x / 255.0,
+//								20 * y / 255.0,
+//								1.0,
+//								1.0));
+//						gc.fillRect(x * 16, y * 16, 16, 16);
+//					}
+//				}
 				
 				fps++;	
 				lastTime = currentTime;

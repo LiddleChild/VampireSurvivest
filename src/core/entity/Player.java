@@ -1,19 +1,19 @@
 package core.entity;
 
-import core.Camera;
+import core.InputHandler;
 import core.Renderer;
-import core.world.Map;
+import core.world.Tile;
+import core.world.World;
 import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
-import util.InputHandler;
-import util.math.Vector2;
+import util.Vector2;
 
 public class Player extends BaseEntity {
 	
 	private Vector2 direction;
 	
-	public Player() {
-		super("player", 1);
+	public Player(World world) {
+		super("player", 3, world);
 		
 		direction = new Vector2(0.f, 0.f);
 	}
@@ -23,9 +23,7 @@ public class Player extends BaseEntity {
 		calculateDirection();
 		
 		Renderer.setFill(Color.LIGHTGREEN);
-		Renderer.fillRect(position, Map.GRID_SIZE, Map.GRID_SIZE);
-		
-		Camera.getInstance().interpolate(position);
+		Renderer.fillRect(position, Tile.SIZE, Tile.SIZE);
 	}
 	
 	private void calculateDirection() {

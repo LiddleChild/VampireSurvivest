@@ -1,6 +1,6 @@
-package util.math;
+package util;
 
-public class Vector2 {
+public class Vector2 implements Comparable<Vector2> {
 	
 	public float x, y;
 	
@@ -22,10 +22,8 @@ public class Vector2 {
 	}
 	
 	/*
-	 * OPERATION
+	 * ADDITION
 	 */
-	
-	// ADDITION
 	public Vector2 addEqual(Vector2 other) {
 		x += other.x;
 		y += other.y;
@@ -41,7 +39,9 @@ public class Vector2 {
 		return new Vector2(x + other, y + other);
 	}
 	
-	// SUBSTRACTION
+	/*
+	 * SUBSTRACTION 
+	 */
 	public Vector2 substractEqual(Vector2 other) {
 		x -= other.x;
 		y -= other.y;
@@ -53,7 +53,9 @@ public class Vector2 {
 		return new Vector2(x - other.x, y - other.y);
 	}
 	
-	// MULTIPLICATION
+	/*
+	 * MULTIPLICATION
+	 */
 	public Vector2 multiplyEqual(float other) {
 		x *= other;
 		y *= other;
@@ -63,6 +65,10 @@ public class Vector2 {
 	
 	public Vector2 multiply(float other) {
 		return new Vector2(x * other, y * other);
+	}
+	
+	public float getSize() {
+		return (float) Math.sqrt(x * x + y * y);
 	}
 	
 	public Vector2 normalize() {
@@ -76,6 +82,11 @@ public class Vector2 {
 	@Override
 	public String toString() {
 		return String.format("[%.2f %.2f]", x, y);
+	}
+
+	@Override
+	public int compareTo(Vector2 other) {
+		return Float.compare(getSize(), other.getSize());
 	}
 	
 }

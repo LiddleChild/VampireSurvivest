@@ -1,26 +1,41 @@
 package core;
 
-import core.world.Map;
+import core.entity.BaseEntity;
+import core.world.Tile;
+import core.world.World;
 import logic.Window;
-import util.math.Vector2;
+import util.Vector2;
 
 public class Camera {
 	private static Camera instance;
+	
+	private Vector2 halfScreenOffset;
 
+	private BaseEntity entity;
 	private Vector2 position;
 	
-	private float interpAmount = 0.05f;
+	private float interpThreshold = 0.05f;
+	private float interpAmount = 0.045f;
 	
 	public Camera() {
-		position = new Vector2(
-				Map.SPAWN_POINT_X,
-				Map.SPAWN_POINT_Y);
+		halfScreenOffset = new Vector2(
+				Window.WINDOW_WIDTH - Tile.SIZE,
+				Window.WINDOW_HEIGHT - Tile.SIZE)
+				.multiply(0.5f);
+		
+		position = new Vector2(World.SPAWN_POINT);
 	}
 	
-	public void interpolate(Vector2 vec) {
-		position.addEqual(vec
-				.substract(position)
-				.multiply(interpAmount));
+	public void update() {
+		if (entity != null) {
+			Vector2 diff = entity.getPosition()
+					.substract(position)
+					.multiply(interpAmount);
+			
+			if (diff.getSize() < interpThreshold) return;
+			
+			position.addEqual(diff);
+		}
 	}
 	
 	/*
@@ -32,7 +47,9 @@ public class Camera {
 	}
 	
 	public Vector2 getPosition() {
-		return this.position;
+		return position
+				.multiply(-1)
+				.add(halfScreenOffset);
 	}
 	
 	public void setX(float x) {
@@ -40,7 +57,7 @@ public class Camera {
 	}
 	
 	public float getX() {
-		return -position.x + ((Window.WINDOW_WIDTH - Map.GRID_SIZE) / 2);
+		return getPosition().x;
 	}
 	
 	public void setY(float y) {
@@ -48,19 +65,25 @@ public class Camera {
 	}
 	
 	public float getY() {
-		return -position.y + ((Window.WINDOW_HEIGHT - Map.GRID_SIZE) / 2);
+		return getPosition().y;
 	}
 	
 	/*
 	 * SINGLETON
 	 */
-	
 	public static Camera getInstance() {
 		if (instance == null) {
 			instance = new Camera();
 		}
 		
 		return instance;
+	}
+	
+	/*
+	 * GETTERS & SETTERS
+	 */
+	public void setEntity(BaseEntity entity) {
+		this.entity = entity;
 	}
 	
 }

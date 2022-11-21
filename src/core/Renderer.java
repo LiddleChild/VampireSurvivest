@@ -1,44 +1,74 @@
 package core;
 
+import core.sprite.Sprite;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Paint;
 import logic.Window;
-import util.math.Vector2;
+import util.Mathf;
+import util.Vector2;
 
 public class Renderer {
-	
 	private static GraphicsContext gc;
+	
 	private static Paint paint;
 	
 	public static void initialize(GraphicsContext gc) {
-		Renderer.gc = gc;
+		 Renderer.gc = gc;
 	}
 	
-	public static void setFill(Paint p) {
-		paint = p;
+	private static Vector2 cameraTranslate(float x, float y) {
+		return Mathf.round(new Vector2(x, y)
+				.add(Camera.getInstance().getPosition()));
+	}
+	
+	private static boolean checkInsideWindow(float x, float y, float w, float h) {
+		Vector2 t = cameraTranslate(x, y);
+		
+		return (t.x > -w && t.x < Window.WINDOW_WIDTH &&
+				t.y > -h && t.y < Window.WINDOW_HEIGHT);
 	}
 	
 	/*
-	 * Overloading
+	 * SetFill
 	 */
+	public static void setFill(Paint p) {
+		if (p != paint) {
+			gc.setFill(p);
+		}
+	}
 	
+	/*
+	 * FillRect
+	 */
 	public static void fillRect(Vector2 pos, float w, float h) {
 		fillRect(pos.x, pos.y, w, h);
 	}
 	
 	public static void fillRect(float x, float y, float w, float h) {
-		float sx = x + Camera.getInstance().getX();
-		float sy = y + Camera.getInstance().getY();
+		Vector2 t = cameraTranslate(x, y);
 		
-		if (sx > -w && sx < Window.WINDOW_WIDTH &&
-				sy > -h && sy < Window.WINDOW_HEIGHT) {
+		if (checkInsideWindow(x, y, w, h)) {
+			gc.fillRect(t.x, t.y, w, h);
+		}
+	}
+	
+	/*
+	 * DrawSprite
+	 */
+	public static void drawSprite(Sprite sprite, float x, float y, float w, float h) {
+		drawSprite(sprite, x, y, w, h, 1.f);
+	}
+	
+	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float alpha) {
+		Vector2 t = cameraTranslate(x, y);
+		
+		if (checkInsideWindow(x, y, w, h)) {
+			if (alpha < 1.f) gc.setGlobalAlpha(alpha);
 			
-			if (paint != null) {				
-				gc.setFill(paint);
-			}
+			gc.drawImage(sprite.getImage(), t.x, t.y, w, h);
 			
-			gc.fillRect(sx, sy, w, h);
-		}		
+			if (alpha < 1.f) gc.setGlobalAlpha(1.f);
+		}
 	}
 	
 }
