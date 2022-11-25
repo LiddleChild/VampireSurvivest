@@ -42,4 +42,8 @@ public class Tile extends GameBehavior {
 		return solid;
 	}
 	
+	public boolean isEmptyTile() {
+		return sprite == null;
+	}
+	
 }

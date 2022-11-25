@@ -40,10 +40,12 @@ public class WorldLoader {
 					Color c = maps[i].getPixelReader().getColor(x, y);
 					Sprite s = colorMaps.get(ColorUtil.parseColor2Int(c));
 					
+					// Spawn point
 					if (ColorUtil.parseColor2Int(c) == ColorUtil.parseColor2Int(255, 255, 0)) {
 						spawnPoint = new Vector2(x * Tile.SIZE, y * Tile.SIZE);
 					}
 					
+					// Set collision maps
 					if (i == 0) {		
 						collisionMaps[x][y] = isSolid(c);
 					}

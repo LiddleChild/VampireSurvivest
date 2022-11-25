@@ -29,7 +29,7 @@ public class Camera {
 	public void update() {
 		if (entity != null) {
 			Vector2 diff = entity.getPosition()
-					.substract(position)
+					.subtract(position)
 					.multiply(interpAmount);
 			
 			if (diff.getSize() < interpThreshold) return;

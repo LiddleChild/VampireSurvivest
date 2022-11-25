@@ -42,14 +42,14 @@ public class Vector2 implements Comparable<Vector2> {
 	/*
 	 * SUBSTRACTION 
 	 */
-	public Vector2 substractEqual(Vector2 other) {
+	public Vector2 subtractEqual(Vector2 other) {
 		x -= other.x;
 		y -= other.y;
 		
 		return this;
 	}
 	
-	public Vector2 substract(Vector2 other) {
+	public Vector2 subtract(Vector2 other) {
 		return new Vector2(x - other.x, y - other.y);
 	}
 	
@@ -87,6 +87,30 @@ public class Vector2 implements Comparable<Vector2> {
 	@Override
 	public int compareTo(Vector2 other) {
 		return Float.compare(getSize(), other.getSize());
+	}
+	
+	public boolean isInNorth(Vector2 other) {
+		float sy = Math.abs(other.y - y);
+		float sx = Math.abs(other.x - x);
+		return other.y < y && sy >= sx;
+	}
+	
+	public boolean isInSouth(Vector2 other) {
+		float sy = Math.abs(other.y - y);
+		float sx = Math.abs(other.x - x);
+		return other.y > y && sy >= sx;
+	}
+	
+	public boolean isInWest(Vector2 other) {
+		float sy = Math.abs(other.y - y);
+		float sx = Math.abs(other.x - x);
+		return other.x < x && sx >= sy;
+	}
+	
+	public boolean isInEast(Vector2 other) {
+		float sy = Math.abs(other.y - y);
+		float sx = Math.abs(other.x - x);
+		return other.x > x && sx >= sy;
 	}
 	
 }

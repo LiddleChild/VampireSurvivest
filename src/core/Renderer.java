@@ -55,8 +55,16 @@ public class Renderer {
 	/*
 	 * DrawSprite
 	 */
-	public static void drawSprite(Sprite sprite, float x, float y, float w, float h) {
-		drawSprite(sprite, x, y, w, h, 1.f);
+	public static void drawSprite(Sprite sprite, Vector2 pos, float w, float h, float dx, float dy, float dw, float dh) {
+		Vector2 t = cameraTranslate(pos.x, pos.y);
+		
+		if (checkInsideWindow(pos.x, pos.y, w, h)) {
+			gc.drawImage(sprite.getImage(), dx, dy, dw, dh, t.x, t.y, w, h);
+		}
+	}
+	
+	public static void drawSprite(Sprite sprite, Vector2 pos, float w, float h) {
+		drawSprite(sprite, pos.x, pos.y, w, h, 1.f);
 	}
 	
 	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float alpha) {

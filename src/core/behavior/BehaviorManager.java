@@ -4,8 +4,6 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 
 import core.Camera;
-import core.Renderer;
-import javafx.scene.paint.Color;
 
 public class BehaviorManager {
 	private static BehaviorManager instance;

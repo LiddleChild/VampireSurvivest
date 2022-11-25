@@ -2,39 +2,33 @@ package core.collision;
 
 import java.util.ArrayList;
 
-import javafx.scene.shape.Rectangle;
+import core.entity.BaseEntity;
 
 public class CollisionManager {
 	private static CollisionManager instance;
 	
-	private ArrayList<HittableObject> objects;
+	private ArrayList<BaseEntity> entityLists;
 
 	public CollisionManager() {
-		objects = new ArrayList<HittableObject>();
+		entityLists = new ArrayList<BaseEntity>();
 	}
 	
-	private boolean isIntersecting(HittableObject obj1, HittableObject obj2) {
-		Rectangle rect1 = obj1.getHitBox();
-		Rectangle rect2 = obj2.getHitBox();
+	public ArrayList<BaseEntity> isColliding(BaseEntity entity) {
+		ArrayList<BaseEntity> collidedEntity = new ArrayList<BaseEntity>();
 		
-		return rect1.intersects(rect2.getBoundsInLocal());
-	}
-	
-	public ArrayList<HittableObject> isColliding(HittableObject obj) {
-		ArrayList<HittableObject> hitObjects = new ArrayList<HittableObject>();
-		
-		for (HittableObject e : objects) {
-			if (isIntersecting(e, obj)) {
-				hitObjects.add(e);
-				e.onHit(obj);
+		for (BaseEntity other : entityLists) {
+			if (other != entity &&
+					entity.getBound().intersects(other.getBound())) {
+				
+				collidedEntity.add(other);
 			}
 		}
 		
-		return hitObjects;
+		return collidedEntity;
 	}
 	
-	public void add(HittableObject o) {
-		objects.add(o);
+	public void add(BaseEntity o) {
+		entityLists.add(o);
 	}
 	
 	/*

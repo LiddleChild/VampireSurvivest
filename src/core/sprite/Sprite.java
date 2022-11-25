@@ -10,22 +10,30 @@ public class Sprite implements Comparable<Sprite> {
 	private Image image;
 	private SpriteSheet sheet;
 	
+	public Sprite(String path) {
+		this.image = SpriteLoader.load(path);
+	}
+	
 	public Sprite(SpriteSheet sheet, int x, int y) {
 		this.size = sheet.getSize();
 		this.x = x * size;
 		this.y = y * size;
 		this.sheet = sheet;
 		
-		load();
+		loadSpriteSheet();
 	}
 	
-	private void load() {
+	private void loadSpriteSheet() {
 		PixelReader reader = sheet.getImage().getPixelReader();
 		image = new WritableImage(reader, x, y, size, size);
 	}
 	
 	public Image getImage() { 
 		return image;
+	}
+	
+	public int getSize() {
+		return size;
 	}
 
 	@Override
