@@ -1,0 +1,8 @@
+Upcoming
+[ ]	Sprite Animation
+[ ]	More Enemy ( Explosion, etc. )
+[ ]	Enlarge the map
+[ ]	Items
+
+In the every end
+[ ]	Refactor EVERY SINGLE CLASS

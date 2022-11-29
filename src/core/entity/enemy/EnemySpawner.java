@@ -3,7 +3,6 @@ package core.entity.enemy;
 import java.util.ArrayList;
 import java.util.Random;
 
-import core.Camera;
 import core.Renderer;
 import core.behavior.GameBehavior;
 import core.world.Tile;

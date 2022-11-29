@@ -35,6 +35,14 @@ public class Sprite implements Comparable<Sprite> {
 	public int getSize() {
 		return size;
 	}
+	
+	public int getWidth() {
+		return (int) image.getWidth();
+	}
+	
+	public int getHeight() {
+		return (int) image.getHeight();
+	}
 
 	@Override
 	public int compareTo(Sprite o) {

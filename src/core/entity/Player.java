@@ -7,6 +7,7 @@ import core.Renderer;
 import core.collision.CollisionManager;
 import core.inputHandler.KeyboardHandler;
 import core.inputHandler.MouseHandler;
+import core.sprite.AnimatedSprite;
 import core.sprite.Sprite;
 import core.world.Tile;
 import core.world.World;
@@ -20,7 +21,8 @@ public class Player extends Entity {
 	private Vector2f direction;
 	private Vector2f middleScreen;
 	
-	private Sprite playerSprite;
+//	private Sprite playerSprite;
+	private AnimatedSprite playerSprite;
 	
 	private Rectangle[] hitboxes;
 	
@@ -37,7 +39,8 @@ public class Player extends Entity {
 				new Rectangle((int) position.x - Tile.SIZE, (int) position.y, Tile.SIZE, Tile.SIZE)
 		};
 		
-		playerSprite = new Sprite("player.png");
+		playerSprite = new AnimatedSprite("player.png", 5, 64, 128);
+//		playerSprite = new Sprite("player.png");
 		
 		attackDamage = 25.f;
 		attackCooldownTime = 0.5f;
@@ -51,7 +54,15 @@ public class Player extends Entity {
 //		Renderer.setFill(Color.LIGHTGREEN);
 //		Renderer.fillRect(position, Tile.SIZE, Tile.SIZE);
 		
-		Renderer.drawSprite(playerSprite, position.subtract(new Vector2f(0, Tile.SIZE)), Tile.SIZE, Tile.SIZE * 2, 0, 0, 64, 128);
+//		Renderer.drawSprite(playerSprite, position.subtract(new Vector2f(0, Tile.SIZE)), Tile.SIZE, Tile.SIZE * 2, 0, 0, 64, 128);
+		
+		if (direction.x < 0) {
+			playerSprite.setReverse(true);
+		} else if (direction.x > 0) {
+			playerSprite.setReverse(false);
+		}
+		
+		playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2);
 		
 		super.drawHealthBar();
 		attackTime += deltaTime;
