@@ -1,4 +1,4 @@
-package core;
+package core.inputHandler;
 
 import java.util.Set;
 import java.util.TreeSet;
@@ -7,7 +7,7 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
-public class InputHandler implements EventHandler<KeyEvent> {
+public class KeyboardHandler implements EventHandler<KeyEvent> {
 	
 	private static Set<KeyCode> keydowns;
 	
@@ -25,7 +25,7 @@ public class InputHandler implements EventHandler<KeyEvent> {
 	}
 	
 	public static boolean onKeyPressed(KeyCode k) {
-		return keydowns.contains(k);
+		return keydowns.contains((Object) k);
 	}
 	
 }

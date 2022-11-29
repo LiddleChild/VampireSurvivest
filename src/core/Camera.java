@@ -1,34 +1,34 @@
 package core;
 
-import core.entity.BaseEntity;
+import core.entity.Entity;
 import core.world.Tile;
 import core.world.World;
 import logic.Window;
-import util.Vector2;
+import util.Vector2f;
 
 public class Camera {
 	private static Camera instance;
 	
-	private Vector2 halfScreenOffset;
+	private Vector2f halfScreenOffset;
 
-	private BaseEntity entity;
-	private Vector2 position;
+	private Entity entity;
+	private Vector2f position;
 	
 	private float interpThreshold = 0.05f;
 	private float interpAmount = 0.045f;
 	
 	public Camera() {
-		halfScreenOffset = new Vector2(
+		halfScreenOffset = new Vector2f(
 				Window.WINDOW_WIDTH - Tile.SIZE,
 				Window.WINDOW_HEIGHT - Tile.SIZE)
 				.multiply(0.5f);
 		
-		position = new Vector2(World.SPAWN_POINT);
+		position = new Vector2f(World.SPAWN_POINT);
 	}
 	
 	public void update() {
 		if (entity != null) {
-			Vector2 diff = entity.getPosition()
+			Vector2f diff = entity.getPosition()
 					.subtract(position)
 					.multiply(interpAmount);
 			
@@ -42,11 +42,11 @@ public class Camera {
 	 * GETTER & SETTER
 	 */
 	
-	public void setPosition(Vector2 vec) {
+	public void setPosition(Vector2f vec) {
 		this.position = vec;
 	}
 	
-	public Vector2 getPosition() {
+	public Vector2f getPosition() {
 		return position
 				.multiply(-1)
 				.add(halfScreenOffset);
@@ -82,7 +82,7 @@ public class Camera {
 	/*
 	 * GETTERS & SETTERS
 	 */
-	public void setEntity(BaseEntity entity) {
+	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}
 	

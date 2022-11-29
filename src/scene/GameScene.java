@@ -1,8 +1,9 @@
 package scene;
 
-import core.InputHandler;
 import core.Renderer;
 import core.behavior.BehaviorManager;
+import core.inputHandler.KeyboardHandler;
+import core.inputHandler.MouseHandler;
 import core.world.World;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -27,12 +28,19 @@ public class GameScene extends BaseScene {
 		
 		Renderer.initialize(gc);
 		World world = new World();
-		
-		// Initialize input handler
-		InputHandler.initialize();
-		InputHandler handler = new InputHandler();
-		getScene().setOnKeyPressed(handler);
-		getScene().setOnKeyReleased(handler);
+
+		// Initialize keyboard handler
+		KeyboardHandler.initialize();
+		KeyboardHandler keyboardHandler = new KeyboardHandler();
+		getScene().setOnKeyPressed(keyboardHandler);
+		getScene().setOnKeyReleased(keyboardHandler);
+
+		// Initialize mouse handler
+		MouseHandler.initialize();
+		MouseHandler mouseHandler = new MouseHandler();
+		getScene().setOnMousePressed(mouseHandler);
+		getScene().setOnMouseReleased(mouseHandler);
+		getScene().setOnMouseMoved(mouseHandler);
 		
 		initGameLoop();
 	}

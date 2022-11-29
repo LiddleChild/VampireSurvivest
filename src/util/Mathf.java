@@ -11,8 +11,8 @@ public class Mathf {
 	    return x;
 	}
 	
-	public static Vector2 round(Vector2 vec) {
-		return new Vector2(
+	public static Vector2f round(Vector2f vec) {
+		return new Vector2f(
 				Math.round(vec.x),
 				Math.round(vec.y));
 	}

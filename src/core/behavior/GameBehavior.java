@@ -2,7 +2,7 @@ package core.behavior;
 
 public abstract class GameBehavior implements Comparable<GameBehavior> {
 	
-	private Integer layer;
+	private int layerPriority, yPriority;
 
 	protected float deltaTime;
 	
@@ -14,8 +14,9 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 		this(0);
 	}
 	
-	public GameBehavior(int layer) {
-		this.layer = layer;
+	public GameBehavior(int layerPriority) {
+		this.layerPriority = layerPriority;
+		this.yPriority = 0;
 		
 		BehaviorManager.getInstance().addBehavior(this);
 	}
@@ -26,11 +27,19 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 		this.deltaTime = dt;
 	}
 	
+	public int getYPriority() {
+		return yPriority;
+	}
+
+	public void setYPriority(int yPriority) {
+		this.yPriority = yPriority;
+	}
+
 	@Override
 	public int compareTo(GameBehavior other) {
-		int comp = layer.compareTo(other.layer);
+		int comp = Integer.compare(layerPriority, other.layerPriority);
 		
-		return (comp != 0) ? comp : Integer.compare(hashCode(), other.hashCode());
+		return (comp != 0) ? comp : Integer.compare(yPriority, other.yPriority);
 	}
 	
 }

@@ -8,14 +8,14 @@ import core.sprite.SpriteSheet;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import util.ColorUtil;
-import util.Vector2;
+import util.Vector2f;
 
 public class WorldLoader {
 	
 	private static Tile[][][] tileMaps;
 	private static boolean[][] collisionMaps;
 	
-	private static Vector2 spawnPoint;
+	private static Vector2f spawnPoint;
 	
 	public static void load(SpriteSheet tileset, String... paths) {
 		Image maps[] = new Image[paths.length];
@@ -42,7 +42,7 @@ public class WorldLoader {
 					
 					// Spawn point
 					if (ColorUtil.parseColor2Int(c) == ColorUtil.parseColor2Int(255, 255, 0)) {
-						spawnPoint = new Vector2(x * Tile.SIZE, y * Tile.SIZE);
+						spawnPoint = new Vector2f(x * Tile.SIZE, y * Tile.SIZE);
 					}
 					
 					// Set collision maps
@@ -73,7 +73,7 @@ public class WorldLoader {
 		return collisionMaps;
 	}
 
-	public static Vector2 getSpawnPoint() {
+	public static Vector2f getSpawnPoint() {
 		return spawnPoint;
 	}
 	

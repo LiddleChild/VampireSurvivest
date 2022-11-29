@@ -2,22 +2,22 @@ package core.world;
 
 import core.Camera;
 import core.behavior.GameBehavior;
-import core.entity.Enemy;
 import core.entity.Player;
+import core.entity.enemy.EnemySpawner;
 import core.sprite.SpriteSheet;
-import util.Vector2;
+import util.Vector2f;
 
 public class World extends GameBehavior {
 	public static int MAP_WIDTH;
 	public static int MAP_HEIGHT;
 	public static int MAP_MAX_LAYER;
-	public static Vector2 SPAWN_POINT;
+	public static Vector2f SPAWN_POINT;
 
 	private Tile[][][] tileMaps;
 	private boolean[][] collisionMaps;
 	
-	private Player player;
-	private Enemy enemy;
+	private static Player player;
+	private EnemySpawner enemySpawner;
 	
 	public World() {
 		super();
@@ -36,7 +36,7 @@ public class World extends GameBehavior {
 		MAP_MAX_LAYER = tileMaps[0][0].length;
 		
 		if (SPAWN_POINT == null) {			
-			SPAWN_POINT = new Vector2(
+			SPAWN_POINT = new Vector2f(
 					MAP_WIDTH / 2 * Tile.SIZE,
 					MAP_HEIGHT / 2 * Tile.SIZE);
 		}
@@ -44,12 +44,12 @@ public class World extends GameBehavior {
 		player = new Player(this);
 		Camera.getInstance().setEntity(player);
 		
-		enemy = new Enemy(this);
+		enemySpawner = new EnemySpawner(this);
 	}
 
 	@Override
 	public void update() {
-		if (getTile(getCoord(player.getPosition()), 2).isEmptyTile()) return;
+		if (getTile(pos2Coord(player.getPosition()), 2).isEmptyTile()) return;
 		
 		for (int x = 0; x < MAP_WIDTH; x++) {
 			for (int y = 0; y < MAP_HEIGHT; y++) {
@@ -57,7 +57,7 @@ public class World extends GameBehavior {
 					Tile t = getTile(x, y, i);
 					if (t == null ||
 							player.getPosition()
-							.subtract(new Vector2(x * Tile.SIZE, y * Tile.SIZE)).getSize() > 5.f * Tile.SIZE
+							.subtract(new Vector2f(x * Tile.SIZE, y * Tile.SIZE)).getSize() > 5.f * Tile.SIZE
 							) continue;
 					
 					t.setTransparent();
@@ -69,34 +69,34 @@ public class World extends GameBehavior {
 	/*
 	 * IS SOLID TILE
 	 */
-	public boolean isSolidTile(float x, float y) {
-		Vector2 coord = getCoord(x, y);
-
-		int ix = (int) coord.x;
-		int iy = (int) coord.y;
-
-		if (ix < 0 || ix >= tileMaps.length ||
-				iy < 0 || iy >= tileMaps[0].length)
-			return false;
+	public boolean isPosSolidTile(float x, float y) {
+		Vector2f coord = pos2Coord(x, y);
 		
-		return collisionMaps[ix][iy];
+		return isCoordSolidTile((int) coord.x, (int) coord.y);
 	}
 	
-	public boolean isSolidTile(Vector2 pos) {
-		return isSolidTile(pos.x, pos.y);
+	public boolean isCoordSolidTile(int x, int y) {
+		if (x < 0 || x >= tileMaps.length ||
+				y < 0 || y >= tileMaps[0].length)
+			return false;
+		
+		return collisionMaps[x][y];
 	}
 	
 	/*
-	 * GET COORD
+	 * COORD, POS CONVERSION
 	 */
-	public Vector2 getCoord(float x, float y) {
-		return new Vector2(
+	public Vector2f pos2Coord(float x, float y) {
+		return new Vector2f(
 				(int) (x / Tile.SIZE),
 				(int) (y / Tile.SIZE));
 	}
 	
-	public Vector2 getCoord(Vector2 pos) {
-		return getCoord(pos.x, pos.y);
+	public Vector2f pos2Coord(Vector2f pos) {
+		return pos2Coord(pos.x, pos.y);
+	}
+	public Vector2f coord2Pos(int x, int y) {
+		return new Vector2f(x * Tile.SIZE, y * Tile.SIZE);
 	}
 	
 	/*
@@ -115,14 +115,14 @@ public class World extends GameBehavior {
 		return tileMaps[ix][iy][iLayer];
 	}
 	
-	public Tile getTile(Vector2 pos, int layer) {
+	public Tile getTile(Vector2f pos, int layer) {
 		return getTile(pos.x, pos.y, layer);
 	}
 	
 	/*
 	 * GETTERS & SETTERS
 	 */
-	public Player getPlayer() {
+	public static Player getPlayer() {
 		return player;
 	}
 }
