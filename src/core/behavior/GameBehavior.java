@@ -34,6 +34,10 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 	public void setYPriority(int yPriority) {
 		this.yPriority = yPriority;
 	}
+	
+	protected void delete() {
+		BehaviorManager.getInstance().removeBehavior(this);
+	}
 
 	@Override
 	public int compareTo(GameBehavior other) {

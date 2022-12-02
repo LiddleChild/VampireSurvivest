@@ -89,6 +89,10 @@ public class Vector2f implements Comparable<Vector2f> {
 		return Float.compare(getSize(), other.getSize());
 	}
 	
+	public boolean isZero() {
+		return (x == 0.f && y == 0.f);
+	}
+	
 	public boolean isInNorth(Vector2f other) {
 		float sy = Math.abs(other.y - y);
 		float sx = Math.abs(other.x - x);

@@ -85,6 +85,12 @@ public abstract class Entity extends GameBehavior {
 		}
 	}
 	
+	@Override
+	protected void delete() {
+		CollisionManager.getInstance().remove(this);
+		super.delete();
+	}
+	
 	protected void move(Vector2f direction) {
 		direction.normalize();
 		this.direction = direction;

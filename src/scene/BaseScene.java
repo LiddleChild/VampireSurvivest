@@ -5,14 +5,19 @@ import java.io.IOException;
 import javafx.scene.Group;
 import javafx.scene.Node;
 import javafx.scene.Scene;
+import javafx.stage.Stage;
 import logic.Window;
 
 public abstract class BaseScene {
 	
+	protected Stage stage;
+	
 	private Scene scene;
 	private Group root;
 	
-	public BaseScene() {
+	public BaseScene(Stage stage) {
+		this.stage = stage;
+		
 		root = new Group();
 		scene = new Scene(root, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 	}

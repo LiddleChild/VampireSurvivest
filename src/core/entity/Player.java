@@ -3,12 +3,11 @@ package core.entity;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import core.Renderer;
 import core.collision.CollisionManager;
 import core.inputHandler.KeyboardHandler;
 import core.inputHandler.MouseHandler;
 import core.sprite.AnimatedSprite;
-import core.sprite.Sprite;
+import core.sprite.AnimatedSprite.State;
 import core.world.Tile;
 import core.world.World;
 import javafx.scene.input.KeyCode;
@@ -23,6 +22,7 @@ public class Player extends Entity {
 	
 //	private Sprite playerSprite;
 	private AnimatedSprite playerSprite;
+	private AnimatedSprite hitFxSprite;
 	
 	private Rectangle[] hitboxes;
 	
@@ -39,8 +39,13 @@ public class Player extends Entity {
 				new Rectangle((int) position.x - Tile.SIZE, (int) position.y, Tile.SIZE, Tile.SIZE)
 		};
 		
-		playerSprite = new AnimatedSprite("player.png", 5, 64, 128);
+		playerSprite = new AnimatedSprite("player.png", 1, 5, 64, 128);
+		playerSprite.setOffset(new Vector2f(0, -Tile.SIZE));
 //		playerSprite = new Sprite("player.png");
+		
+		hitFxSprite = new AnimatedSprite("hit_animation.png", 1, 5, 35, 32);
+		hitFxSprite.setState(State.PLAY);
+		hitFxSprite.setFrameTime(0.15f);
 		
 		attackDamage = 25.f;
 		attackCooldownTime = 0.5f;
@@ -62,7 +67,10 @@ public class Player extends Entity {
 			playerSprite.setReverse(false);
 		}
 		
-		playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2);
+		playerSprite.setState((direction.isZero()) ? AnimatedSprite.State.IDLE : AnimatedSprite.State.PLAY);
+		playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2, deltaTime, 0.f);
+		
+		hitFxSprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
 		
 		super.drawHealthBar();
 		attackTime += deltaTime;
@@ -72,7 +80,9 @@ public class Player extends Entity {
 			for (int i = 0; i < hitDirs.length; i++) {
 				if (hitDirs[i]) {
 					ArrayList<Entity> hits = CollisionManager.getInstance().isColliding(this, hitboxes[i]);
-					for (Entity e : hits) attack(e);
+					for (Entity e : hits) {
+						super.attack(e);
+					}
 				}
 			}
 		}

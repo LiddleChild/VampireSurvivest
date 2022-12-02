@@ -9,6 +9,7 @@ import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import logic.Window;
 
 public class GameScene extends BaseScene {
@@ -16,8 +17,8 @@ public class GameScene extends BaseScene {
 	private Canvas canvas;
 	private GraphicsContext gc;
 	
-	public GameScene() {
-		super();
+	public GameScene(Stage stage) {
+		super(stage);
 		
 		// Create canvas
 		canvas = new Canvas(Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
@@ -53,6 +54,8 @@ public class GameScene extends BaseScene {
 			private float time = 0.f;
 			private int fps = 0;
 			
+			private Color backgroundColor = new Color(43.0 / 255.0, 41.0 / 255.0, 41.0 / 255.0, 1.0);
+			
 			@Override
 			public void handle(long currentTime) {	
 				// Calculate delta time
@@ -61,12 +64,14 @@ public class GameScene extends BaseScene {
 				time += deltaTime;
 				if (time >= 1.f) {
 					time -= 1.f;
-					System.out.println(String.format("FPS: %d", fps));
+					
+					stage.setTitle(String.format("A Game Window, %3d fps", fps));
+					
 					fps = 0;
 				}
 				
 				// Clear screen
-				gc.setFill(Color.BLACK);
+				gc.setFill(backgroundColor);
 				gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 				
 				// Call update

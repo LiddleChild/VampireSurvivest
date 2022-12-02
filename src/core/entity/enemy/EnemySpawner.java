@@ -33,7 +33,6 @@ public class EnemySpawner extends GameBehavior {
 			time = 0.f;
 			nextSpawnTime = random.nextFloat(3.f, 5.f);
 			
-//			enemyLists.add(new Enemy(world, World.SPAWN_POINT));
 			spawnEnemy();
 		} else {
 			time += deltaTime;
@@ -41,7 +40,7 @@ public class EnemySpawner extends GameBehavior {
 	}
 	
 	private void spawnEnemy() {
-		int count = 5;
+		int count = 3;
 		float spawnRate = 0.1f / (World.MAP_WIDTH * World.MAP_HEIGHT);
 		
 		while (count > 0) {

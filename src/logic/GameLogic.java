@@ -18,7 +18,7 @@ public class GameLogic extends Application {
 	@Override
 	public void start(Stage stage) throws Exception {
 //		MainMenuScene mainMenuScene = new MainMenuScene();
-		GameScene gameScene = new GameScene();
+		GameScene gameScene = new GameScene(stage);
 		
 		stage.setTitle("A Game Window");
 		stage.setScene(gameScene.getScene());
