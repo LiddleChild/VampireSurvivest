@@ -73,7 +73,6 @@ public class Renderer {
 	/*
 	 * DrawSprite
 	 */
-	
 	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float dx, float dy, float dw, float dh) {
 		drawSprite(sprite, x, y, w, h, dx, dy, dw, dh, 0.f, 0.f, 1.f, 0.f);
 	}
@@ -84,6 +83,10 @@ public class Renderer {
 	
 	public static void drawSprite(Sprite sprite, Vector2f pos, float w, float h) {
 		drawSprite(sprite, pos.x, pos.y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight(), 0.f, 0.f, 1.f, 0.f);
+	}
+	
+	public static void drawSprite(Sprite sprite, Vector2f pos, float w, float h, float ox, float oy) {
+		drawSprite(sprite, pos.x, pos.y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight(), ox, oy, 1.f, 0.f);
 	}
 	
 	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float alpha) {

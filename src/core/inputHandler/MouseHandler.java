@@ -31,7 +31,7 @@ public class MouseHandler implements EventHandler<MouseEvent> {
 		}
 	}
 	
-	public static boolean onKeyPressed(MouseButton mb) {
+	public static boolean isMouseDown(MouseButton mb) {
 		return keydowns.contains(mb.name());
 	}
 

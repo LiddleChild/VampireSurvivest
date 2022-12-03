@@ -9,6 +9,7 @@ import core.collision.CollisionManager;
 import core.world.Tile;
 import core.world.World;
 import javafx.scene.paint.Color;
+import util.Time;
 import util.Vector2f;
 
 public abstract class Entity extends GameBehavior {
@@ -22,7 +23,7 @@ public abstract class Entity extends GameBehavior {
 	protected World world;
 	
 	protected float maxHealth, health;
-	protected float attackDamage, attackCooldownTime, attackTime;
+	protected float attackDamage, attackCooldownTime, lastAttackTime;
 	
 	protected Rectangle bound;
 	protected ArrayList<Entity> collidingEntity;
@@ -39,7 +40,7 @@ public abstract class Entity extends GameBehavior {
 		this.world = world;
 		
 		attackCooldownTime = 3.f;
-		attackTime = 0.f;
+		lastAttackTime = 0.f;
 		attackDamage = 5.f;
 		
 		CollisionManager.getInstance().add(this);
@@ -79,9 +80,12 @@ public abstract class Entity extends GameBehavior {
 	}
 	
 	protected void attack(Entity e) {
-		if (attackTime >= attackCooldownTime) {
+		float currentTime = Time.getNanoSecond();
+		
+		if (currentTime - lastAttackTime >= attackCooldownTime) {	
 			e.setHealth(e.getHealth() - attackDamage);
-			attackTime = 0.f;
+			
+			lastAttackTime = currentTime;
 		}
 	}
 	

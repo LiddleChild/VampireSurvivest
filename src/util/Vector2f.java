@@ -89,6 +89,11 @@ public class Vector2f implements Comparable<Vector2f> {
 		return Float.compare(getSize(), other.getSize());
 	}
 	
+	public void setZero() {
+		x = 0;
+		y = 0;
+	}
+	
 	public boolean isZero() {
 		return (x == 0.f && y == 0.f);
 	}

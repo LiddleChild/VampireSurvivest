@@ -4,13 +4,11 @@ import java.util.HashMap;
 import java.util.Map;
 
 import core.Renderer;
+import core.sprite.AnimationState.State;
 import core.world.Tile;
-import javafx.util.Pair;
 import util.Vector2f;
 
 public class AnimatedSprite {
-	
-	public static enum State { IDLE, PLAY }
 	
 	private int frameWidth, frameHeight;
 	private int frame, frameCol;
@@ -19,12 +17,12 @@ public class AnimatedSprite {
 	
 	private Sprite sprite;
 	
-	private boolean reverse;
+	private boolean reverse = false;
 	
 	private Vector2f offset;
 	
 	private State state;
-	private Map<State, Pair<Integer, Integer>> intervals;
+	private Map<State, AnimationState> intervals;
 	
 	public AnimatedSprite(String path, int frameRow, int frameCol, int frameWidth, int frameHeight) {
 		this.frameCol = frameCol;
@@ -41,16 +39,16 @@ public class AnimatedSprite {
 		
 		state = State.IDLE;
 		
-		intervals = new HashMap<State, Pair<Integer,Integer>>();
-		setStateIntervals(State.IDLE, 0, 1);
-		setStateIntervals(State.PLAY, 1, frameCol * frameRow);
+		intervals = new HashMap<State, AnimationState>();
+		setStateIntervals(State.IDLE, State.IDLE, 0, 1);
+		setStateIntervals(State.PLAY, State.IDLE, 1, frameCol * frameRow);
 	}
 	
-	public void setStateIntervals(State state, int start, int end) {
-		intervals.put(state, new Pair<Integer, Integer>(start, end));
+	public void setStateIntervals(State state, State nextState, int start, int end) {
+		intervals.put(state, new AnimationState(state, nextState, start, end));
 	}
 	
-	public void setState(State state) {
+	public void setState(State state) {	
 		this.state = state;
 	}
 	
@@ -58,8 +56,9 @@ public class AnimatedSprite {
 		time += deltaTime;
 		if (time >= frameTime) {
 			time -= frameTime;
-			if (frame >= intervals.get(state).getValue() - 1) {
-				frame = intervals.get(state).getKey();
+			if (frame >= intervals.get(state).getEndFrame() - 1) {
+				state = intervals.get(state).getNextStage();
+				frame = intervals.get(state).getStartFrame();
 			} else {
 				frame++;
 			}

@@ -3,6 +3,7 @@ package core.entity.enemy;
 import core.collision.CollisionManager;
 import core.entity.Entity;
 import core.sprite.AnimatedSprite;
+import core.sprite.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
 import util.Vector2f;
@@ -26,7 +27,6 @@ public class Enemy extends Entity {
 		Vector2f playerPos = World.getPlayer().getPosition();
 		super.move(playerPos.subtract(position));
 		
-		attackTime += deltaTime;
 		if (CollisionManager.getInstance().isCollidingWithPlayer(this)) {
 			super.attack(World.getPlayer());
 		}
@@ -37,7 +37,7 @@ public class Enemy extends Entity {
 			enemySprite.setReverse(false);
 		}
 
-		enemySprite.setState((direction.isZero()) ? AnimatedSprite.State.IDLE : AnimatedSprite.State.PLAY);
+		enemySprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
 		enemySprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
 		
 //		Renderer.setFill(Color.DARKRED);

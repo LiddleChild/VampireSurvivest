@@ -1,17 +1,17 @@
 package core.entity;
 
-import java.awt.Rectangle;
-import java.util.ArrayList;
-
+import core.Renderer;
 import core.collision.CollisionManager;
 import core.inputHandler.KeyboardHandler;
 import core.inputHandler.MouseHandler;
+import core.item.Sword;
 import core.sprite.AnimatedSprite;
-import core.sprite.AnimatedSprite.State;
+import core.sprite.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
+import javafx.scene.paint.Color;
 import logic.Window;
 import util.Vector2f;
 
@@ -20,46 +20,33 @@ public class Player extends Entity {
 	private Vector2f direction;
 	private Vector2f middleScreen;
 	
-//	private Sprite playerSprite;
 	private AnimatedSprite playerSprite;
-	private AnimatedSprite hitFxSprite;
+//	private AnimatedSprite hitFxSprite;
 	
-	private Rectangle[] hitboxes;
+	private Sword sword;
 	
 	public Player(World world) {
 		super("player", world);
 		
+		sword = new Sword();
+		
 		middleScreen = new Vector2f(Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2);
 		direction = new Vector2f(0.f, 0.f);
 		
-		hitboxes = new Rectangle[] {
-				new Rectangle((int) position.x, (int) position.y - Tile.SIZE, Tile.SIZE, Tile.SIZE),
-				new Rectangle((int) position.x + Tile.SIZE, (int) position.y, Tile.SIZE, Tile.SIZE),
-				new Rectangle((int) position.x, (int) position.y + Tile.SIZE, Tile.SIZE, Tile.SIZE),
-				new Rectangle((int) position.x - Tile.SIZE, (int) position.y, Tile.SIZE, Tile.SIZE)
-		};
-		
 		playerSprite = new AnimatedSprite("player.png", 1, 5, 64, 128);
 		playerSprite.setOffset(new Vector2f(0, -Tile.SIZE));
-//		playerSprite = new Sprite("player.png");
 		
-		hitFxSprite = new AnimatedSprite("hit_animation.png", 1, 5, 35, 32);
-		hitFxSprite.setState(State.PLAY);
-		hitFxSprite.setFrameTime(0.15f);
-		
-		attackDamage = 25.f;
-		attackCooldownTime = 0.5f;
+//		hitFxSprite = new AnimatedSprite("hit_animation.png", 1, 5, 35, 32);
+//		hitFxSprite.setFrameTime(0.1f);
+//		hitFxSprite.setState(State.IDLE);
+//		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
+//		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
 	}
 	
 	@Override
 	public void update() {
 		calculateDirection();
-		updateHitboxes();
-		
-//		Renderer.setFill(Color.LIGHTGREEN);
-//		Renderer.fillRect(position, Tile.SIZE, Tile.SIZE);
-		
-//		Renderer.drawSprite(playerSprite, position.subtract(new Vector2f(0, Tile.SIZE)), Tile.SIZE, Tile.SIZE * 2, 0, 0, 64, 128);
+		sword.setPosition(position);
 		
 		if (direction.x < 0) {
 			playerSprite.setReverse(true);
@@ -67,22 +54,19 @@ public class Player extends Entity {
 			playerSprite.setReverse(false);
 		}
 		
-		playerSprite.setState((direction.isZero()) ? AnimatedSprite.State.IDLE : AnimatedSprite.State.PLAY);
+		playerSprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
 		playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2, deltaTime, 0.f);
 		
-		hitFxSprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
-		
 		super.drawHealthBar();
-		attackTime += deltaTime;
 		
-		if (MouseHandler.onKeyPressed(MouseButton.PRIMARY)) {
+		if (MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
 			boolean[] hitDirs = middleScreen.getDirection(MouseHandler.getMousePosition());
 			for (int i = 0; i < hitDirs.length; i++) {
 				if (hitDirs[i]) {
-					ArrayList<Entity> hits = CollisionManager.getInstance().isColliding(this, hitboxes[i]);
-					for (Entity e : hits) {
-						super.attack(e);
-					}
+					sword.attack(CollisionManager.getInstance().isColliding(this, sword.getHitboxes()[i]));
+					
+					Renderer.setFill(new Color(1.f, 0.f, 0.f, 0.5f));
+					Renderer.fillRect(sword.getHitboxes()[i]);
 				}
 			}
 		}
@@ -105,20 +89,6 @@ public class Player extends Entity {
 		direction.y = dirY;
 		
 		move(direction);
-	}
-	
-	private void updateHitboxes() {
-		hitboxes[0].x = (int) position.x;
-		hitboxes[0].y = (int) position.y - Tile.SIZE;
-		
-		hitboxes[1].x = (int) position.x + Tile.SIZE;
-		hitboxes[1].y = (int) position.y;
-		
-		hitboxes[2].x = (int) position.x;
-		hitboxes[2].y = (int) position.y + Tile.SIZE;
-		
-		hitboxes[3].x = (int) position.x - Tile.SIZE;
-		hitboxes[3].y = (int) position.y;
 	}
 
 }
