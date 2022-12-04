@@ -1,5 +1,7 @@
 package core.entity.enemy;
 
+import java.awt.Rectangle;
+
 import core.collision.CollisionManager;
 import core.entity.Entity;
 import core.sprite.AnimatedSprite;
@@ -19,7 +21,12 @@ public class Enemy extends Entity {
 		
 		position = new Vector2f(spawn);
 		
+		bound = new Rectangle(0, 0, 20, Tile.SIZE);
+		
 		enemySprite = new AnimatedSprite("undead.png", 1, 5, 64, 64);
+		enemySprite.setOffset(new Vector2f(
+						(bound.width  - Tile.SIZE) / 2,
+						(bound.height - Tile.SIZE) / 2));
 	}
 
 	@Override
@@ -44,6 +51,11 @@ public class Enemy extends Entity {
 //		Renderer.fillRect(position, Tile.SIZE, Tile.SIZE);
 		
 		super.drawHealthBar();
+	}
+
+	@Override
+	protected void onTakingDamage() {
+		
 	}
 
 	@Override

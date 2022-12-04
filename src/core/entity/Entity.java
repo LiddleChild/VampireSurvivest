@@ -56,12 +56,30 @@ public abstract class Entity extends GameBehavior {
 		bound = new Rectangle(0, 0, Tile.SIZE, Tile.SIZE);
 	}
 	
+	/*
+	 * EVENT
+	 */
 	protected abstract void onDeath();
+	protected abstract void onTakingDamage();
+	
+	/*
+	 * DEATH
+	 */
+	@Override
+	protected void delete() {
+		CollisionManager.getInstance().remove(this);
+		super.delete();
+	}
+	
+	/*
+	 * DRAWING
+	 */
+	protected void drawBound() {
+		Renderer.setFill(new Color(1, 0, 0, 0.5f));
+		Renderer.fillRect(bound);
+	}
 	
 	protected void drawHealthBar() {
-//		Renderer.setFill(new Color(1, 0, 0, .5f));
-//		Renderer.fillRect(position, Tile.SIZE, Tile.SIZE);
-		
 		// Background
 		Renderer.setFill(Color.GREY);
 		Renderer.fillRectWithBound(
@@ -79,22 +97,27 @@ public abstract class Entity extends GameBehavior {
 				5);
 	}
 	
+	/*
+	 * ATTACK
+	 */
+	public void takeDamge(float damage) {
+		this.setHealth(getHealth() - damage);
+		onTakingDamage();
+	}
+	
 	protected void attack(Entity e) {
 		float currentTime = Time.getNanoSecond();
 		
 		if (currentTime - lastAttackTime >= attackCooldownTime) {	
-			e.setHealth(e.getHealth() - attackDamage);
+			e.takeDamge(attackDamage);
 			
 			lastAttackTime = currentTime;
 		}
 	}
 	
-	@Override
-	protected void delete() {
-		CollisionManager.getInstance().remove(this);
-		super.delete();
-	}
-	
+	/*
+	 * MOVEMENT
+	 */
 	protected void move(Vector2f direction) {
 		direction.normalize();
 		this.direction = direction;
@@ -139,45 +162,36 @@ public abstract class Entity extends GameBehavior {
 		float rightX  =	(float) Math.ceil (position.x / Tile.SIZE) * Tile.SIZE;
 		float topY    =	(float) Math.floor(position.y / Tile.SIZE) * Tile.SIZE;
 		float bottomY = (float) Math.ceil (position.y / Tile.SIZE) * Tile.SIZE;
-		
+
 		collidingEntity = CollisionManager.getInstance().isColliding(this);
-		
-		Vector2f futurePosition = position.add(dv);
 		
 		// TOP
 		if (dv.y < 0) {
-			movable[0] = !(world.isPosSolidTile(leftX , futurePosition.y) ||
-					world.isPosSolidTile(rightX, position.y + dv.y));
+			movable[0] = !(world.isPosSolidTile(leftX , bound.y + dv.y) ||
+					world.isPosSolidTile(rightX, bound.y + dv.y));
 			
-			for (Entity e : collidingEntity)
-				movable[0] &= !(position.isInNorth(e.getPosition()));
+			collidingEntity.forEach((e) -> movable[0] &= !(position.isInNorth(e.getPosition())));
 		}
 		
 		// BOTTOM
 		if (dv.y > 0) {
-			movable[2] = !(world.isPosSolidTile(leftX , futurePosition.y + Tile.SIZE) ||
-					world.isPosSolidTile(rightX, position.y + Tile.SIZE + dv.y));
-			
-			for (Entity e : collidingEntity)
-				movable[2] &= !(position.isInSouth(e.getPosition()));
+			movable[2] = !(world.isPosSolidTile(leftX , bound.y + dv.y + Tile.SIZE) ||
+					world.isPosSolidTile(rightX, bound.y + dv.y + Tile.SIZE));
+			collidingEntity.forEach((e) -> movable[2] &= !(position.isInSouth(e.getPosition())));
 		}
 
 		// LEFT
 		if (dv.x < 0) {
-			movable[3] = !(world.isPosSolidTile(futurePosition.x, topY) ||
-					world.isPosSolidTile(position.x + dv.x, bottomY));
-			
-			for (Entity e : collidingEntity)
-				movable[3] &= !(position.isInWest(e.getPosition()));
+			movable[3] = !(world.isPosSolidTile(bound.x + dv.x, topY) ||
+					world.isPosSolidTile(bound.x + dv.x, bottomY));
+			collidingEntity.forEach((e) -> movable[3] &= !(position.isInWest(e.getPosition())));
 		}
 
 		// RIGHT
 		if (dv.x > 0) {
-			movable[1] = !(world.isPosSolidTile(futurePosition.x + Tile.SIZE, topY) ||
-					world.isPosSolidTile(position.x + Tile.SIZE + dv.x, bottomY));
-			
-			for (Entity e : collidingEntity)
-				movable[1] &= !(position.isInEast(e.getPosition()));
+			movable[1] = !(world.isPosSolidTile(bound.x + dv.x + Tile.SIZE, topY) ||
+					world.isPosSolidTile(bound.x + dv.x + Tile.SIZE, bottomY));
+			collidingEntity.forEach((e) -> movable[1] &= !(position.isInEast(e.getPosition())));
 		}
 	}
 	

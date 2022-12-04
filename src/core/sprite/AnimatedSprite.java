@@ -51,8 +51,12 @@ public class AnimatedSprite {
 	public void setState(State state) {	
 		this.state = state;
 	}
-	
+
 	public void draw(Vector2f position, int w, int h, float deltaTime, float angle) {
+		draw((int) position.x, (int) position.y, w, h, deltaTime, angle);
+	}
+	
+	public void draw(int x, int y, int w, int h, float deltaTime, float angle) {
 		time += deltaTime;
 		if (time >= frameTime) {
 			time -= frameTime;
@@ -64,23 +68,19 @@ public class AnimatedSprite {
 			}
 		}
 		
-		int x = (int) (position.x);
-		int y = (int) (position.y);
-		
 		if (reverse) {
 			w = -w;
 			x += Tile.SIZE;
 		}
 		
+		Renderer.setRenderOffset(offset.x, offset.y);
+		Renderer.setRenderRotation(angle);
 		Renderer.drawSprite(sprite,
 				x, y,
 				w, h,
 				(frame % frameCol) * frameWidth,
 				(frame / frameCol) * frameHeight,
-				frameWidth, frameHeight,
-				offset.x, offset.y,
-				1.f,
-				angle);
+				frameWidth, frameHeight);
 	}
 	
 	/*
@@ -96,6 +96,14 @@ public class AnimatedSprite {
 	
 	public void setFrameTime(float frameTime) {
 		this.frameTime = frameTime;
+	}
+	
+	public int getWidth() {
+		return sprite.getWidth();
+	}
+	
+	public int getHeight() {
+		return sprite.getHeight();
 	}
 	
 }

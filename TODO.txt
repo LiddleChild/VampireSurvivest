@@ -1,5 +1,6 @@
 Upcoming
 [ ]	AnimatedSprite animation states
+[ ]	Entity bound
 [ ]	More Enemy ( Explosion, etc. )
 [ ]	Enlarge the map
 [ ]	Items

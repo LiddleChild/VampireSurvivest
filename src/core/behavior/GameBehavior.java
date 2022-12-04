@@ -27,6 +27,10 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 		this.deltaTime = dt;
 	}
 	
+	public int getLayerPriority() {
+		return layerPriority;
+	}
+
 	public int getYPriority() {
 		return yPriority;
 	}

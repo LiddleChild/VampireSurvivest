@@ -4,6 +4,8 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import core.entity.Entity;
+import core.sprite.AnimatedSprite;
+import core.sprite.AnimationState.State;
 import core.sprite.Sprite;
 import core.world.Tile;
 import util.Time;
@@ -12,7 +14,9 @@ import util.Vector2f;
 public class Sword {
 
 	private Sprite sprite;
+	private AnimatedSprite hitFxSprite;
 	private Rectangle[] hitboxes;
+	private int direction;
 	private float attackDamage, attackCooldownTime, lastAttackTime;
 	
 	public Sword() {
@@ -25,20 +29,29 @@ public class Sword {
 				new Rectangle( -Tile.SIZE, 			0, Tile.SIZE, Tile.SIZE)
 		};
 
+		direction = 0;
 		
-		attackCooldownTime = 0.5f;
+		attackCooldownTime = 0.75f;
 		lastAttackTime = 0.f;
-		attackDamage = 50.f;
+		attackDamage = 35.f;
+
+		hitFxSprite = new AnimatedSprite("hit_animation.png", 1, 5, 35, 32);
+		hitFxSprite.setFrameTime(0.05f);
+		hitFxSprite.setState(State.IDLE);
+		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
+		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
+	}
+	
+	public void drawFx(float deltaTime) {
+		hitFxSprite.draw(hitboxes[direction].x, hitboxes[direction].y, Tile.SIZE, Tile.SIZE, deltaTime, 90.f * direction);
 	}
 	
 	public void attack(ArrayList<Entity> entityLists) {
 		float currentTime = Time.getNanoSecond();
 		
 		if (currentTime - lastAttackTime >= attackCooldownTime) {
-			
-			for (Entity e : entityLists) {				
-				e.setHealth(e.getHealth() - attackDamage);
-			}
+			entityLists.forEach((e) -> e.takeDamge(attackDamage));
+			hitFxSprite.setState(State.PLAY);
 			
 			lastAttackTime = currentTime;
 		}
@@ -68,6 +81,14 @@ public class Sword {
 		
 		hitboxes[3].x = (int) position.x - Tile.SIZE;
 		hitboxes[3].y = (int) position.y;
+	}
+
+	public int getDirection() {
+		return direction;
+	}
+
+	public void setDirection(int direction) {
+		this.direction = direction;
 	}
 	
 }

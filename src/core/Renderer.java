@@ -15,8 +15,14 @@ public class Renderer {
 	
 	private static Paint paint;
 	
+	private static Vector2f offset;
+	private static float alpha, rotation;
+	
 	public static void initialize(GraphicsContext gc) {
 		 Renderer.gc = gc;
+		 Renderer.offset = new Vector2f();
+		 Renderer.alpha = 1.f;
+		 Renderer.rotation = 0.f;
 	}
 	
 	public static Vector2f translateCamera(float x, float y) {
@@ -29,6 +35,22 @@ public class Renderer {
 		
 		return (t.x > -w && t.x < Window.WINDOW_WIDTH &&
 				t.y > -h && t.y < Window.WINDOW_HEIGHT);
+	}
+	
+	/*
+	 * CONFIGURATION
+	 */
+	public static void setRenderOffset(float x, float y) {
+		offset.x = x;
+		offset.y = y;
+	}
+	
+	public static void setRenderOpacity(float alpha) {
+		Renderer.alpha = alpha;
+	}
+	
+	public static void setRenderRotation(float rotation) {
+		Renderer.rotation = rotation;
 	}
 	
 	/*
@@ -73,44 +95,21 @@ public class Renderer {
 	/*
 	 * DrawSprite
 	 */
+	public static void drawSprite(Sprite sprite, float x, float y, float w, float h) {
+		drawSprite(sprite, x, y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight());
+	}
+	
 	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float dx, float dy, float dw, float dh) {
-		drawSprite(sprite, x, y, w, h, dx, dy, dw, dh, 0.f, 0.f, 1.f, 0.f);
-	}
-	
-	public static void drawSprite(Sprite sprite, Vector2f pos, float w, float h, float dx, float dy, float dw, float dh) {
-		drawSprite(sprite, pos.x, pos.y, w, h, dx, dy, dw, dh, 0.f, 0.f, 1.f, 0.f);
-	}
-	
-	public static void drawSprite(Sprite sprite, Vector2f pos, float w, float h) {
-		drawSprite(sprite, pos.x, pos.y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight(), 0.f, 0.f, 1.f, 0.f);
-	}
-	
-	public static void drawSprite(Sprite sprite, Vector2f pos, float w, float h, float ox, float oy) {
-		drawSprite(sprite, pos.x, pos.y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight(), ox, oy, 1.f, 0.f);
-	}
-	
-	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float alpha) {
-		drawSprite(sprite, x, y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight(), 0.f, 0.f, alpha, 0.f);
-	}
-	
-	public static void drawSprite(Sprite sprite,
-			float x, float y,
-			float w, float h,
-			float dx, float dy,
-			float dw, float dh,
-			float ox, float oy,
-			float alpha,
-			float angle) {
-		
 		Vector2f t = translateCamera(x, y);
+		float ox = offset.x, oy = offset.y;
 		
 		if (checkInsideWindow(x, y, w, h)) {
 			if (alpha < 1.f) gc.setGlobalAlpha(alpha);
 			
-			if (angle != 0.f) {
+			if (rotation != 0.f) {
 				gc.save();
 				gc.translate(t.x + (w + ox) / 2, t.y + (h + oy) / 2);
-				gc.rotate(angle);
+				gc.rotate(rotation);
 				
 				gc.drawImage(sprite.getImage(), dx, dy, dw, dh, ox - (w + ox) / 2, oy - (h + oy) / 2, w, h);
 				
@@ -121,6 +120,10 @@ public class Renderer {
 			
 			if (alpha < 1.f) gc.setGlobalAlpha(1.f);
 		}
+		
+		alpha = 1.f;
+		rotation = 0.f;
+		offset.setZero();
 	}
 	
 }

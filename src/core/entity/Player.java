@@ -1,5 +1,7 @@
 package core.entity;
 
+import java.awt.Rectangle;
+
 import core.Renderer;
 import core.collision.CollisionManager;
 import core.inputHandler.KeyboardHandler;
@@ -11,7 +13,6 @@ import core.world.Tile;
 import core.world.World;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
-import javafx.scene.paint.Color;
 import logic.Window;
 import util.Vector2f;
 
@@ -21,9 +22,10 @@ public class Player extends Entity {
 	private Vector2f middleScreen;
 	
 	private AnimatedSprite playerSprite;
-//	private AnimatedSprite hitFxSprite;
 	
 	private Sword sword;
+	
+	private int blinkPeriod, maxBlink, blinkTime;
 	
 	public Player(World world) {
 		super("player", world);
@@ -32,15 +34,18 @@ public class Player extends Entity {
 		
 		middleScreen = new Vector2f(Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2);
 		direction = new Vector2f(0.f, 0.f);
+
+		blinkPeriod = 25;
+		maxBlink = 6;
+		blinkTime = 0;
+		
+		bound = new Rectangle(0, 0, 28, Tile.SIZE);
 		
 		playerSprite = new AnimatedSprite("player.png", 1, 5, 64, 128);
-		playerSprite.setOffset(new Vector2f(0, -Tile.SIZE));
-		
-//		hitFxSprite = new AnimatedSprite("hit_animation.png", 1, 5, 35, 32);
-//		hitFxSprite.setFrameTime(0.1f);
-//		hitFxSprite.setState(State.IDLE);
-//		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
-//		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
+		playerSprite.setOffset(new Vector2f(0, -Tile.SIZE)
+				.add(new Vector2f(
+						(bound.width  - Tile.SIZE) / 2,
+						(bound.height - Tile.SIZE) / 2)));
 	}
 	
 	@Override
@@ -48,28 +53,48 @@ public class Player extends Entity {
 		calculateDirection();
 		sword.setPosition(position);
 		
-		if (direction.x < 0) {
-			playerSprite.setReverse(true);
-		} else if (direction.x > 0) {
-			playerSprite.setReverse(false);
-		}
-		
-		playerSprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
-		playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2, deltaTime, 0.f);
-		
-		super.drawHealthBar();
-		
 		if (MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
 			boolean[] hitDirs = middleScreen.getDirection(MouseHandler.getMousePosition());
 			for (int i = 0; i < hitDirs.length; i++) {
 				if (hitDirs[i]) {
 					sword.attack(CollisionManager.getInstance().isColliding(this, sword.getHitboxes()[i]));
+//					
+//					Renderer.setFill(new Color(1.f, 0.f, 0.f, 0.5f));
+//					Renderer.fillRect(sword.getHitboxes()[i]);
 					
-					Renderer.setFill(new Color(1.f, 0.f, 0.f, 0.5f));
-					Renderer.fillRect(sword.getHitboxes()[i]);
+					sword.setDirection(i);
 				}
 			}
 		}
+		
+		if (direction.x < 0) {
+			playerSprite.setReverse(true);
+		} else if (direction.x > 0) {
+			playerSprite.setReverse(false);
+		}
+
+		Renderer.drawSprite(sword.getSprite(),
+				position.x + Tile.SIZE / 2.5f,
+				position.y,
+				Tile.SIZE, Tile.SIZE);
+		
+		if (blinkTime > 0) {
+			if (blinkTime == maxBlink * blinkPeriod) blinkTime = 0;
+			else blinkTime++;
+		}
+		
+		playerSprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+		if (blinkTime % (2 * blinkPeriod) <= blinkPeriod) {
+			playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2, deltaTime, 0.f);
+		}
+		
+		sword.drawFx(deltaTime);
+		super.drawHealthBar();
+	}
+
+	@Override
+	protected void onTakingDamage() {
+		blinkTime = 1;
 	}
 
 	@Override
