@@ -3,13 +3,13 @@ import javafx.application.Application;
 import javafx.stage.Stage;
 import scene.GameScene;
 
-public class GameLogic extends Application {
+public class Main extends Application {
 	
-	private static GameLogic instance;
+	private static Main instance;
 	
-	public static GameLogic getInstance() {
+	public static Main getInstance() {
 		if (instance == null) {
-			instance = new GameLogic();
+			instance = new Main();
 		}
 		
 		return instance;

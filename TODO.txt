@@ -1,5 +1,7 @@
 Upcoming
-[ ]	AnimatedSprite animation states
+[ ]	UI Component
+[ ]	Knockback
+[ ]	AnimatedSprite
 [ ]	Entity bound
 [ ]	More Enemy ( Explosion, etc. )
 [ ]	Enlarge the map

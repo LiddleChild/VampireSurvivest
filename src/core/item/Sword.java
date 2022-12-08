@@ -4,9 +4,9 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import core.entity.Entity;
-import core.sprite.AnimatedSprite;
-import core.sprite.AnimationState.State;
 import core.sprite.Sprite;
+import core.sprite.animation.AnimatedSprite;
+import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import util.Time;
 import util.Vector2f;
@@ -31,7 +31,7 @@ public class Sword {
 
 		direction = 0;
 		
-		attackCooldownTime = 0.75f;
+		attackCooldownTime = 0.6f;
 		lastAttackTime = 0.f;
 		attackDamage = 35.f;
 
@@ -44,6 +44,11 @@ public class Sword {
 	
 	public void drawFx(float deltaTime) {
 		hitFxSprite.draw(hitboxes[direction].x, hitboxes[direction].y, Tile.SIZE, Tile.SIZE, deltaTime, 90.f * direction);
+		
+//		for (Rectangle r : hitboxes) {
+//			Renderer.setFill(new Color(1, 0, 0, 0.5f));
+//			Renderer.fillRect(r);
+//		}
 	}
 	
 	public void attack(ArrayList<Entity> entityLists) {

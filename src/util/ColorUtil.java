@@ -24,4 +24,8 @@ public class ColorUtil {
 		return parseColor2Int(a, r, g, b);
 	}
 	
+	public static Color parseRGB2Color(int r, int g, int b) {
+		return new Color(r / 255.f, g / 255.f, b / 255.f, 1.f);
+	}
+	
 }

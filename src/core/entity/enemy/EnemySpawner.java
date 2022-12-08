@@ -5,6 +5,7 @@ import java.util.Random;
 
 import core.Renderer;
 import core.behavior.GameBehavior;
+import core.entity.Entity;
 import core.world.Tile;
 import core.world.World;
 
@@ -16,7 +17,7 @@ public class EnemySpawner extends GameBehavior {
 	private float nextSpawnTime = 0.f;
 	private float time = 0.f;
 	
-	private ArrayList<Enemy> enemyLists;
+	private ArrayList<Entity> enemyLists;
 	
 	public EnemySpawner(World world) {
 		super();
@@ -24,7 +25,7 @@ public class EnemySpawner extends GameBehavior {
 		this.world = world;
 		this.random = new Random();
 		
-		enemyLists = new ArrayList<Enemy>();
+		enemyLists = new ArrayList<Entity>();
 	}
 	
 	@Override
@@ -50,7 +51,12 @@ public class EnemySpawner extends GameBehavior {
 							!world.isCoordSolidTile(x, y) &&
 							!Renderer.checkInsideWindow(x * Tile.SIZE, y * Tile.SIZE, Tile.SIZE, Tile.SIZE)) {
 						
-						enemyLists.add(new Enemy(world, world.coord2Pos(x, y)));
+						int rand = random.nextInt(100);
+						if (rand <= 25) {							
+							enemyLists.add(new Imp(world, world.coord2Pos(x, y)));
+						} else {
+							enemyLists.add(new Enemy(world, world.coord2Pos(x, y)));
+						}
 						count--;
 					}
 				}

@@ -4,15 +4,15 @@ import java.awt.Rectangle;
 
 import core.collision.CollisionManager;
 import core.entity.Entity;
-import core.sprite.AnimatedSprite;
-import core.sprite.AnimationState.State;
+import core.sprite.animation.AnimatedSprite;
+import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
 import util.Vector2f;
 
 public class Enemy extends Entity {
 	
-	private AnimatedSprite enemySprite;
+	private AnimatedSprite sprite;
 	
 	public Enemy(World world, Vector2f spawn) {
 		super("enemy", world);
@@ -23,8 +23,8 @@ public class Enemy extends Entity {
 		
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
 		
-		enemySprite = new AnimatedSprite("undead.png", 1, 5, 64, 64);
-		enemySprite.setOffset(new Vector2f(
+		sprite = new AnimatedSprite("undead.png", 1, 5, 64, 64);
+		sprite.setOffset(new Vector2f(
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2));
 	}
@@ -39,16 +39,13 @@ public class Enemy extends Entity {
 		}
 
 		if (direction.x < 0) {
-			enemySprite.setReverse(true);
+			sprite.setReverse(true);
 		} else if (direction.x > 0) {
-			enemySprite.setReverse(false);
+			sprite.setReverse(false);
 		}
 
-		enemySprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
-		enemySprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
-		
-//		Renderer.setFill(Color.DARKRED);
-//		Renderer.fillRect(position, Tile.SIZE, Tile.SIZE);
+		sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+		sprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
 		
 		super.drawHealthBar();
 	}
@@ -61,6 +58,7 @@ public class Enemy extends Entity {
 	@Override
 	protected void onDeath() {
 		super.delete();
+		world.spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
 	}
 
 }

@@ -1,5 +1,7 @@
 package core.world;
 
+import java.util.ArrayList;
+
 import core.Camera;
 import core.behavior.GameBehavior;
 import core.entity.Player;
@@ -15,6 +17,8 @@ public class World extends GameBehavior {
 
 	private Tile[][][] tileMaps;
 	private boolean[][] collisionMaps;
+	
+	private ArrayList<Coin> coins;
 	
 	private static Player player;
 	private EnemySpawner enemySpawner;
@@ -45,6 +49,8 @@ public class World extends GameBehavior {
 		Camera.getInstance().setEntity(player);
 		
 		enemySpawner = new EnemySpawner(this);
+		
+		coins = new ArrayList<Coin>();
 	}
 
 	@Override
@@ -64,6 +70,10 @@ public class World extends GameBehavior {
 				}
 			}
 		}
+	}
+	
+	public void spawnCoin(Vector2f pos) {
+		coins.add(new Coin(pos));
 	}
 	
 	/*

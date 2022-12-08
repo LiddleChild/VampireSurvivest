@@ -118,6 +118,10 @@ public abstract class Entity extends GameBehavior {
 	/*
 	 * MOVEMENT
 	 */
+	public void knockback(Vector2f direction, float amount) {
+		position.addEqual(direction.normalize().multiply(amount));
+	}
+	
 	protected void move(Vector2f direction) {
 		direction.normalize();
 		this.direction = direction;

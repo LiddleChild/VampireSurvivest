@@ -1,4 +1,4 @@
-package core.sprite;
+package core.sprite.animation;
 
 public class AnimationState {
 	public static enum State { IDLE, PLAY }

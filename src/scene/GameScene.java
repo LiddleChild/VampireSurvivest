@@ -4,6 +4,7 @@ import core.Renderer;
 import core.behavior.BehaviorManager;
 import core.inputHandler.KeyboardHandler;
 import core.inputHandler.MouseHandler;
+import core.ui.ExperienceBar;
 import core.world.World;
 import javafx.animation.AnimationTimer;
 import javafx.scene.canvas.Canvas;
@@ -13,12 +14,15 @@ import javafx.stage.Stage;
 import logic.Window;
 
 public class GameScene extends BaseScene {
+	private static GameScene instance;
 	
 	private Canvas canvas;
 	private GraphicsContext gc;
 	
 	public GameScene(Stage stage) {
 		super(stage);
+		
+		instance = this;
 		
 		// Create canvas
 		canvas = new Canvas(Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
@@ -27,7 +31,10 @@ public class GameScene extends BaseScene {
 		// Grab graphics context
 		gc = canvas.getGraphicsContext2D();
 		
+		// Initialize renderer
 		Renderer.initialize(gc);
+		
+		// Initialize world
 		World world = new World();
 
 		// Initialize keyboard handler
@@ -43,6 +50,10 @@ public class GameScene extends BaseScene {
 		getScene().setOnMouseReleased(mouseHandler);
 		getScene().setOnMouseMoved(mouseHandler);
 		
+		// Initialize UI
+		ExperienceBar expBar = new ExperienceBar();
+		
+		// Start game loops
 		initGameLoop();
 	}
 	
@@ -93,6 +104,20 @@ public class GameScene extends BaseScene {
 			}
 			
 		}.start();
+	}
+	
+	/*
+	 * SINGLETON
+	 */
+	public static GameScene getInstance() {
+		return instance;
+	}
+	
+	/*
+	 * GETTERS & SETTERS
+	 */
+	public GraphicsContext getGraphicsContext() {
+		return gc;
 	}
 	
 }

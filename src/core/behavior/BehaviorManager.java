@@ -16,21 +16,26 @@ public class BehaviorManager {
 	
 	private State state = State.INITIALIZING;
 	
-	private ArrayList<GameBehavior> behaviorLists;
+	private ArrayList<UIBehavior> uiBehaviorLists; 
+	private ArrayList<GameBehavior> gameBehaviorLists;
 	private Queue<GameBehavior> addQueues, removeQueues;
 	
 	public BehaviorManager() {
-		this.behaviorLists = new ArrayList<GameBehavior>();
+		this.gameBehaviorLists = new ArrayList<GameBehavior>();
+		this.uiBehaviorLists = new ArrayList<UIBehavior>();
 		
 		this.addQueues = new LinkedList<GameBehavior>();
 		this.removeQueues = new LinkedList<GameBehavior>();
 	}
 	
+	/*
+	 * GAME BEHAVIOR
+	 */
 	public void addBehavior(GameBehavior e) {
 		if (state == State.RUNNING) {
 			addQueues.add(e);
 		} else {
-			behaviorLists.add(e);
+			gameBehaviorLists.add(e);
 		}
 	}
 	
@@ -38,17 +43,25 @@ public class BehaviorManager {
 		if (state == State.RUNNING) {
 			removeQueues.add(e);
 		} else {
-			behaviorLists.remove(e);
+			gameBehaviorLists.remove(e);
 		}
+	}
+	
+	/*
+	 * UI BEHAVIOR
+	 */
+	public void addUIBehavior(UIBehavior e) {
+		uiBehaviorLists.add(e);
 	}
 	
 	public void update(float deltaTime) {
 		state = State.RUNNING;
 		
-		behaviorLists.sort(null);
+		// Sort behaviors by y-position and layer priority
+		gameBehaviorLists.sort(null);
 		
-		// Call update to all behaviors
-		for (GameBehavior e : behaviorLists) {
+		// Call update to all game behaviors
+		for (GameBehavior e : gameBehaviorLists) {
 			e.updateDeltaTime(deltaTime);
 			e.update();
 		}
@@ -56,9 +69,14 @@ public class BehaviorManager {
 		// Camera update
 		Camera.getInstance().update();
 		
+		// Call update to all UI behavior
+		for (UIBehavior e : uiBehaviorLists) {
+			e.update();
+		}
+		
 		// Add later to prevent iterator invalidation
-		while (!addQueues.isEmpty()) behaviorLists.add(addQueues.poll());
-		while (!removeQueues.isEmpty()) behaviorLists.remove(removeQueues.poll());
+		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());
+		while (!removeQueues.isEmpty()) gameBehaviorLists.remove(removeQueues.poll());
 	}
 	
 	/*

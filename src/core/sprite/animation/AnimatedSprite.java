@@ -1,10 +1,11 @@
-package core.sprite;
+package core.sprite.animation;
 
 import java.util.HashMap;
 import java.util.Map;
 
 import core.Renderer;
-import core.sprite.AnimationState.State;
+import core.sprite.Sprite;
+import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import util.Vector2f;
 
@@ -24,7 +25,13 @@ public class AnimatedSprite {
 	private State state;
 	private Map<State, AnimationState> intervals;
 	
+	private AnimatedSpriteEvent event;
+	
 	public AnimatedSprite(String path, int frameRow, int frameCol, int frameWidth, int frameHeight) {
+		this(path, frameRow, frameCol, frameWidth, frameHeight, frameRow * frameCol);
+	}
+	
+	public AnimatedSprite(String path, int frameRow, int frameCol, int frameWidth, int frameHeight, int frameCount) {
 		this.frameCol = frameCol;
 		this.frameWidth = frameWidth;
 		this.frameHeight = frameHeight;
@@ -41,7 +48,7 @@ public class AnimatedSprite {
 		
 		intervals = new HashMap<State, AnimationState>();
 		setStateIntervals(State.IDLE, State.IDLE, 0, 1);
-		setStateIntervals(State.PLAY, State.IDLE, 1, frameCol * frameRow);
+		setStateIntervals(State.PLAY, State.IDLE, 1, frameCount);
 	}
 	
 	public void setStateIntervals(State state, State nextState, int start, int end) {
@@ -61,6 +68,8 @@ public class AnimatedSprite {
 		if (time >= frameTime) {
 			time -= frameTime;
 			if (frame >= intervals.get(state).getEndFrame() - 1) {
+				if (event != null) event.onEnd();
+
 				state = intervals.get(state).getNextStage();
 				frame = intervals.get(state).getStartFrame();
 			} else {
@@ -104,6 +113,10 @@ public class AnimatedSprite {
 	
 	public int getHeight() {
 		return sprite.getHeight();
+	}
+	
+	public void setEventHandler(AnimatedSpriteEvent event) {
+		this.event = event;
 	}
 	
 }

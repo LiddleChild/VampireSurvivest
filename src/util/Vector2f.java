@@ -35,7 +35,7 @@ public class Vector2f implements Comparable<Vector2f> {
 		return new Vector2f(x + other.x, y + other.y);
 	}
 	
-	public Vector2f add(int other) {
+	public Vector2f add(float other) {
 		return new Vector2f(x + other, y + other);
 	}
 	
@@ -51,6 +51,10 @@ public class Vector2f implements Comparable<Vector2f> {
 	
 	public Vector2f subtract(Vector2f other) {
 		return new Vector2f(x - other.x, y - other.y);
+	}
+	
+	public Vector2f subtract(float other) {
+		return new Vector2f(x - other, y - other);
 	}
 	
 	/*
