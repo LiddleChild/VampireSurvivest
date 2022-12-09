@@ -29,6 +29,9 @@ public class StartingScene extends BaseScene {
 	public void update(float deltaTime) {
 		time += deltaTime;
 		
+		double a = (Math.tanh(4 * time - 2) + 1) / 2.0;
+		
+		title.setColor(new Color(a, a, a, 1.f));
 		title.update(deltaTime);
 		
 		if (time >= waitTime) {
