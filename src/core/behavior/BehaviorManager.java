@@ -16,13 +16,11 @@ public class BehaviorManager {
 	
 	private State state = State.INITIALIZING;
 	
-	private ArrayList<UIBehavior> uiBehaviorLists; 
 	private ArrayList<GameBehavior> gameBehaviorLists;
 	private Queue<GameBehavior> addQueues, removeQueues;
 	
 	public BehaviorManager() {
 		this.gameBehaviorLists = new ArrayList<GameBehavior>();
-		this.uiBehaviorLists = new ArrayList<UIBehavior>();
 		
 		this.addQueues = new LinkedList<GameBehavior>();
 		this.removeQueues = new LinkedList<GameBehavior>();
@@ -47,13 +45,6 @@ public class BehaviorManager {
 		}
 	}
 	
-	/*
-	 * UI BEHAVIOR
-	 */
-	public void addUIBehavior(UIBehavior e) {
-		uiBehaviorLists.add(e);
-	}
-	
 	public void update(float deltaTime) {
 		state = State.RUNNING;
 		
@@ -68,11 +59,6 @@ public class BehaviorManager {
 		
 		// Camera update
 		Camera.getInstance().update();
-		
-		// Call update to all UI behavior
-		for (UIBehavior e : uiBehaviorLists) {
-			e.update();
-		}
 		
 		// Add later to prevent iterator invalidation
 		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());

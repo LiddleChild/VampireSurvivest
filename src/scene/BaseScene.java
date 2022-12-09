@@ -1,40 +1,29 @@
 package scene;
 
-import java.io.IOException;
-
-import javafx.scene.Group;
-import javafx.scene.Node;
-import javafx.scene.Scene;
+import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
-import logic.Window;
+import logic.GameLogic;
 
 public abstract class BaseScene {
 	
 	protected Stage stage;
+	protected GraphicsContext gc;
 	
-	private Scene scene;
-	private Group root;
+	private String ID;
 	
-	public BaseScene(Stage stage) {
+	public BaseScene(String ID, Stage stage) {
+		this.ID = ID;
 		this.stage = stage;
-		
-		root = new Group();
-		scene = new Scene(root, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
+		this.gc = GameLogic.getInstance().getGraphicsContext();
 	}
 	
-	protected void addComponent(Node n) {
-		root.getChildren().add(n);
-	}
-	
-	protected void loadScene(String path) throws IOException {
-		
-	}
+	public abstract void update(float deltaTime);
 	
 	/*
-	 * GETTER
+	 * GETTERS & SETTERS
 	 */
-	public Scene getScene() {
-		return scene;
+	public String getID() {
+		return ID;
 	}
 	
 }
