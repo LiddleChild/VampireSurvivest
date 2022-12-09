@@ -7,14 +7,20 @@ import core.inputHandler.KeyboardHandler;
 import core.inputHandler.MouseHandler;
 import core.world.World;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
+import javafx.event.EventHandler;
 import javafx.scene.Group;
 import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import scene.BaseScene;
 import scene.GameScene;
+import scene.MainMenuScene;
+import scene.StartingScene;
 
 public class GameLogic {
 	
@@ -24,6 +30,8 @@ public class GameLogic {
 	private int currentScene;
 	
 	private GraphicsContext gc;
+	
+	private Font defaultFont;
 	
 	/*
 	 * SINGLETON
@@ -38,13 +46,16 @@ public class GameLogic {
 	}
 	
 	public void initalize(Stage stage) {
+		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
+		
 		this.stage = stage;
 		initializeWindow();
 		
 		sceneLists = new ArrayList<BaseScene>();
-		sceneLists.add(new GameScene("main_menu", stage));
+		sceneLists.add(new StartingScene("starting", stage));
+		sceneLists.add(new MainMenuScene("main_menu", stage));
 		sceneLists.add(new GameScene("game", stage));
-		currentScene = 0;
+		setCurrentScene(0);
 		
 		// Initialize renderer
 		Renderer.initialize(gc);
@@ -56,13 +67,21 @@ public class GameLogic {
 		new World();
 		
 		// Start game loops
-		initGameLoop();
+		initializeGameLoop();
 	}
 	
 	private void initializeWindow() {
 		stage.setTitle("A Game Window");
 		stage.setResizable(false);
 		stage.show();
+		
+		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent t) {
+                Platform.exit();
+                System.exit(0);
+            }
+        });
 
 		Canvas canvas = new Canvas(Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		gc = canvas.getGraphicsContext2D();
@@ -91,7 +110,7 @@ public class GameLogic {
 		scene.setOnMouseMoved(mouseHandler);
 	}
 	
-	private void initGameLoop() {
+	private void initializeGameLoop() {
 		new AnimationTimer() {
 			
 			private long lastTime = System.nanoTime();
@@ -141,5 +160,9 @@ public class GameLogic {
 	
 	public void nextScene() {
 		currentScene++;
+	}
+
+	public Font getDefaultFont() {
+		return defaultFont;
 	}
 }
