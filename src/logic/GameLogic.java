@@ -33,6 +33,8 @@ public class GameLogic {
 	
 	private Font defaultFont;
 	
+	private float maxExp, exp;
+	
 	/*
 	 * SINGLETON
 	 */
@@ -46,6 +48,9 @@ public class GameLogic {
 	}
 	
 	public void initalize(Stage stage) {
+		maxExp = 100.f;
+		exp = 0.f;
+		
 		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
 		
 		this.stage = stage;
@@ -55,7 +60,7 @@ public class GameLogic {
 		sceneLists.add(new StartingScene("starting", stage));
 		sceneLists.add(new MainMenuScene("main_menu", stage));
 		sceneLists.add(new GameScene("game", stage));
-		setCurrentScene(0);
+		setCurrentScene(2);
 		
 		// Initialize renderer
 		Renderer.initialize(gc);
@@ -164,5 +169,21 @@ public class GameLogic {
 
 	public Font getDefaultFont() {
 		return defaultFont;
+	}
+
+	public float getMaxExp() {
+		return maxExp;
+	}
+
+	public void setMaxExp(float maxExp) {
+		this.maxExp = maxExp;
+	}
+
+	public float getExp() {
+		return exp;
+	}
+
+	public void setExp(float exp) {
+		this.exp = exp;
 	}
 }
