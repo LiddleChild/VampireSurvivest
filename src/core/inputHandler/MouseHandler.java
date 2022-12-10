@@ -6,7 +6,7 @@ import java.util.TreeSet;
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class MouseHandler implements EventHandler<MouseEvent> {
 	

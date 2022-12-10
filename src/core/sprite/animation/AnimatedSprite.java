@@ -7,7 +7,7 @@ import core.Renderer;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class AnimatedSprite {
 	

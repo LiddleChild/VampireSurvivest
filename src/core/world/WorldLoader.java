@@ -8,7 +8,7 @@ import core.sprite.SpriteSheet;
 import javafx.scene.image.Image;
 import javafx.scene.paint.Color;
 import util.ColorUtil;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class WorldLoader {
 	

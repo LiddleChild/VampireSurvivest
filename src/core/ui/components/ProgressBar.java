@@ -6,14 +6,13 @@ import javafx.scene.paint.Color;
 
 public class ProgressBar extends UIComponent {
 
-	private float maxProgress, progress, targetProgress;
-	private float interpAmount;
+	private float maxProgress, progress;
 	private Rectangle bound;
 	private Color backgroundColor, foregroundColor;
 	private boolean isReverse;
 	
 	private Color borderColor;
-	private int borderSize;
+	private int borderSize, borderRadius;
 	
 	public ProgressBar(int x, int y, int w, int h, float maxProgress) {
 		this.maxProgress = maxProgress;
@@ -26,40 +25,35 @@ public class ProgressBar extends UIComponent {
 		
 		borderSize = 0;
 		borderColor = Color.WHITE;
-		
-		interpAmount = 0.99f;
+		borderRadius = 8;
 	}
 	
 	@Override
 	public void update(float deltaTime) {
-		progress += (targetProgress - progress) * interpAmount * deltaTime;
-		
 		gc.setFill(borderColor);
-		gc.fillRect(bound.x, bound.y, bound.width, bound.height);
+		gc.fillRoundRect(bound.x, bound.y, bound.width, bound.height, borderRadius, borderRadius);
 		
 		gc.setFill(backgroundColor);
-		gc.fillRect(
+		gc.fillRoundRect(
 				bound.x + borderSize,
 				bound.y + borderSize,
 				bound.width - borderSize * 2,
-				bound.height - borderSize * 2);
+				bound.height - borderSize * 2, borderRadius, borderRadius);
 		
+		float xx, yy, ww, hh;
 		gc.setFill(foregroundColor);
 		if (isReverse) {
-			float xx = bound.x + (progress / maxProgress) * bound.width + borderSize;
-			float yy = bound.y + borderSize;
-			float ww = bound.width * (1.f - progress / maxProgress) - borderSize * 2;
-			float hh = bound.height - borderSize * 2;
-			
-			gc.fillRect(xx, yy, ww, hh);
+			xx = bound.x + (progress / maxProgress) * bound.width + borderSize;
+			yy = bound.y + borderSize;
+			ww = bound.width * (1.f - progress / maxProgress) - borderSize * 2;
+			hh = bound.height - borderSize * 2;
 		} else {
-			float xx = bound.x + borderSize;
-			float yy = bound.y + borderSize;
-			float ww = bound.width * (progress / maxProgress) - borderSize * 2;
-			float hh = bound.height - borderSize * 2;
-
-			gc.fillRect(xx, yy, ww, hh);
+			xx = bound.x + borderSize;
+			yy = bound.y + borderSize;
+			ww = bound.width * (progress / maxProgress) - borderSize * 2;
+			hh = bound.height - borderSize * 2;
 		}
+		gc.fillRoundRect(xx, yy, ww, hh, borderRadius, borderRadius);
 	}
 	
 	/*
@@ -74,12 +68,8 @@ public class ProgressBar extends UIComponent {
 		return progress;
 	}
 
-	public void setTargetProgress(float targetProgress) {
-		this.targetProgress = targetProgress;
-	}
-
 	public void setProgress(float progress) {
-		this.progress = progress;
+		this.progress = (progress > maxProgress) ? maxProgress : progress;
 	}
 
 	public void setBackgroundColor(Color backgroundColor) {
@@ -102,7 +92,7 @@ public class ProgressBar extends UIComponent {
 		this.isReverse = isReverse;
 	}
 
-	public void setInterpAmount(float interpAmount) {
-		this.interpAmount = interpAmount;
+	public void setBorderRadius(int borderRadius) {
+		this.borderRadius = borderRadius;
 	}
 }

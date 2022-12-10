@@ -9,7 +9,7 @@ import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import util.Time;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class Sword {
 

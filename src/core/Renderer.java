@@ -7,8 +7,8 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import logic.Window;
-import util.Mathf;
-import util.Vector2f;
+import util.math.Mathf;
+import util.math.Vector2f;
 
 public class Renderer {
 	private static GraphicsContext gc;

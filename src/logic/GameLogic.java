@@ -30,10 +30,10 @@ public class GameLogic {
 	private int currentScene;
 	
 	private GraphicsContext gc;
-	
 	private Font defaultFont;
 	
-	private float maxExp, exp;
+	private GameState gameState;
+	private int maxExp, exp, level;
 	
 	/*
 	 * SINGLETON
@@ -48,8 +48,11 @@ public class GameLogic {
 	}
 	
 	public void initalize(Stage stage) {
-		maxExp = 100.f;
-		exp = 0.f;
+		maxExp = 100;
+		exp = 0;
+		level = 1;
+		
+		gameState = GameState.PLAY;
 		
 		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
 		
@@ -137,6 +140,12 @@ public class GameLogic {
 					fps = 0;
 				}
 				
+				if (exp >= maxExp) {
+					exp = 0;
+					maxExp *= 1.5f;
+					level++;
+				}
+				
 				// Clear screen
 				gc.setFill(Color.BLACK);
 				gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
@@ -171,19 +180,31 @@ public class GameLogic {
 		return defaultFont;
 	}
 
-	public float getMaxExp() {
+	public int getMaxExp() {
 		return maxExp;
 	}
 
-	public void setMaxExp(float maxExp) {
+	public void setMaxExp(int maxExp) {
 		this.maxExp = maxExp;
 	}
 
-	public float getExp() {
+	public int getExp() {
 		return exp;
 	}
 
-	public void setExp(float exp) {
+	public void setExp(int exp) {
 		this.exp = exp;
+	}
+
+	public int getLevel() {
+		return level;
+	}
+
+	public GameState getGameState() {
+		return gameState;
+	}
+
+	public void setGameState(GameState gameState) {
+		this.gameState = gameState;
 	}
 }

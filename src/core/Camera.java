@@ -4,7 +4,7 @@ import core.entity.Entity;
 import core.world.Tile;
 import core.world.World;
 import logic.Window;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class Camera {
 	private static Camera instance;

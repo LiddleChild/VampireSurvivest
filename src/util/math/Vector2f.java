@@ -1,4 +1,4 @@
-package util;
+package util.math;
 
 public class Vector2f implements Comparable<Vector2f> {
 	

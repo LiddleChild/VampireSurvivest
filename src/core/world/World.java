@@ -7,7 +7,7 @@ import core.behavior.GameBehavior;
 import core.entity.Player;
 import core.entity.enemy.EnemySpawner;
 import core.sprite.SpriteSheet;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class World extends GameBehavior {
 	public static int MAP_WIDTH;
@@ -21,7 +21,6 @@ public class World extends GameBehavior {
 	private ArrayList<Coin> coins;
 	
 	private static Player player;
-	private EnemySpawner enemySpawner;
 	
 	public World() {
 		super();
@@ -48,9 +47,13 @@ public class World extends GameBehavior {
 		player = new Player(this);
 		Camera.getInstance().setEntity(player);
 		
-		enemySpawner = new EnemySpawner(this);
+		new EnemySpawner(this);
 		
 		coins = new ArrayList<Coin>();
+		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE))));
+		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE * 2))));
+		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE * 3))));
+		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE * 4))));
 	}
 
 	@Override

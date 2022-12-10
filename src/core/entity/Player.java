@@ -14,7 +14,7 @@ import core.world.World;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
 import logic.Window;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class Player extends Entity {
 	

@@ -6,7 +6,7 @@ import core.behavior.GameBehavior;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import logic.GameLogic;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class Coin extends GameBehavior {
 
@@ -19,7 +19,6 @@ public class Coin extends GameBehavior {
 	
 	public Coin(Vector2f position) {
 		super(3);
-		
 		this.position = position;
 
 		sprite = new AnimatedSprite("coin.png", 1, 4, 64, 64);
@@ -32,7 +31,7 @@ public class Coin extends GameBehavior {
 	@Override
 	public void update() {
 		if (bound.intersects(World.getPlayer().getBound())) {
-			GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() + 25.f);
+			GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() + 25);
 			super.delete();
 		}
 		

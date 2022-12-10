@@ -8,7 +8,7 @@ import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class Enemy extends Entity {
 	

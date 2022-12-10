@@ -9,7 +9,7 @@ import core.sprite.animation.AnimatedSpriteEvent;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public class Imp extends Entity {
 	

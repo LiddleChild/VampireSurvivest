@@ -10,7 +10,7 @@ import core.world.Tile;
 import core.world.World;
 import javafx.scene.paint.Color;
 import util.Time;
-import util.Vector2f;
+import util.math.Vector2f;
 
 public abstract class Entity extends GameBehavior {
 
