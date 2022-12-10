@@ -30,15 +30,12 @@ public class ProgressBar extends UIComponent {
 	
 	@Override
 	public void update(float deltaTime) {
-		gc.setFill(borderColor);
-		gc.fillRoundRect(bound.x, bound.y, bound.width, bound.height, borderRadius, borderRadius);
-		
 		gc.setFill(backgroundColor);
-		gc.fillRoundRect(
+		gc.fillRect(
 				bound.x + borderSize,
 				bound.y + borderSize,
 				bound.width - borderSize * 2,
-				bound.height - borderSize * 2, borderRadius, borderRadius);
+				bound.height - borderSize * 2);
 		
 		float xx, yy, ww, hh;
 		gc.setFill(foregroundColor);
@@ -53,7 +50,16 @@ public class ProgressBar extends UIComponent {
 			ww = bound.width * (progress / maxProgress) - borderSize * 2;
 			hh = bound.height - borderSize * 2;
 		}
-		gc.fillRoundRect(xx, yy, ww, hh, borderRadius, borderRadius);
+		gc.fillRect(xx, yy, ww, hh);
+		
+		gc.setStroke(borderColor);
+		gc.setLineWidth(borderSize);
+		gc.strokeRoundRect(
+				bound.x + borderSize / 2,
+				bound.y + borderSize / 2,
+				bound.width - borderSize,
+				bound.height - borderSize,
+				borderRadius, borderRadius);
 	}
 	
 	/*

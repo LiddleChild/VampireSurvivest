@@ -58,13 +58,10 @@ public class AnimatedSprite {
 	public void setState(State state) {	
 		this.state = state;
 	}
-
-	public void draw(Vector2f position, int w, int h, float deltaTime, float angle) {
-		draw((int) position.x, (int) position.y, w, h, deltaTime, angle);
-	}
 	
-	public void draw(int x, int y, int w, int h, float deltaTime, float angle) {
+	public void update(float deltaTime) {
 		time += deltaTime;
+
 		if (time >= frameTime) {
 			time -= frameTime;
 			if (frame >= intervals.get(state).getEndFrame() - 1) {
@@ -76,7 +73,13 @@ public class AnimatedSprite {
 				frame++;
 			}
 		}
-		
+	}
+
+	public void render(Vector2f position, int w, int h, float angle) {
+		render((int) position.x, (int) position.y, w, h, angle);
+	}
+	
+	public void render(int x, int y, int w, int h, float angle) {
 		if (reverse) {
 			w = -w;
 			x += Tile.SIZE;

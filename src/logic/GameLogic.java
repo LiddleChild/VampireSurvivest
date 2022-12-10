@@ -86,6 +86,7 @@ public class GameLogic {
 		stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent t) {
+            	setGameState(GameState.EXIT);
                 Platform.exit();
                 System.exit(0);
             }
@@ -140,10 +141,12 @@ public class GameLogic {
 					fps = 0;
 				}
 				
-				if (exp >= maxExp) {
-					exp = 0;
-					maxExp *= 1.5f;
+				if (gameState != GameState.UPGRADE && exp >= maxExp) {
+//					exp = 0;
+//					maxExp *= 1.5f;
 					level++;
+					
+					setGameState(GameState.UPGRADE);
 				}
 				
 				// Clear screen

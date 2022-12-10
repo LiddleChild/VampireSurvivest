@@ -30,6 +30,11 @@ public class Tile extends GameBehavior {
 
 	@Override
 	public void update() {
+		
+	}
+
+	@Override
+	public void render() {
 		if (sprite != null) {
 			if (transparent) Renderer.setRenderOpacity(0.5f);
 			Renderer.drawSprite(sprite, x, y, Tile.SIZE, Tile.SIZE);

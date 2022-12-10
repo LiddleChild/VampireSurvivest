@@ -4,12 +4,14 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import core.Renderer;
-import core.behavior.GameBehavior;
 import core.entity.Entity;
 import core.world.Tile;
 import core.world.World;
+import logic.GameLogic;
+import logic.GameState;
+import util.Time;
 
-public class EnemySpawner extends GameBehavior {
+public class EnemySpawner implements Runnable {
 	private World world;
 	
 	private Random random;
@@ -27,16 +29,24 @@ public class EnemySpawner extends GameBehavior {
 		
 		enemyLists = new ArrayList<Entity>();
 	}
-	
+
 	@Override
-	public void update() {
-		if (time >= nextSpawnTime) {
-			time = 0.f;
-			nextSpawnTime = random.nextFloat(3.f, 5.f);
+	public void run() {
+		float lastTime = Time.getNanoSecond();
+		while (GameLogic.getInstance().getGameState() != GameState.EXIT) {
+			float currentTime = Time.getNanoSecond();
+			float deltaTime = currentTime - lastTime;
 			
-			spawnEnemy();
-		} else {
-			time += deltaTime;
+			if (time >= nextSpawnTime) {
+				time = 0.f;
+				nextSpawnTime = random.nextFloat(3.f, 5.f);
+				
+				spawnEnemy();
+			} else {
+				time += deltaTime;
+			}
+			
+			lastTime = currentTime;
 		}
 	}
 	

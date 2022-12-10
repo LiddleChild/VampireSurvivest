@@ -26,6 +26,7 @@ public class Coin extends GameBehavior {
 		sprite.setStateIntervals(State.IDLE, State.IDLE, 0, 3);
 		
 		bound = new Rectangle((int) position.x, (int) position.y, 16, 16);
+		time = 0.f;
 	}
 	
 	@Override
@@ -36,11 +37,17 @@ public class Coin extends GameBehavior {
 		}
 		
 		time += deltaTime;
-		sprite.draw((int) position.x,
+		sprite.update(deltaTime);
+	}
+	
+	@Override
+	public void render() {
+		sprite.render(
+				(int) position.x,
 				(int) (position.y + Math.sin(time * 3.f) * Tile.SIZE / 8),
 				Tile.SIZE / 2,
 				Tile.SIZE / 2,
-				deltaTime, 0.f);
+				0.f);
 		
 //		Renderer.setFill(new Color(1, 0, 0, 0.5f));
 //		Renderer.fillRect(bound);

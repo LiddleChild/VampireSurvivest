@@ -22,6 +22,7 @@ public abstract class GameBehavior implements Comparable<GameBehavior> {
 	}
 	
 	public abstract void update();
+	public abstract void render();
 	
 	public void updateDeltaTime(float dt) {
 		this.deltaTime = dt;

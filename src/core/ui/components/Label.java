@@ -14,6 +14,7 @@ public class Label extends UIComponent {
 	
 	private Color shadowColor;
 	private boolean isTextShadow;
+	private int shadowOffset;
 	
 	private Text fxText;
 	
@@ -28,6 +29,7 @@ public class Label extends UIComponent {
 		setFont(GameLogic.getInstance().getDefaultFont());		
 		setColor(Color.BLACK);
 		setShadowColor(Color.WHITE);
+		setShadowOffset(3);
 	}
 	
 	@Override
@@ -49,7 +51,7 @@ public class Label extends UIComponent {
 		
 		if (isTextShadow) {
 			gc.setFill(shadowColor);
-			gc.fillText(text, xx + 3, yy + 3);
+			gc.fillText(text, xx + shadowOffset, yy + shadowOffset);
 		}
 		
 		gc.setFill(color);
@@ -95,5 +97,9 @@ public class Label extends UIComponent {
 	public void setText(String text) {
 		this.text = text;
 		this.fxText.setText(text);
+	}
+
+	public void setShadowOffset(int shadowOffset) {
+		this.shadowOffset = shadowOffset;
 	}
 }

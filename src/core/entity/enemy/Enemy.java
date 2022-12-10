@@ -38,15 +38,16 @@ public class Enemy extends Entity {
 			super.attack(World.getPlayer());
 		}
 
-		if (direction.x < 0) {
-			sprite.setReverse(true);
-		} else if (direction.x > 0) {
-			sprite.setReverse(false);
-		}
+		if (direction.x < 0) sprite.setReverse(true);
+		else if (direction.x > 0) sprite.setReverse(false);
 
 		sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
-		sprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
-		
+		sprite.update(deltaTime);
+	}
+
+	@Override
+	public void render() {
+		if (sprite != null) sprite.render(position, Tile.SIZE, Tile.SIZE, 0.f);
 		super.drawHealthBar();
 	}
 

@@ -47,7 +47,8 @@ public class World extends GameBehavior {
 		player = new Player(this);
 		Camera.getInstance().setEntity(player);
 		
-		new EnemySpawner(this);
+
+		new Thread(new EnemySpawner(this), "enemy_spawner_thread").start();
 		
 		coins = new ArrayList<Coin>();
 		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE))));
@@ -73,6 +74,11 @@ public class World extends GameBehavior {
 				}
 			}
 		}
+	}
+
+	@Override
+	public void render() {
+		
 	}
 	
 	public void spawnCoin(Vector2f pos) {

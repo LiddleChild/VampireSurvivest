@@ -1,27 +1,38 @@
 package core.ui.components;
 
-import java.awt.Rectangle;
-
 import core.inputHandler.MouseHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
 
 public class Button extends UIComponent {
 
-	private Label label;
-	private Rectangle bound;
-	private Color backgroundColor, hoverBackgroundColor;
+	private Label label, rightHoverCursor, leftHoverCursor;
+	private SubWindow bound;
+	private Color hoverColor;
 
 	private boolean isClick;
 	private ButtonEventHandler event;
 	
 	public Button(String text, int x, int y, int w, int h) {
 		label = new Label(text, x, y);
-		bound = new Rectangle(x - w / 2, y - h / 2, w, h);
+		bound = new SubWindow(x, y, w, h);
+
+		rightHoverCursor = new Label("<", x + w / 2 + 20, y);
+		rightHoverCursor.setPosition(Position.LEFT);
+		rightHoverCursor.setFontSize(h * 0.8f);
+		rightHoverCursor.setColor(hoverColor);
+		rightHoverCursor.setTextShadow(true);
+		rightHoverCursor.setShadowColor(Color.BLACK);
+		
+		leftHoverCursor = new Label(">", x - w / 2 - 20, y);
+		leftHoverCursor.setPosition(Position.RIGHT);
+		leftHoverCursor.setFontSize(h * 0.8f);
+		leftHoverCursor.setColor(hoverColor);
+		leftHoverCursor.setTextShadow(true);
+		leftHoverCursor.setShadowColor(Color.BLACK);
 		
 		isClick = false;
-		backgroundColor = Color.WHITE;
-		hoverBackgroundColor = Color.GREY;
+		hoverColor = Color.WHITE;
 	}
 
 	@Override
@@ -30,35 +41,40 @@ public class Button extends UIComponent {
 			isClick = false;
 		}
 		
-		if (bound.contains(MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y)) {
+		if (bound.getBound().contains(MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y)) {
 			if (event != null && !isClick && MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
 				isClick = true;
 				event.onClick();
 			}
+
+			leftHoverCursor.setColor(hoverColor);
+			leftHoverCursor.update(deltaTime);
 			
-			gc.setFill(hoverBackgroundColor);
-		} else {			
-			gc.setFill(backgroundColor);
+			rightHoverCursor.setColor(hoverColor);
+			rightHoverCursor.update(deltaTime);
 		}
 		
-		gc.fillRect(bound.x, bound.y, bound.width, bound.height);
-		
+		bound.update(deltaTime);
 		label.update(deltaTime);
 	}
 
-	
 	/*
 	 * GETTERS & SETTERS
 	 */
-	public void setBackgroundColor(Color backgroundColor) {
-		this.backgroundColor = backgroundColor;
-	}
-
-	public void setHoverBackgroundColor(Color hoverBackgroundColor) {
-		this.hoverBackgroundColor = hoverBackgroundColor;
-	}
 
 	public void setOnClick(ButtonEventHandler event) {
 		this.event = event;
+	}
+
+	public void setHoverColor(Color hoverColor) {
+		this.hoverColor = hoverColor;
+	}
+
+	public SubWindow getBound() {
+		return bound;
+	}
+
+	public Label getLabel() {
+		return label;
 	}
 }

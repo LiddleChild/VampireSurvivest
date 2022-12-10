@@ -51,7 +51,7 @@ public class BehaviorManager {
 		// Sort behaviors by y-position and layer priority
 		gameBehaviorLists.sort(null);
 		
-		// Call update to all game behaviors
+		// Call update
 		for (GameBehavior e : gameBehaviorLists) {
 			e.updateDeltaTime(deltaTime);
 			e.update();
@@ -63,6 +63,13 @@ public class BehaviorManager {
 		// Add later to prevent iterator invalidation
 		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());
 		while (!removeQueues.isEmpty()) gameBehaviorLists.remove(removeQueues.poll());
+	}
+	
+	public void render(float deltaTime) {
+		// Call render
+		for (GameBehavior e : gameBehaviorLists) {
+			e.render();
+		}
 	}
 	
 	/*

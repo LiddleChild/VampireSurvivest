@@ -42,8 +42,12 @@ public class Sword {
 		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
 	}
 	
-	public void drawFx(float deltaTime) {
-		hitFxSprite.draw(hitboxes[direction].x, hitboxes[direction].y, Tile.SIZE, Tile.SIZE, deltaTime, 90.f * direction);
+	public void updateFX(float deltaTime) {
+		hitFxSprite.update(deltaTime);
+	}
+	
+	public void renderFx() {
+		hitFxSprite.render(hitboxes[direction].x, hitboxes[direction].y, Tile.SIZE, Tile.SIZE, 90.f * direction);
 		
 //		for (Rectangle r : hitboxes) {
 //			Renderer.setFill(new Color(1, 0, 0, 0.5f));

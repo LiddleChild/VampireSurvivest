@@ -27,11 +27,11 @@ public class MainMenuScene extends BaseScene {
 		title.setShadowColor(Color.WHITE);
 		title.setTextShadow(true);
 		
-		startButton = new Button("START",
-				Window.WINDOW_WIDTH / 2,
-				Window.WINDOW_HEIGHT / 2 + 100,
-				150,
-				50);
+		startButton = new Button("START", Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + 100, 180, 50);
+		startButton.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
+		startButton.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		startButton.getBound().setBorderSize(2);
+		startButton.getLabel().setColor(Color.WHITE);
 		startButton.setOnClick(new ButtonEventHandler() {
 			@Override
 			public void onClick() {

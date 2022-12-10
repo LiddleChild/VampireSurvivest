@@ -82,26 +82,32 @@ public class Imp extends Entity {
 				time = 0.f;
 				showBlink = true;
 			}
-		
-			if (direction.x < 0) {
-				sprite.setReverse(true);
-			} else if (direction.x > 0) {
-				sprite.setReverse(false);
-			}
-		
-			sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
-			if (showBlink) {			
-				sprite.draw(position, Tile.SIZE, Tile.SIZE, deltaTime, 0.f);
-			}
+
+			if (direction.x < 0) sprite.setReverse(true);
+			else if (direction.x > 0) sprite.setReverse(false);
 			
-			super.drawHealthBar();
+			sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+			sprite.update(deltaTime);
+		} else {
+			explosionSprite.update(deltaTime);
 		}
-		
-		if (isDetonated) {
-			explosionSprite.draw(position.subtract((explosionRange - 1.f) * Tile.SIZE / 2.f),
+	}
+
+	@Override
+	public void render() {
+		if (!isDetonated) {
+			// Draw imp
+			if (showBlink) {			
+				sprite.render(position, Tile.SIZE, Tile.SIZE, 0.f);
+			}
+
+			// Draw health bar
+			super.drawHealthBar();
+		} else {
+			// Draw explosion
+			explosionSprite.render(position.subtract((explosionRange - 1.f) * Tile.SIZE / 2.f),
 					(int) (explosionRange * Tile.SIZE),
 					(int) (explosionRange * Tile.SIZE),
-					deltaTime,
 					0.f);
 		}
 	}
@@ -109,6 +115,7 @@ public class Imp extends Entity {
 	@Override
 	protected void onDeath() {
 		super.delete();
+		world.spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
 	}
 
 	@Override

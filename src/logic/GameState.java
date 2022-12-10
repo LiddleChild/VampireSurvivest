@@ -2,6 +2,6 @@ package logic;
 
 public enum GameState {
 	
-	PAUSE, PLAY
+	PAUSE, PLAY, EXIT, UPGRADE
 	
 }

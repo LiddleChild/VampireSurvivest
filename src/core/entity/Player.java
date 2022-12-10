@@ -21,7 +21,7 @@ public class Player extends Entity {
 	private Vector2f direction;
 	private Vector2f middleScreen;
 	
-	private AnimatedSprite playerSprite;
+	private AnimatedSprite sprite;
 	
 	private Sword sword;
 	
@@ -41,8 +41,8 @@ public class Player extends Entity {
 		
 		bound = new Rectangle(0, 0, 28, Tile.SIZE);
 		
-		playerSprite = new AnimatedSprite("player.png", 1, 5, 64, 128);
-		playerSprite.setOffset(new Vector2f(0, -Tile.SIZE)
+		sprite = new AnimatedSprite("player.png", 1, 5, 64, 128);
+		sprite.setOffset(new Vector2f(0, -Tile.SIZE)
 				.add(new Vector2f(
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2)));
@@ -58,7 +58,7 @@ public class Player extends Entity {
 			for (int i = 0; i < hitDirs.length; i++) {
 				if (hitDirs[i]) {
 					sword.attack(CollisionManager.getInstance().isColliding(this, sword.getHitboxes()[i]));
-//					
+
 //					Renderer.setFill(new Color(1.f, 0.f, 0.f, 0.5f));
 //					Renderer.fillRect(sword.getHitboxes()[i]);
 					
@@ -67,28 +67,37 @@ public class Player extends Entity {
 			}
 		}
 		
-		if (direction.x < 0) {
-			playerSprite.setReverse(true);
-		} else if (direction.x > 0) {
-			playerSprite.setReverse(false);
+		if (blinkTime > 0) {
+			if (blinkTime == maxBlink * blinkPeriod) blinkTime = 0;
+			else blinkTime++;
 		}
 
+		if (direction.x < 0) sprite.setReverse(true);
+		else if (direction.x > 0) sprite.setReverse(false);
+		
+		sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+		sprite.update(deltaTime);
+		
+		sword.updateFX(deltaTime);
+	}
+
+	@Override
+	public void render() {
+		// Draw sword
 		Renderer.drawSprite(sword.getSprite(),
 				position.x + Tile.SIZE / 2.5f,
 				position.y,
 				Tile.SIZE, Tile.SIZE);
 		
-		if (blinkTime > 0) {
-			if (blinkTime == maxBlink * blinkPeriod) blinkTime = 0;
-			else blinkTime++;
-		}
-		
-		playerSprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+		// Draw player
 		if (blinkTime % (2 * blinkPeriod) <= blinkPeriod) {
-			playerSprite.draw(position, Tile.SIZE, Tile.SIZE * 2, deltaTime, 0.f);
+			sprite.render(position, Tile.SIZE, Tile.SIZE * 2, 0.f);
 		}
 		
-		sword.drawFx(deltaTime);
+		// Draw sword FX
+		sword.renderFx();
+		
+		// Draw health bar
 		super.drawHealthBar();
 	}
 
