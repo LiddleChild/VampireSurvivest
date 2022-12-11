@@ -1,7 +1,7 @@
 package core.behavior;
 
 import javafx.scene.canvas.GraphicsContext;
-import scene.GameScene;
+import logic.GameLogic;
 
 public abstract class UIBehavior {
 	
@@ -9,8 +9,7 @@ public abstract class UIBehavior {
 	protected GraphicsContext gc;
 	
 	public UIBehavior() {
-		BehaviorManager.getInstance().addUIBehavior(this);
-		this.gc = GameScene.getInstance().getGraphicsContext();
+		this.gc = GameLogic.getInstance().getGraphicsContext();
 	}
 	
 	public abstract void update();

@@ -1,10 +1,12 @@
 package scene;
 
 import core.behavior.BehaviorManager;
+import core.ui.StatusWindow;
 import core.ui.UpgradeWindow;
 import core.ui.components.Label;
 import core.ui.components.Position;
 import core.ui.components.ProgressBar;
+import core.world.World;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.GameLogic;
@@ -12,22 +14,14 @@ import logic.GameState;
 import logic.Window;
 import util.ColorUtil;
 
-/*
- * 
- * TODO:
- * - separate update method into: update(float), render(float) to implement pausing
- * - Upgrade UI on level up
- * - REFAC: GameLogic
- * 
- */
-
 public class GameScene extends BaseScene {
 
 	private Color backgroundColor = new Color(43.0 / 255.0, 41.0 / 255.0, 41.0 / 255.0, 1.0);
 	private ProgressBar expBar;
 	private Label level;
 	
-	private UpgradeWindow upgrade;
+	private UpgradeWindow upgradeWindow;
+	private StatusWindow statusWindow;
 	
 	public GameScene(String ID, Stage stage) {
 		super(ID, stage);
@@ -47,7 +41,17 @@ public class GameScene extends BaseScene {
 		level.setTextShadow(true);
 		level.setShadowOffset(2);
 		
-		upgrade = new UpgradeWindow();
+		upgradeWindow = new UpgradeWindow();
+		statusWindow = new StatusWindow();
+	}
+	
+	@Override
+	public void init() {
+		// Initialize world
+		new World();
+		
+		// Call init
+		BehaviorManager.getInstance().init();
 	}
 
 	@Override
@@ -66,7 +70,8 @@ public class GameScene extends BaseScene {
 		 * UI
 		 */
 		if (GameLogic.getInstance().getGameState() == GameState.UPGRADE) {
-			upgrade.update(deltaTime);
+			upgradeWindow.update(deltaTime);
+			statusWindow.update(deltaTime);
 		}
 		
 		expBar.setMaxProgress(GameLogic.getInstance().getMaxExp());

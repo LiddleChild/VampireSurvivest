@@ -10,21 +10,22 @@ import util.math.Vector2f;
 
 public class MouseHandler implements EventHandler<MouseEvent> {
 	
-	private static Set<String> keydowns;
-
+	private static Set<String> mousedowns;
 	private static Vector2f mousePosition;
+	private static boolean lastMouseDown;
 	
 	public static void initialize() {
 		mousePosition = new Vector2f(0, 0);
-		keydowns = new TreeSet<String>();
+		mousedowns = new TreeSet<String>();
+		lastMouseDown = false;
 	}
 
 	@Override
 	public void handle(MouseEvent e) {
 		if (e.getEventType() == MouseEvent.MOUSE_PRESSED) {
-			keydowns.add(e.getButton().name());
+			mousedowns.add(e.getButton().name());
 		} else if (e.getEventType() == MouseEvent.MOUSE_RELEASED) {
-			keydowns.remove(e.getButton().name());
+			mousedowns.remove(e.getButton().name());
 		} else if (e.getEventType() == MouseEvent.MOUSE_MOVED) {
 			mousePosition.x = (float) e.getX();
 			mousePosition.y = (float) e.getY();
@@ -32,7 +33,15 @@ public class MouseHandler implements EventHandler<MouseEvent> {
 	}
 	
 	public static boolean isMouseDown(MouseButton mb) {
-		return keydowns.contains(mb.name());
+		if (mousedowns.contains(mb.name())) {
+			if (lastMouseDown) return false;
+			
+			lastMouseDown = true;
+			return true;
+		}
+		
+		lastMouseDown = false;
+		return false;
 	}
 
 	public static Vector2f getMousePosition() {

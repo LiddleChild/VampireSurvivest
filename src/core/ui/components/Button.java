@@ -10,7 +10,6 @@ public class Button extends UIComponent {
 	private SubWindow bound;
 	private Color hoverColor;
 
-	private boolean isClick;
 	private ButtonEventHandler event;
 	
 	public Button(String text, int x, int y, int w, int h) {
@@ -22,6 +21,7 @@ public class Button extends UIComponent {
 		rightHoverCursor.setFontSize(h * 0.8f);
 		rightHoverCursor.setColor(hoverColor);
 		rightHoverCursor.setTextShadow(true);
+		rightHoverCursor.setShadowOffset(2);
 		rightHoverCursor.setShadowColor(Color.BLACK);
 		
 		leftHoverCursor = new Label(">", x - w / 2 - 20, y);
@@ -29,21 +29,16 @@ public class Button extends UIComponent {
 		leftHoverCursor.setFontSize(h * 0.8f);
 		leftHoverCursor.setColor(hoverColor);
 		leftHoverCursor.setTextShadow(true);
+		leftHoverCursor.setShadowOffset(2);
 		leftHoverCursor.setShadowColor(Color.BLACK);
 		
-		isClick = false;
 		hoverColor = Color.WHITE;
 	}
 
 	@Override
 	public void update(float deltaTime) {
-		if (!MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
-			isClick = false;
-		}
-		
 		if (bound.getBound().contains(MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y)) {
-			if (event != null && !isClick && MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
-				isClick = true;
+			if (event != null && MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
 				event.onClick();
 			}
 

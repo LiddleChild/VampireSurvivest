@@ -27,6 +27,11 @@ public class Tile extends GameBehavior {
 	public void setTransparent() {
 		transparent = true;
 	}
+	
+	@Override
+	public void init() {
+		
+	}
 
 	@Override
 	public void update() {

@@ -39,7 +39,12 @@ public class MainMenuScene extends BaseScene {
 			}
 		});
 		
-		this.background = new Sprite("mainmenu_background.jpg");
+		background = new Sprite("mainmenu_background.jpg");
+	}
+	
+	@Override
+	public void init() {
+		
 	}
 
 	@Override

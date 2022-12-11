@@ -30,6 +30,11 @@ public class Coin extends GameBehavior {
 	}
 	
 	@Override
+	public void init() {
+		
+	}
+	
+	@Override
 	public void update() {
 		if (bound.intersects(World.getPlayer().getBound())) {
 			GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() + 25);

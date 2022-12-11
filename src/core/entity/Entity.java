@@ -19,7 +19,7 @@ public abstract class Entity extends GameBehavior {
 	protected Vector2f position;
 	protected Vector2f direction;
 	
-	protected float speed;
+	protected float movementSpeed;
 	protected World world;
 	
 	protected float maxHealth, health;
@@ -47,7 +47,7 @@ public abstract class Entity extends GameBehavior {
 		
 		movable = new boolean[] { true, true, true, true };
 		
-		speed = Tile.SIZE * 4.f;
+		setMovementSpeed(4.f);
 		position = new Vector2f(World.SPAWN_POINT);
 		direction = new Vector2f(0.f, 0.f);
 		
@@ -89,11 +89,11 @@ public abstract class Entity extends GameBehavior {
 				5);
 
 		// Health
-		Renderer.setFill(new Color(1 - health / maxHealth, health / 100.f, 0, 1.f));
+		Renderer.setFill(new Color(1 - health / maxHealth, health / maxHealth, 0, 1.f));
 		Renderer.fillRect(
 				position.x,
 				position.y - Tile.SIZE / 2,
-				Tile.SIZE * health / 100.f,
+				Tile.SIZE * health / maxHealth,
 				5);
 	}
 	
@@ -153,7 +153,7 @@ public abstract class Entity extends GameBehavior {
 		}
 		
 		// Update position
-		position.addEqual(direction.multiply(speed * deltaTime));
+		position.addEqual(direction.multiply(movementSpeed * deltaTime));
 		
 		bound.x = (int) position.x;
 		bound.y = (int) position.y;
@@ -223,12 +223,29 @@ public abstract class Entity extends GameBehavior {
 		this.health = health;
 	}
 
+	public float getMaxHealth() {
+		return maxHealth;
+	}
+
+	public void setMaxHealth(float maxHealth) {
+		this.maxHealth = maxHealth;
+		this.health = maxHealth;
+	}
+
 	public Rectangle getBound() {
 		return bound;
 	}
 
 	public void setBound(Rectangle bound) {
 		this.bound = bound;
+	}
+
+	public void setMovementSpeed(float speed) {
+		this.movementSpeed = speed * Tile.SIZE;
+	}
+
+	public float getMovementSpeed() {
+		return movementSpeed;
 	}
 	
 }

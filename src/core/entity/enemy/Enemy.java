@@ -17,16 +17,21 @@ public class Enemy extends Entity {
 	public Enemy(World world, Vector2f spawn) {
 		super("enemy", world);
 		
-		super.speed = Tile.SIZE * .75f;
-		
 		position = new Vector2f(spawn);
-		
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
 		
-		sprite = new AnimatedSprite("undead.png", 1, 5, 64, 64);
+		sprite = new AnimatedSprite("entity/undead.png", 1, 5, 64, 64);
 		sprite.setOffset(new Vector2f(
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2));
+		
+		setMaxHealth(25.f);
+		setMovementSpeed(1.5f);
+	}
+	
+	@Override
+	public void init() {
+		
 	}
 
 	@Override

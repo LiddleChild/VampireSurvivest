@@ -10,7 +10,7 @@ import util.ColorUtil;
 
 public class SpriteSheet {
 	
-	public static SpriteSheet tileset = new SpriteSheet("tilesheets.png", "colorsheets.png", 64);
+	public static SpriteSheet tileset = new SpriteSheet("world/tilesheets.png", "world/colorsheets.png", 64);
 	
 	private int width, height, size;
 	private Image image;

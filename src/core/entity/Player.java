@@ -2,37 +2,32 @@ package core.entity;
 
 import java.awt.Rectangle;
 
-import core.Renderer;
-import core.collision.CollisionManager;
 import core.inputHandler.KeyboardHandler;
-import core.inputHandler.MouseHandler;
-import core.item.Sword;
+import core.item.Item;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseButton;
-import logic.Window;
+import logic.GameLogic;
+import logic.PlayerCharacter;
 import util.math.Vector2f;
 
 public class Player extends Entity {
 	
 	private Vector2f direction;
-	private Vector2f middleScreen;
-	
 	private AnimatedSprite sprite;
 	
-	private Sword sword;
+	private Item item;
 	
 	private int blinkPeriod, maxBlink, blinkTime;
 	
 	public Player(World world) {
 		super("player", world);
 		
-		sword = new Sword();
+		PlayerCharacter c = GameLogic.getInstance().getCharacter();
+		item = c.getItem();
 		
-		middleScreen = new Vector2f(Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2);
 		direction = new Vector2f(0.f, 0.f);
 
 		blinkPeriod = 25;
@@ -41,31 +36,27 @@ public class Player extends Entity {
 		
 		bound = new Rectangle(0, 0, 28, Tile.SIZE);
 		
-		sprite = new AnimatedSprite("player.png", 1, 5, 64, 128);
+		sprite = new AnimatedSprite(c.getSpritePath(), 1, 5, 64, 128);
 		sprite.setOffset(new Vector2f(0, -Tile.SIZE)
 				.add(new Vector2f(
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2)));
+		
+		setMovementSpeed(5.f);
+	}
+	
+	@Override
+	public void init() {
+		
 	}
 	
 	@Override
 	public void update() {
 		calculateDirection();
-		sword.setPosition(position);
 		
-		if (MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
-			boolean[] hitDirs = middleScreen.getDirection(MouseHandler.getMousePosition());
-			for (int i = 0; i < hitDirs.length; i++) {
-				if (hitDirs[i]) {
-					sword.attack(CollisionManager.getInstance().isColliding(this, sword.getHitboxes()[i]));
-
-//					Renderer.setFill(new Color(1.f, 0.f, 0.f, 0.5f));
-//					Renderer.fillRect(sword.getHitboxes()[i]);
-					
-					sword.setDirection(i);
-				}
-			}
-		}
+		item.setPosition(position);
+		item.setDirection(direction);
+		item.attack();
 		
 		if (blinkTime > 0) {
 			if (blinkTime == maxBlink * blinkPeriod) blinkTime = 0;
@@ -78,25 +69,19 @@ public class Player extends Entity {
 		sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
 		sprite.update(deltaTime);
 		
-		sword.updateFX(deltaTime);
+		item.update(deltaTime);
 	}
 
 	@Override
 	public void render() {
-		// Draw sword
-		Renderer.drawSprite(sword.getSprite(),
-				position.x + Tile.SIZE / 2.5f,
-				position.y,
-				Tile.SIZE, Tile.SIZE);
+		// Draw sword FX
+		item.render();
 		
 		// Draw player
 		if (blinkTime % (2 * blinkPeriod) <= blinkPeriod) {
 			sprite.render(position, Tile.SIZE, Tile.SIZE * 2, 0.f);
 		}
-		
-		// Draw sword FX
-		sword.renderFx();
-		
+	
 		// Draw health bar
 		super.drawHealthBar();
 	}

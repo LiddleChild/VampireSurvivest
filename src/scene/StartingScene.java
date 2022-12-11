@@ -24,6 +24,11 @@ public class StartingScene extends BaseScene {
 		time = 0.f;
 		waitTime = 3.f;
 	}
+	
+	@Override
+	public void init() {
+		
+	}
 
 	@Override
 	public void update(float deltaTime) {

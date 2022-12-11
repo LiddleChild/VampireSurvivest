@@ -6,14 +6,10 @@ import java.util.Queue;
 
 import core.Camera;
 
-public class BehaviorManager {
-	enum State {
-		INITIALIZING,
-		RUNNING
-	}
-	
+public class BehaviorManager {	
 	private static BehaviorManager instance;
 	
+	enum State { INITIALIZING, RUNNING }
 	private State state = State.INITIALIZING;
 	
 	private ArrayList<GameBehavior> gameBehaviorLists;
@@ -42,6 +38,12 @@ public class BehaviorManager {
 			removeQueues.add(e);
 		} else {
 			gameBehaviorLists.remove(e);
+		}
+	}
+	
+	public void init() {
+		for (GameBehavior e : gameBehaviorLists) {
+			e.init();
 		}
 	}
 	

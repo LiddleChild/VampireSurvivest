@@ -135,4 +135,13 @@ public class Vector2f implements Comparable<Vector2f> {
 		};
 	}
 	
+	public boolean[] toDirection() {
+		return new boolean[] {
+			y < 0.f,
+			x > 0.f,
+			y > 0.f,
+			x < 0.f
+		};
+	}
+	
 }

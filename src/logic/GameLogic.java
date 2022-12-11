@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import core.Renderer;
 import core.inputHandler.KeyboardHandler;
 import core.inputHandler.MouseHandler;
-import core.world.World;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.event.EventHandler;
@@ -20,6 +19,7 @@ import javafx.stage.WindowEvent;
 import scene.BaseScene;
 import scene.GameScene;
 import scene.MainMenuScene;
+import scene.SelectCharacterScene;
 import scene.StartingScene;
 
 public class GameLogic {
@@ -32,8 +32,12 @@ public class GameLogic {
 	private GraphicsContext gc;
 	private Font defaultFont;
 	
+	/*
+	 * GAAME STATE
+	 */
 	private GameState gameState;
 	private int maxExp, exp, level;
+	private PlayerCharacter character;
 	
 	/*
 	 * SINGLETON
@@ -52,6 +56,8 @@ public class GameLogic {
 		exp = 0;
 		level = 1;
 		
+		character = PlayerCharacter.BRAVES;
+		
 		gameState = GameState.PLAY;
 		
 		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
@@ -62,17 +68,15 @@ public class GameLogic {
 		sceneLists = new ArrayList<BaseScene>();
 		sceneLists.add(new StartingScene("starting", stage));
 		sceneLists.add(new MainMenuScene("main_menu", stage));
+		sceneLists.add(new SelectCharacterScene("select_character", stage));
 		sceneLists.add(new GameScene("game", stage));
-		setCurrentScene(2);
+		setCurrentScene(1);
 		
 		// Initialize renderer
 		Renderer.initialize(gc);
 
 		initializeKeyboardHandler();
 		initializeMouseHandler();
-		
-		// Initialize world
-		new World();
 		
 		// Start game loops
 		initializeGameLoop();
@@ -114,6 +118,7 @@ public class GameLogic {
 	private void initializeMouseHandler() {
 		MouseHandler.initialize();
 		MouseHandler mouseHandler = new MouseHandler();
+		scene.setOnMouseClicked(mouseHandler);
 		scene.setOnMousePressed(mouseHandler);
 		scene.setOnMouseReleased(mouseHandler);
 		scene.setOnMouseMoved(mouseHandler);
@@ -173,10 +178,11 @@ public class GameLogic {
 	
 	public void setCurrentScene(int index) {
 		currentScene = index;
+		sceneLists.get(currentScene).init();
 	}
 	
 	public void nextScene() {
-		currentScene++;
+		setCurrentScene(currentScene + 1);
 	}
 
 	public Font getDefaultFont() {
@@ -209,5 +215,17 @@ public class GameLogic {
 
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+	}
+
+	public Scene getScene() {
+		return scene;
+	}
+
+	public PlayerCharacter getCharacter() {
+		return character;
+	}
+
+	public void setCharacter(PlayerCharacter character) {
+		this.character = character;
 	}
 }

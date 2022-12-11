@@ -24,16 +24,16 @@ public class Imp extends Entity {
 	public Imp(World world, Vector2f spawn) {
 		super("Bomber", world);
 
-		super.speed = Tile.SIZE * 0.75f;
-		
 		position = new Vector2f(spawn);
-		
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
 		
-		sprite = new AnimatedSprite("imp.png", 1, 5, 64, 64);
+		sprite = new AnimatedSprite("entity/imp.png", 1, 5, 64, 64);
 		sprite.setOffset(new Vector2f(
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2));
+		
+		setMaxHealth(25.f);
+		setMovementSpeed(2.f);
 		
 		explosionSprite = new AnimatedSprite("explosion.png", 8, 10, 100, 100);
 		explosionSprite.setFrameTime(0.015f);
@@ -47,13 +47,18 @@ public class Imp extends Entity {
 		});
 		
 		isDetonated = false;
-		detonateTime = 3.f;
+		detonateTime = 2.f;
 		time = 0.f;
 		
 		blinkTime = 0.f;
 		showBlink = true;
 		
-		explosionRange = 5.f;
+		explosionRange = 3.f;
+	}
+	
+	@Override
+	public void init() {
+		
 	}
 
 	@Override

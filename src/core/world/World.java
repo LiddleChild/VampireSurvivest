@@ -15,20 +15,20 @@ public class World extends GameBehavior {
 	public static int MAP_MAX_LAYER;
 	public static Vector2f SPAWN_POINT;
 
+	private static Player player;
+
 	private Tile[][][] tileMaps;
 	private boolean[][] collisionMaps;
 	
 	private ArrayList<Coin> coins;
 	
-	private static Player player;
-	
 	public World() {
 		super();
 		WorldLoader.load(SpriteSheet.tileset,
-				"map0.png",
-				"map1.png",
-				"map2.png",
-				"map3.png");
+				"world/map0.png",
+				"world/map1.png",
+				"world/map2.png",
+				"world/map3.png");
 		
 		tileMaps = WorldLoader.getTileMaps();
 		collisionMaps = WorldLoader.getCollisionMaps();
@@ -51,10 +51,11 @@ public class World extends GameBehavior {
 		new Thread(new EnemySpawner(this), "enemy_spawner_thread").start();
 		
 		coins = new ArrayList<Coin>();
-		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE))));
-		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE * 2))));
-		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE * 3))));
-		coins.add(new Coin(SPAWN_POINT.add(new Vector2f(0, -Tile.SIZE * 4))));
+	}
+	
+	@Override
+	public void init() {
+		
 	}
 
 	@Override

@@ -17,6 +17,7 @@ public abstract class BaseScene {
 		this.gc = GameLogic.getInstance().getGraphicsContext();
 	}
 	
+	public abstract void init();
 	public abstract void update(float deltaTime);
 	
 	/*

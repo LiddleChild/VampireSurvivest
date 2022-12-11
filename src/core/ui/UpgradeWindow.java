@@ -13,8 +13,16 @@ import javafx.scene.paint.Color;
 import logic.Window;
 import util.ColorUtil;
 
+/*
+ * 
+ * TODO:
+ * - Magic Wand
+ * - items
+ * 
+ */
+
 public class UpgradeWindow extends UIComponent {
-	private final int COIN_SIZE = 375, GRAVITY = Window.WINDOW_HEIGHT / 2;
+	private final int COIN_SIZE = 500, GRAVITY = Window.WINDOW_HEIGHT / 2;
 	private final float COIN_FRAME_TIME = 0.15f;
 	
 	private Color backgroundColor;
@@ -28,7 +36,7 @@ public class UpgradeWindow extends UIComponent {
 	private Button[] items;
 	
 	public UpgradeWindow() {
-		backgroundColor = new Color(0, 0, 0, 0.25f);
+		backgroundColor = new Color(0, 0, 0, 0.5f);
 		
 		coin = new Sprite("coin.png");
 		coins = new ArrayList<Coin>();
@@ -46,9 +54,11 @@ public class UpgradeWindow extends UIComponent {
 		
 		items = new Button[3];
 		for (int i = 0; i < 3; i++) {
-			items[i] = new Button("Item " + i, Window.WINDOW_WIDTH / 2, 200 + i * 100, w - 80, 75);
-			items[i].getBound().setBackgroundColor(Color.WHITE);
-			items[i].getBound().setBorderSize(0);
+			items[i] = new Button("Item " + i, Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + (i - 1) * 80, w - 10, 75);
+			items[i].getBound().setBackgroundColor(ColorUtil.parseRGB2Color(211, 191, 169));
+			items[i].getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+			items[i].getBound().setBorderSize(2);
+			items[i].getBound().setBorderRadius(8);
 		}
 	}
 	

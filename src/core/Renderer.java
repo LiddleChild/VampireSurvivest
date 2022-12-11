@@ -108,10 +108,10 @@ public class Renderer {
 			
 			if (rotation != 0.f) {
 				gc.save();
-				gc.translate(t.x + (w + ox) / 2, t.y + (h + oy) / 2);
+				gc.translate(t.x + ox + w / 2, t.y + oy + h / 2);
 				gc.rotate(rotation);
 				
-				gc.drawImage(sprite.getImage(), dx, dy, dw, dh, ox - (w + ox) / 2, oy - (h + oy) / 2, w, h);
+				gc.drawImage(sprite.getImage(), dx, dy, dw, dh, ox - (w / 2 + ox), oy - (h / 2 + oy), w, h);
 				
 				gc.restore();
 			} else {

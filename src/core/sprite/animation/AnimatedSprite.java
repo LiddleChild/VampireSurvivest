@@ -6,7 +6,6 @@ import java.util.Map;
 import core.Renderer;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimationState.State;
-import core.world.Tile;
 import util.math.Vector2f;
 
 public class AnimatedSprite {
@@ -81,8 +80,8 @@ public class AnimatedSprite {
 	
 	public void render(int x, int y, int w, int h, float angle) {
 		if (reverse) {
+			x += w;
 			w = -w;
-			x += Tile.SIZE;
 		}
 		
 		Renderer.setRenderOffset(offset.x, offset.y);
@@ -106,6 +105,10 @@ public class AnimatedSprite {
 		offset = vec;
 	}
 	
+	public Vector2f getOffset() {
+		return offset;
+	}
+
 	public void setFrameTime(float frameTime) {
 		this.frameTime = frameTime;
 	}
