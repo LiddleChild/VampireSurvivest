@@ -3,27 +3,31 @@ package core.world;
 import java.util.ArrayList;
 
 import core.Camera;
-import core.behavior.GameBehavior;
+import core.entity.Entity;
 import core.entity.Player;
 import core.entity.enemy.EnemySpawner;
 import core.sprite.SpriteSheet;
 import util.math.Vector2f;
 
-public class World extends GameBehavior {
-	public static int MAP_WIDTH;
-	public static int MAP_HEIGHT;
-	public static int MAP_MAX_LAYER;
-	public static Vector2f SPAWN_POINT;
+public class World {
+	private static World instance;
+	
+	public final int MAP_WIDTH, MAP_HEIGHT, MAP_MAX_LAYER;
+	public Vector2f SPAWN_POINT;
 
-	private static Player player;
+	private Player player;
 
 	private Tile[][][] tileMaps;
 	private boolean[][] collisionMaps;
 	
 	private ArrayList<Coin> coins;
+	private ArrayList<Entity> enemyLists;
 	
 	public World() {
 		super();
+		
+		instance = this;
+		
 		WorldLoader.load(SpriteSheet.tileset,
 				"world/map0.png",
 				"world/map1.png",
@@ -44,46 +48,29 @@ public class World extends GameBehavior {
 					MAP_HEIGHT / 2 * Tile.SIZE);
 		}
 		
-		player = new Player(this);
+		player = new Player();
 		Camera.getInstance().setEntity(player);
 		
-
 		new Thread(new EnemySpawner(this), "enemy_spawner_thread").start();
 		
 		coins = new ArrayList<Coin>();
-	}
-	
-	@Override
-	public void init() {
-		
-	}
-
-	@Override
-	public void update() {
-		if (getTile(pos2Coord(player.getPosition()), 2).isEmptyTile()) return;
-		
-		for (int x = 0; x < MAP_WIDTH; x++) {
-			for (int y = 0; y < MAP_HEIGHT; y++) {
-				for (int i = 2; i < MAP_MAX_LAYER; i++) {
-					Tile t = getTile(x, y, i);
-					if (t == null ||
-							player.getPosition()
-							.subtract(new Vector2f(x * Tile.SIZE, y * Tile.SIZE)).getSize() > 5.f * Tile.SIZE
-							) continue;
-					
-					t.setTransparent();
-				}
-			}
-		}
-	}
-
-	@Override
-	public void render() {
-		
+		enemyLists = new ArrayList<Entity>();
 	}
 	
 	public void spawnCoin(Vector2f pos) {
 		coins.add(new Coin(pos));
+	}
+	
+	public void addEnemy(Entity e) {
+		enemyLists.add(e);
+	}
+	
+	public void removeEnemy(Entity e) {
+		enemyLists.remove(e);
+	}
+	
+	public static World getInstance() {
+		return instance;
 	}
 	
 	/*
@@ -142,7 +129,11 @@ public class World extends GameBehavior {
 	/*
 	 * GETTERS & SETTERS
 	 */
-	public static Player getPlayer() {
+	public Player getPlayer() {
 		return player;
+	}
+
+	public ArrayList<Entity> getEnemyLists() {
+		return enemyLists;
 	}
 }

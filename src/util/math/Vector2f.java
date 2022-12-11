@@ -21,6 +21,11 @@ public class Vector2f implements Comparable<Vector2f> {
 		this.y = y;
 	}
 	
+	public Vector2f(float angle) {
+		this.x = (float) Math.cos(angle / 180.f * Math.PI);
+		this.y = (float) Math.sin(angle / 180.f * Math.PI);
+	}
+	
 	/*
 	 * ADDITION
 	 */

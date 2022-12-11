@@ -4,18 +4,19 @@ import java.awt.Rectangle;
 
 import core.collision.CollisionManager;
 import core.entity.Entity;
+import core.entity.HostileEntity;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
 import util.math.Vector2f;
 
-public class Enemy extends Entity {
+public class Enemy extends Entity implements HostileEntity {
 	
 	private AnimatedSprite sprite;
 	
-	public Enemy(World world, Vector2f spawn) {
-		super("enemy", world);
+	public Enemy(Vector2f spawn) {
+		super("enemy");
 		
 		position = new Vector2f(spawn);
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
@@ -36,11 +37,11 @@ public class Enemy extends Entity {
 
 	@Override
 	public void update() {
-		Vector2f playerPos = World.getPlayer().getPosition();
+		Vector2f playerPos = World.getInstance().getPlayer().getPosition();
 		super.move(playerPos.subtract(position));
 		
 		if (CollisionManager.getInstance().isCollidingWithPlayer(this)) {
-			super.attack(World.getPlayer());
+			super.attack(World.getInstance().getPlayer());
 		}
 
 		if (direction.x < 0) sprite.setReverse(true);
@@ -63,8 +64,9 @@ public class Enemy extends Entity {
 
 	@Override
 	protected void onDeath() {
+		World.getInstance().removeEnemy(this);
 		super.delete();
-		world.spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
+		World.getInstance().spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
 	}
 
 }

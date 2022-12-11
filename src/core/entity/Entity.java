@@ -17,11 +17,9 @@ public abstract class Entity extends GameBehavior {
 	private String id;
 	
 	protected Vector2f position;
-	protected Vector2f direction;
-	
+	protected Vector2f direction;	
 	protected float movementSpeed;
-	protected World world;
-	
+
 	protected float maxHealth, health;
 	protected float attackDamage, attackCooldownTime, lastAttackTime;
 	
@@ -30,14 +28,13 @@ public abstract class Entity extends GameBehavior {
 	
 	private boolean[] movable = new boolean[4]; // T R B L
 	
-	public Entity(String id, World world) {
-		this(id, 3, world);
+	public Entity(String id) {
+		this(id, 3);
 	}
 	
-	public Entity(String id, int layer, World world) {
+	public Entity(String id, int layer) {
 		super(layer);
 		this.id = id;
-		this.world = world;
 		
 		attackCooldownTime = 3.f;
 		lastAttackTime = 0.f;
@@ -48,7 +45,7 @@ public abstract class Entity extends GameBehavior {
 		movable = new boolean[] { true, true, true, true };
 		
 		setMovementSpeed(4.f);
-		position = new Vector2f(World.SPAWN_POINT);
+		position = new Vector2f(World.getInstance().SPAWN_POINT);
 		direction = new Vector2f(0.f, 0.f);
 		
 		maxHealth = 100;
@@ -171,30 +168,30 @@ public abstract class Entity extends GameBehavior {
 		
 		// TOP
 		if (dv.y < 0) {
-			movable[0] = !(world.isPosSolidTile(leftX , bound.y + dv.y) ||
-					world.isPosSolidTile(rightX, bound.y + dv.y));
+			movable[0] = !(World.getInstance().isPosSolidTile(leftX , bound.y + dv.y) ||
+					World.getInstance().isPosSolidTile(rightX, bound.y + dv.y));
 			
 			collidingEntity.forEach((e) -> movable[0] &= !(position.isInNorth(e.getPosition())));
 		}
 		
 		// BOTTOM
 		if (dv.y > 0) {
-			movable[2] = !(world.isPosSolidTile(leftX , bound.y + dv.y + Tile.SIZE) ||
-					world.isPosSolidTile(rightX, bound.y + dv.y + Tile.SIZE));
+			movable[2] = !(World.getInstance().isPosSolidTile(leftX , bound.y + dv.y + Tile.SIZE) ||
+					World.getInstance().isPosSolidTile(rightX, bound.y + dv.y + Tile.SIZE));
 			collidingEntity.forEach((e) -> movable[2] &= !(position.isInSouth(e.getPosition())));
 		}
 
 		// LEFT
 		if (dv.x < 0) {
-			movable[3] = !(world.isPosSolidTile(bound.x + dv.x, topY) ||
-					world.isPosSolidTile(bound.x + dv.x, bottomY));
+			movable[3] = !(World.getInstance().isPosSolidTile(bound.x + dv.x, topY) ||
+					World.getInstance().isPosSolidTile(bound.x + dv.x, bottomY));
 			collidingEntity.forEach((e) -> movable[3] &= !(position.isInWest(e.getPosition())));
 		}
 
 		// RIGHT
 		if (dv.x > 0) {
-			movable[1] = !(world.isPosSolidTile(bound.x + dv.x + Tile.SIZE, topY) ||
-					world.isPosSolidTile(bound.x + dv.x + Tile.SIZE, bottomY));
+			movable[1] = !(World.getInstance().isPosSolidTile(bound.x + dv.x + Tile.SIZE, topY) ||
+					World.getInstance().isPosSolidTile(bound.x + dv.x + Tile.SIZE, bottomY));
 			collidingEntity.forEach((e) -> movable[1] &= !(position.isInEast(e.getPosition())));
 		}
 	}

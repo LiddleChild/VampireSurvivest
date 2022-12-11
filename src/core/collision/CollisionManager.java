@@ -51,7 +51,7 @@ public class CollisionManager {
 	}
 	
 	public boolean isCollidingWithPlayer(Entity entity) {
-		return World.getPlayer().getBound().intersects(entity.getBound());
+		return World.getInstance().getPlayer().getBound().intersects(entity.getBound());
 	}
 	
 	public void add(Entity e) {

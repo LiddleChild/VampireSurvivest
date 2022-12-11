@@ -7,7 +7,6 @@ import core.item.Item;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
-import core.world.World;
 import javafx.scene.input.KeyCode;
 import logic.GameLogic;
 import logic.PlayerCharacter;
@@ -22,8 +21,8 @@ public class Player extends Entity {
 	
 	private int blinkPeriod, maxBlink, blinkTime;
 	
-	public Player(World world) {
-		super("player", world);
+	public Player() {
+		super("player");
 		
 		PlayerCharacter c = GameLogic.getInstance().getCharacter();
 		item = c.getItem();

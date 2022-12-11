@@ -32,7 +32,7 @@ public class StatusWindow extends UIComponent {
 	@Override
 	public void update(float deltaTime) {
 		playerStat.setText(String.format("Movement Speed: %.1f\nMax Health: %.1f",
-				World.getPlayer().getMovementSpeed() / Tile.SIZE, World.getPlayer().getMaxHealth()));
+				World.getInstance().getPlayer().getMovementSpeed() / Tile.SIZE, World.getInstance().getPlayer().getMaxHealth()));
 		
 		window.update(deltaTime);
 		

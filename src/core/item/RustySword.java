@@ -39,7 +39,7 @@ public class RustySword implements Item {
 		attackTime = 0.f;
 		attackDamage = 25.f;
 
-		hitFxSprite = new AnimatedSprite("hit_animation.png", 1, 5, 128, 228);
+		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
 		hitFxSprite.setFrameTime(0.025f);
 		hitFxSprite.setState(State.IDLE);
 		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
@@ -72,14 +72,14 @@ public class RustySword implements Item {
 	
 	@Override
 	public void attack() {
-			if (attackTime >= attackCooldownTime) {
-				attackTime -= attackCooldownTime;
-				
-				ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(getHitboxes()[direction].getBound());
-				entityLists.forEach((e) -> e.takeDamge(attackDamage));
-				
-				hitFxSprite.setState(State.PLAY);
-			}
+		if (attackTime >= attackCooldownTime) {
+			attackTime -= attackCooldownTime;
+			
+			ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(getHitboxes()[direction].getBound());
+			entityLists.forEach((e) -> e.takeDamge(attackDamage));
+			
+			hitFxSprite.setState(State.PLAY);
+		}
 	}
 	
 	/*

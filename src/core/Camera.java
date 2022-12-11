@@ -23,7 +23,7 @@ public class Camera {
 				Window.WINDOW_HEIGHT - Tile.SIZE)
 				.multiply(0.5f);
 		
-		position = new Vector2f(World.SPAWN_POINT);
+		position = new Vector2f(World.getInstance().SPAWN_POINT);
 	}
 	
 	public void update() {

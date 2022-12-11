@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 
 import core.collision.CollisionManager;
 import core.entity.Entity;
+import core.entity.HostileEntity;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimatedSpriteEvent;
 import core.sprite.animation.AnimationState.State;
@@ -11,7 +12,7 @@ import core.world.Tile;
 import core.world.World;
 import util.math.Vector2f;
 
-public class Imp extends Entity {
+public class Imp extends Entity implements HostileEntity {
 	
 	private AnimatedSprite sprite, explosionSprite;
 	
@@ -21,8 +22,8 @@ public class Imp extends Entity {
 	private float blinkTime;
 	private boolean showBlink;
 
-	public Imp(World world, Vector2f spawn) {
-		super("Bomber", world);
+	public Imp(Vector2f spawn) {
+		super("Bomber");
 
 		position = new Vector2f(spawn);
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
@@ -35,7 +36,7 @@ public class Imp extends Entity {
 		setMaxHealth(25.f);
 		setMovementSpeed(2.f);
 		
-		explosionSprite = new AnimatedSprite("explosion.png", 8, 10, 100, 100);
+		explosionSprite = new AnimatedSprite("fx/explosion.png", 8, 10, 100, 100);
 		explosionSprite.setFrameTime(0.015f);
 		explosionSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
 		explosionSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 81);
@@ -64,10 +65,10 @@ public class Imp extends Entity {
 	@Override
 	public void update() {
 		if (!isDetonated) {			
-			Vector2f playerPos = World.getPlayer().getPosition();
+			Vector2f playerPos = World.getInstance().getPlayer().getPosition();
 			super.move(playerPos.subtract(position));
 		
-			if (World.getPlayer().getPosition().subtract(position).getSize() <= explosionRange * Tile.SIZE) {
+			if (World.getInstance().getPlayer().getPosition().subtract(position).getSize() <= explosionRange * Tile.SIZE) {
 				time += deltaTime;
 				blinkTime += deltaTime;
 				
@@ -79,8 +80,8 @@ public class Imp extends Entity {
 				if (time >= detonateTime) {
 					isDetonated = true;
 					explosionSprite.setState(State.PLAY);
-					World.getPlayer().knockback(World.getPlayer().getPosition().subtract(position), 4.f);
-					World.getPlayer().takeDamge(12.f);
+					World.getInstance().getPlayer().knockback(World.getInstance().getPlayer().getPosition().subtract(position), 4.f);
+					World.getInstance().getPlayer().takeDamge(12.f);
 					CollisionManager.getInstance().remove(this);
 				}
 			} else {
@@ -119,8 +120,9 @@ public class Imp extends Entity {
 
 	@Override
 	protected void onDeath() {
+		World.getInstance().removeEnemy(this);
 		super.delete();
-		world.spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
+		World.getInstance().spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
 	}
 
 	@Override
