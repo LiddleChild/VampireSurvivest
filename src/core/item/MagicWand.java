@@ -1,6 +1,5 @@
 package core.item;
 
-import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import core.Renderer;
@@ -27,7 +26,7 @@ public class MagicWand implements Item {
 	private float attackDamage, attackCooldownTime;
 	private float attackTime;
 	
-	private ArrayList<ForceWave> forceWaveLists;
+	private ArrayList<PurpleForceWave> forceWaveLists;
 	
 	public MagicWand() {
 		sprite = new Sprite("magic_wand.png");
@@ -39,7 +38,7 @@ public class MagicWand implements Item {
 				new Hitbox(-Tile.SIZE * 2, -Tile.SIZE, Tile.SIZE * 2, Tile.SIZE * 2)
 		};
 		
-		forceWaveLists = new ArrayList<ForceWave>();
+		forceWaveLists = new ArrayList<PurpleForceWave>();
 		
 		position = new Vector2f();
 		direction = 1;
@@ -59,12 +58,13 @@ public class MagicWand implements Item {
 	public void update(float deltaTime) {
 		attackTime += deltaTime;
 		
-		ArrayList<ForceWave> deleteLists = new ArrayList<ForceWave>();
+		ArrayList<PurpleForceWave> deleteLists = new ArrayList<PurpleForceWave>();
 		
 		hitFxSprite.update(deltaTime);
-		for (ForceWave fw : forceWaveLists) {
+		for (PurpleForceWave fw : forceWaveLists) {
 			fw.update(deltaTime);
 
+			// Check for hit entity and damage it
 			ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(fw.getBound());
 			for (Entity e : entityLists) {
 				if (e instanceof HostileEntity) {					
@@ -73,6 +73,7 @@ public class MagicWand implements Item {
 				}
 			}
 			
+			// Delete force wave if it's outside rendering window
 			if (!Renderer.checkInsideWindow(
 					fw.getBound().x,
 					fw.getBound().y,
@@ -100,7 +101,7 @@ public class MagicWand implements Item {
 				hitboxes[direction].getBound().width,
 				hitboxes[direction].getBound().height,
 				0.f);
-		for (ForceWave fw : forceWaveLists) {
+		for (PurpleForceWave fw : forceWaveLists) {
 			fw.render();
 		}
 	}
@@ -120,7 +121,7 @@ public class MagicWand implements Item {
 		
 		if (temp != null && attackTime >= attackCooldownTime) {
 			attackTime = 0.f;
-			forceWaveLists.add(new ForceWave(position, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
+			forceWaveLists.add(new PurpleForceWave(position, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
 		}
 	}
 	
@@ -168,46 +169,4 @@ public class MagicWand implements Item {
 		this.direction = direction;
 	}
 
-}
-
-class ForceWave {
-	private static final float MOVEMENT_SPEED = 5.f * Tile.SIZE;
-
-	private AnimatedSprite sprite;
-	private Rectangle bound;
-	
-	private Vector2f position, direction;
-	private float angle;
-	
-	public ForceWave(Vector2f position, float angle) {
-		this.position = new Vector2f(position);
-		this.angle = angle;
-		
-		direction = new Vector2f(this.angle);
-		bound = new Rectangle((int) position.x, (int) position.y, Tile.SIZE, Tile.SIZE);
-		
-		sprite = new AnimatedSprite("fx/wind_projectile_purple.png", 2, 3, 32, 32);
-		sprite.setStateIntervals(State.IDLE, State.IDLE, 0, 5);
-	}
-	
-	public void update(float deltaTime) {
-		Vector2f amount = direction.multiply(deltaTime * MOVEMENT_SPEED);
-		position.addEqual(amount);
-		bound.x = (int) position.x;
-		bound.y = (int) position.y;
-		
-		sprite.update(deltaTime);
-	}
-	
-	public void render() {
-		sprite.render(position, Tile.SIZE, Tile.SIZE, angle);
-	}
-	
-	/*
-	 * GETTERS & SETTERS
-	 */
-	public Rectangle getBound() {
-		return bound;
-	}
-	
 }

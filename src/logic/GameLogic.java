@@ -1,6 +1,8 @@
 package logic;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import core.Renderer;
 import core.inputHandler.KeyboardHandler;
@@ -36,6 +38,7 @@ public class GameLogic {
 	 * GAAME STATE
 	 */
 	private GameState gameState;
+	private Map<GameState, GameStateEvent> gameStateEventMaps;
 	private int maxExp, exp, level;
 	private PlayerCharacter character;
 	
@@ -58,6 +61,7 @@ public class GameLogic {
 		
 		character = PlayerCharacter.BRAVES;
 		
+		gameStateEventMaps = new HashMap<GameState, GameStateEvent>();
 		gameState = GameState.PLAY;
 		
 		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
@@ -147,8 +151,6 @@ public class GameLogic {
 				}
 				
 				if (gameState != GameState.UPGRADE && exp >= maxExp) {
-//					exp = 0;
-//					maxExp *= 1.5f;
 					level++;
 					
 					setGameState(GameState.UPGRADE);
@@ -215,10 +217,14 @@ public class GameLogic {
 
 	public void setGameState(GameState gameState) {
 		this.gameState = gameState;
+		
+		if (gameStateEventMaps.get(gameState) != null) {
+			gameStateEventMaps.get(gameState).onStateChange();
+		}
 	}
-
-	public Scene getScene() {
-		return scene;
+	
+	public void setOnGameStateChangeTo(GameState gameState, GameStateEvent e) {
+		gameStateEventMaps.put(gameState, e);
 	}
 
 	public PlayerCharacter getCharacter() {

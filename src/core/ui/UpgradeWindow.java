@@ -1,25 +1,22 @@
 package core.ui;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Random;
 
 import core.sprite.Sprite;
 import core.ui.components.Button;
+import core.ui.components.ButtonEventHandler;
 import core.ui.components.Label;
 import core.ui.components.SubWindow;
 import core.ui.components.UIComponent;
 import core.world.Tile;
 import javafx.scene.paint.Color;
+import logic.GameLogic;
+import logic.GameState;
+import logic.GameStateEvent;
 import logic.Window;
 import util.ColorUtil;
-
-/*
- * 
- * TODO:
- * - Magic Wand
- * - items
- * 
- */
 
 public class UpgradeWindow extends UIComponent {
 	private final int COIN_SIZE = 500, GRAVITY = Window.WINDOW_HEIGHT / 2;
@@ -33,7 +30,23 @@ public class UpgradeWindow extends UIComponent {
 	
 	private SubWindow window;
 	private Label levelUp;
-	private Button[] items;
+	private ArrayList<String> upgradeLists;
+	private ArrayList<Button> items;
+	
+/*
+
+TODO:
+Upgradable
+	- Max health
+	- Movement speed
+	- Weapon attack damage
+	- Weapon attack speed
+	- Weapon hit box
+	
+Sword LV8
+	- Wave Force on attack
+	
+ */
 	
 	public UpgradeWindow() {
 		backgroundColor = new Color(0, 0, 0, 0.5f);
@@ -52,14 +65,20 @@ public class UpgradeWindow extends UIComponent {
 		levelUp = new Label("Level Up!", Window.WINDOW_WIDTH / 2, 120);
 		levelUp.setColor(Color.WHITE);
 		
-		items = new Button[3];
-		for (int i = 0; i < 3; i++) {
-			items[i] = new Button("Item " + i, Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + (i - 1) * 80, w - 10, 75);
-			items[i].getBound().setBackgroundColor(ColorUtil.parseRGB2Color(211, 191, 169));
-			items[i].getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
-			items[i].getBound().setBorderSize(2);
-			items[i].getBound().setBorderRadius(8);
-		}
+		upgradeLists = new ArrayList<String>();
+		upgradeLists.add("Max health");
+		upgradeLists.add("Movement speed");
+		upgradeLists.add("Weapon attack damage");
+		upgradeLists.add("Weapon attack speed");
+		upgradeLists.add("Weapon hit box");
+		
+		items = new ArrayList<Button>();
+		GameLogic.getInstance().setOnGameStateChangeTo(GameState.UPGRADE, new GameStateEvent() {
+			@Override
+			public void onStateChange() {
+				addItems();
+			}
+		});
 	}
 	
 	@Override
@@ -69,7 +88,7 @@ public class UpgradeWindow extends UIComponent {
 		levelUp.update(deltaTime);
 
 		for (int i = 0; i < 3; i++) {
-			items[i].update(deltaTime);
+			items.get(i).update(deltaTime);
 		}
 	}
 	
@@ -94,6 +113,29 @@ public class UpgradeWindow extends UIComponent {
 			for (Coin c : coins) {
 				c.frame = (c.frame + 1) % 4;		
 			}
+		}
+	}
+	
+	public void addItems() {
+		Collections.shuffle(upgradeLists);
+		items.clear();
+		
+		for (int i = 0; i < 3; i++) {
+			Button btn = new Button(upgradeLists.get(i), Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + (i - 1) * 80, window.getBound().width - 10, 75);
+			btn.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(211, 191, 169));
+			btn.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+			btn.getBound().setBorderSize(2);
+			btn.getBound().setBorderRadius(8);
+			btn.setOnClick(new ButtonEventHandler() {				
+				@Override
+				public void onClick() {
+					GameLogic.getInstance().setGameState(GameState.PLAY);
+					GameLogic.getInstance().setExp(0);
+					GameLogic.getInstance().setMaxExp(GameLogic.getInstance().getMaxExp() * 2);
+				}
+			});
+			
+			items.add(btn);
 		}
 	}
 }
