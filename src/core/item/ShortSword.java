@@ -6,10 +6,12 @@ import core.Renderer;
 import core.collision.CollisionManager;
 import core.collision.Hitbox;
 import core.entity.Entity;
+import core.entity.HostileEntity;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
+import javafx.scene.paint.Color;
 import util.math.Vector2f;
 
 public class ShortSword extends Item {
@@ -22,18 +24,16 @@ public class ShortSword extends Item {
 	private int direction;
 	
 	public ShortSword() {
-		super("Short Sword", "item/short_sword.png", 25.f, 1.5f);
+		super("Short Sword", "item/short_sword.png", 25.f, 1.f);
 		sprite = new Sprite(spritePath);
 		
 		hitboxes = new Hitbox[] {
-				new Hitbox(0, 0, 0, 0),
 				new Hitbox( Tile.SIZE, 0, Tile.SIZE, Tile.SIZE),
-				new Hitbox(0, 0, 0, 0),
 				new Hitbox(-Tile.SIZE, 0, Tile.SIZE, Tile.SIZE)
 		};
 		
 		position = new Vector2f();
-		direction = 1;
+		direction = 0;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
 		hitFxSprite.setFrameTime(0.025f);
@@ -57,22 +57,35 @@ public class ShortSword extends Item {
 				position.y,
 				Tile.SIZE, Tile.SIZE);
 		
-		hitFxSprite.setReverse(direction == 3);
+		hitFxSprite.setReverse(direction == 1);
 		hitFxSprite.render(
 				hitboxes[direction].getBound().x,
 				hitboxes[direction].getBound().y,
 				hitboxes[direction].getBound().width,
 				hitboxes[direction].getBound().height,
 				0.f);
+		
+		for (int i = 0; i < hitboxes.length; i++) {
+			Renderer.setFill(new Color(1, 0, 0, 0.5f));
+			Renderer.fillRect(hitboxes[i].getBound());
+		}
 	}
 	
 	@Override
 	public void attack() {
+		attackDamage = baseAttackDamage + 2.5f * (level - 1);
+		attackCooldownTime = baseAttackCooldownTime - 0.05f * (level - 1);
+		for (int i = 0; i < hitboxes.length; i++) {
+			hitboxes[i].setSize(6 * (level - 1));
+		}
+		
 		if (attackTime >= attackCooldownTime) {
 			attackTime -= attackCooldownTime;
 			
 			ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(hitboxes[direction].getBound());
-			entityLists.forEach((e) -> e.takeDamge(attackDamage));
+			entityLists.forEach((e) -> {
+				if (e instanceof HostileEntity) e.takeDamge(attackDamage);
+			});
 			
 			hitFxSprite.setState(State.PLAY);
 		}
@@ -92,7 +105,7 @@ public class ShortSword extends Item {
 
 	@Override
 	public void setDirection(Vector2f direction) {
-		if (direction.x < 0) this.direction = 3;
-		else if (direction.x > 0) this.direction = 1;
+		if (direction.x < 0) this.direction = 1;
+		else if (direction.x > 0) this.direction = 0;
 	}
 }

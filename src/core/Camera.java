@@ -17,13 +17,12 @@ public class Camera {
 	private float interpThreshold = 0.05f;
 	private float interpAmount = 0.045f;
 	
-	public Camera() {
-		halfScreenOffset = new Vector2f(
-				Window.WINDOW_WIDTH - Tile.SIZE,
-				Window.WINDOW_HEIGHT - Tile.SIZE)
-				.multiply(0.5f);
-		
-		position = new Vector2f(World.getInstance().SPAWN_POINT);
+	public void initialize() {halfScreenOffset = new Vector2f(
+			Window.WINDOW_WIDTH - Tile.SIZE,
+			Window.WINDOW_HEIGHT - Tile.SIZE)
+			.multiply(0.5f);
+	
+		position = new Vector2f(World.getInstance().getSpawnPoint());
 	}
 	
 	public void update() {

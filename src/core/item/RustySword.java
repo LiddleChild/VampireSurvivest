@@ -6,6 +6,7 @@ import core.Renderer;
 import core.collision.CollisionManager;
 import core.collision.Hitbox;
 import core.entity.Entity;
+import core.entity.HostileEntity;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
@@ -22,18 +23,16 @@ public class RustySword extends Item {
 	private int direction;
 	
 	public RustySword() {
-		super("Rusty Sword", "item/rusty_sword.png", 25.f, 2.f);
+		super("Rusty Sword", "item/rusty_sword.png", 25.f, 1.5f);
 		sprite = new Sprite(spritePath);
 		
 		hitboxes = new Hitbox[] {
-				new Hitbox(0, 0, 0, 0),
 				new Hitbox( Tile.SIZE, -Tile.SIZE, Tile.SIZE * 2, Tile.SIZE * 2),
-				new Hitbox(0, 0, 0, 0),
 				new Hitbox(-Tile.SIZE * 2, -Tile.SIZE, Tile.SIZE * 2, Tile.SIZE * 2)
 		};
 		
 		position = new Vector2f();
-		direction = 1;
+		direction = 0;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
 		hitFxSprite.setFrameTime(0.025f);
@@ -57,7 +56,7 @@ public class RustySword extends Item {
 				position.y,
 				Tile.SIZE, Tile.SIZE * 2);
 		
-		hitFxSprite.setReverse(direction == 3);
+		hitFxSprite.setReverse(direction == 1);
 		hitFxSprite.render(
 				hitboxes[direction].getBound().x,
 				hitboxes[direction].getBound().y,
@@ -68,11 +67,19 @@ public class RustySword extends Item {
 	
 	@Override
 	public void attack() {
+		attackDamage = baseAttackDamage + 3f * (level - 1);
+		attackCooldownTime = baseAttackCooldownTime - 0.1f * (level - 1);
+		for (int i = 0; i < hitboxes.length; i++) {
+			hitboxes[i].setSize(4 * (level - 1));
+		}
+		
 		if (attackTime >= attackCooldownTime) {
 			attackTime -= attackCooldownTime;
-			
+
 			ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(hitboxes[direction].getBound());
-			entityLists.forEach((e) -> e.takeDamge(attackDamage));
+			entityLists.forEach((e) -> {
+				if (e instanceof HostileEntity) e.takeDamge(attackDamage);
+			});
 			
 			hitFxSprite.setState(State.PLAY);
 		}
@@ -92,7 +99,7 @@ public class RustySword extends Item {
 
 	@Override
 	public void setDirection(Vector2f direction) {
-		if (direction.x < 0) this.direction = 3;
-		else if (direction.x > 0) this.direction = 1;
+		if (direction.x < 0) this.direction = 1;
+		else if (direction.x > 0) this.direction = 0;
 	}
 }

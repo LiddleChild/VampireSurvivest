@@ -45,11 +45,6 @@ public class Player extends Entity {
 	}
 	
 	@Override
-	public void init() {
-		
-	}
-	
-	@Override
 	public void update() {
 		calculateDirection();
 		

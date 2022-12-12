@@ -43,7 +43,7 @@ public class MainMenuScene extends BaseScene {
 	}
 	
 	@Override
-	public void init() {
+	public void onLoadScene() {
 		
 	}
 

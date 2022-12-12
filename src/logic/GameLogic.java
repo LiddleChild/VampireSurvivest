@@ -37,7 +37,8 @@ public class GameLogic {
 	 */
 	private GameState gameState;
 	private Map<GameState, GameStateEvent> gameStateEventMaps;
-	private int maxExp, exp, level;
+	private float maxExp, exp;
+	private int level, timeCounter;
 	private PlayerCharacter character;
 	
 	/*
@@ -52,15 +53,8 @@ public class GameLogic {
 		return instance;
 	}
 	
-	public void initalize(Stage stage) {	
-		maxExp = 100;
-		exp = 0;
-		level = 1;
-		
-		character = PlayerCharacter.BRAVES;
-		
+	public void initalize(Stage stage) {
 		gameStateEventMaps = new HashMap<GameState, GameStateEvent>();
-		gameState = GameState.PLAY;
 		
 		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
 		
@@ -72,16 +66,32 @@ public class GameLogic {
 		sceneLists.add(new MainMenuScene("main_menu", stage));
 		sceneLists.add(new SelectCharacterScene("select_character", stage));
 		sceneLists.add(new GameScene("game", stage));
-		setCurrentScene(1);
+		
+		// Initialize game state
+		initializeGameState();
 		
 		// Initialize renderer
 		Renderer.initialize(gc);
 
+		// Initialize handler
 		initializeKeyboardHandler();
 		initializeMouseHandler();
 		
 		// Start game loops
 		initializeGameLoop();
+	}
+	
+	public void initializeGameState() {
+		maxExp = 100;
+		exp = 0;
+		level = 1;
+		
+		timeCounter = 0;
+
+		gameState = GameState.PLAY;
+		setCurrentScene(1); // CHANGE
+		
+		character = PlayerCharacter.BRAVES;
 	}
 	
 	private void initializeWindow() {
@@ -137,32 +147,35 @@ public class GameLogic {
 				// Calculate delta time
 				float deltaTime = (currentTime - lastTime) / 1000000000.f;
 				
+				// FPS Counter
 				time += deltaTime;
 				if (time >= 1.f) {
 					time -= 1.f;
-					
 					stage.setTitle(String.format("A Game Window, %3d fps", fps));
-					
 					fps = 0;
 				}
 				
-				if (gameState != GameState.UPGRADE && exp >= maxExp) {
-					level++;
-					
-					setGameState(GameState.UPGRADE);
-				}
-				
-				// Clear screen
-				gc.setFill(Color.BLACK);
-				gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
-				
-				// Call update
-				sceneLists.get(currentScene).update(deltaTime);
+				// Update
+				update(deltaTime);
 				
 				fps++;	
 				lastTime = currentTime;
 			}
 		}.start();
+	}
+	
+	private void update(float deltaTime) {
+		if (gameState != GameState.UPGRADE && exp >= maxExp) {
+			level++;
+			setGameState(GameState.UPGRADE);
+		}
+		
+		// Clear screen
+		gc.setFill(Color.BLACK);
+		gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
+		
+		// Call update
+		sceneLists.get(currentScene).update(deltaTime);
 	}
 	
 	/*
@@ -174,7 +187,7 @@ public class GameLogic {
 	
 	public void setCurrentScene(int index) {
 		currentScene = index;
-		sceneLists.get(currentScene).init();
+		sceneLists.get(currentScene).onLoadScene();
 	}
 	
 	public void nextScene() {
@@ -185,20 +198,26 @@ public class GameLogic {
 		return defaultFont;
 	}
 
-	public int getMaxExp() {
+	public float getMaxExp() {
 		return maxExp;
 	}
 
-	public void setMaxExp(int maxExp) {
+	public void setMaxExp(float maxExp) {
 		this.maxExp = maxExp;
 	}
 
-	public int getExp() {
+	public float getExp() {
 		return exp;
 	}
 
-	public void setExp(int exp) {
+	public void setExp(float exp) {
 		this.exp = exp;
+	}
+	
+	public void nextLevel() {
+		GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() - GameLogic.getInstance().getMaxExp());
+		GameLogic.getInstance().setMaxExp(GameLogic.getInstance().getMaxExp() * 1.75f);
+		GameLogic.getInstance().setGameState(GameState.PLAY);
 	}
 
 	public int getLevel() {
@@ -227,5 +246,17 @@ public class GameLogic {
 
 	public void setCharacter(PlayerCharacter character) {
 		this.character = character;
+	}
+
+	public int getTimeCounter() {
+		return timeCounter;
+	}
+
+	public void setTimeCounter(int timeCounter) {
+		this.timeCounter = timeCounter;
+	}
+	
+	public String timeCounterToString() {
+		return String.format("%02d:%02d", timeCounter / 60, timeCounter % 60);
 	}
 }

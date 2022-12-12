@@ -6,7 +6,6 @@ import core.collision.CollisionManager;
 import core.entity.Entity;
 import core.entity.HostileEntity;
 import core.sprite.animation.AnimatedSprite;
-import core.sprite.animation.AnimatedSpriteEvent;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
@@ -23,7 +22,7 @@ public class Imp extends Entity implements HostileEntity {
 	private boolean showBlink;
 
 	public Imp(Vector2f spawn) {
-		super("Bomber");
+		super("Imp");
 
 		position = new Vector2f(spawn);
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
@@ -40,11 +39,9 @@ public class Imp extends Entity implements HostileEntity {
 		explosionSprite.setFrameTime(0.015f);
 		explosionSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
 		explosionSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 81);
-		explosionSprite.setEventHandler(new AnimatedSpriteEvent() {
-			@Override
-			public void onEnd() {
-				delete();
-			}
+		explosionSprite.setEventHandler(() -> {
+			World.getInstance().removeEnemy(this);
+			super.delete();
 		});
 		
 		isDetonated = false;
@@ -55,11 +52,6 @@ public class Imp extends Entity implements HostileEntity {
 		showBlink = true;
 		
 		explosionRange = 3.f;
-	}
-	
-	@Override
-	public void init() {
-		
 	}
 
 	@Override
@@ -80,7 +72,6 @@ public class Imp extends Entity implements HostileEntity {
 				if (time >= detonateTime) {
 					isDetonated = true;
 					explosionSprite.setState(State.PLAY);
-//					World.getInstance().getPlayer().knockback(World.getInstance().getPlayer().getPosition().subtract(position), 4.f);
 					World.getInstance().getPlayer().takeDamge(12.f);
 					CollisionManager.getInstance().remove(this);
 				}

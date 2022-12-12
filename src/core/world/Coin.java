@@ -30,12 +30,15 @@ public class Coin extends GameBehavior {
 	}
 	
 	@Override
-	public void init() {
-		
-	}
-	
-	@Override
 	public void update() {
+		double radius = 2 * Math.tanh(2 * GameLogic.getInstance().getLevel() - 2) + 2;
+		Vector2f direction = World.getInstance().getPlayer().getPosition().subtract(position);
+		if (direction.getSize() <= radius * Tile.SIZE) {
+			position.addEqual(direction.normalize().multiply(Tile.SIZE * (float) radius * deltaTime));
+			bound.x = (int) position.x;
+			bound.y = (int) position.y;
+		}
+		
 		if (bound.intersects(World.getInstance().getPlayer().getBound())) {
 			GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() + 25);
 			super.delete();

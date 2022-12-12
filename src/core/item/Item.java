@@ -5,18 +5,19 @@ import util.math.Vector2f;
 public abstract class Item {
 
 	protected final String name, spritePath;
-	protected final float baseAttackDamage;
+	protected final float baseAttackDamage, baseAttackCooldownTime;
 	
 	protected float attackDamage, attackCooldownTime, attackTime;
 	protected Vector2f position, direction;
 	protected int level;
 	
-	public Item(String name, String spritePath, float baseAttackDamage, float attackCooldownTime) {
+	public Item(String name, String spritePath, float baseAttackDamage, float baseAttackCooldownTime) {
 		this.name = name;
 		this.spritePath = spritePath;
 		this.baseAttackDamage = baseAttackDamage;
 		this.attackDamage = baseAttackDamage;
-		this.attackCooldownTime = attackCooldownTime;
+		this.baseAttackCooldownTime = baseAttackCooldownTime;
+		this.attackCooldownTime = baseAttackCooldownTime;
 		this.level = 1;
 		this.attackTime = 1.f;
 	}
@@ -52,7 +53,7 @@ public abstract class Item {
 	}
 	
 	public String getName() {
-		return String.format("%s LV %d", name, level);
+		return String.format("%s", name, level);
 	}
 	
 }

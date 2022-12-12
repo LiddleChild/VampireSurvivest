@@ -11,30 +11,34 @@ import util.Time;
 
 public class EnemySpawner implements Runnable {
 	
-	private World world;
-	
 	private Random random;
 	
-	private float nextSpawnTime = 0.f;
-	private float time = 0.f;
+	private final float nextSpawnTime;
+	private float time;
 	
-	public EnemySpawner(World world) {
-		super();
+	private boolean running;
+	
+	public EnemySpawner() {
+		random = new Random();
 		
-		this.world = world;
-		this.random = new Random();
+		nextSpawnTime = 3.f;
+		time = nextSpawnTime;
 	}
 
 	@Override
 	public void run() {
 		float lastTime = Time.getNanoSecond();
-		while (GameLogic.getInstance().getGameState() == GameState.PLAY) {
+		
+		running = true;
+		
+		while (running) {
+			if (GameLogic.getInstance().getGameState() != GameState.PLAY) continue;
+			
 			float currentTime = Time.getNanoSecond();
 			float deltaTime = currentTime - lastTime;
 			
 			if (time >= nextSpawnTime) {
 				time = 0.f;
-				nextSpawnTime = random.nextFloat(3.f, 5.f);
 				
 				spawnEnemy();
 			} else {
@@ -47,25 +51,29 @@ public class EnemySpawner implements Runnable {
 	
 	private void spawnEnemy() {
 		int count = 3;
-		float spawnRate = 0.1f / (World.getInstance().MAP_WIDTH * World.getInstance().MAP_HEIGHT);
+		float spawnRate = 0.1f / (World.getInstance().getMapWidth() * World.getInstance().getMapHeight());
 		
 		while (count > 0) {
-			for (int x = 0; x < World.getInstance().MAP_WIDTH; x++) {
-				for (int y = 0; y < World.getInstance().MAP_HEIGHT; y++) {
+			for (int x = 0; x < World.getInstance().getMapWidth(); x++) {
+				for (int y = 0; y < World.getInstance().getMapHeight(); y++) {
 					if (random.nextFloat() < spawnRate &&
-							!world.isCoordSolidTile(x, y) &&
+							!World.getInstance().isCoordSolidTile(x, y) &&
 							!Renderer.checkInsideWindow(x * Tile.SIZE, y * Tile.SIZE, Tile.SIZE, Tile.SIZE)) {
 						
 						int rand = random.nextInt(100);
 						if (rand <= 25) {							
-							world.addEnemy(new Imp(world.coord2Pos(x, y)));
+							World.getInstance().addEnemy(new Imp(World.getInstance().coord2Pos(x, y)));
 						} else {
-							world.addEnemy(new Enemy(world.coord2Pos(x, y)));
+							World.getInstance().addEnemy(new Enemy(World.getInstance().coord2Pos(x, y)));
 						}
 						count--;
 					}
 				}
 			}
 		}
+	}
+	
+	public void stop() {
+		running = false;
 	}
 }

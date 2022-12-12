@@ -12,13 +12,6 @@ public class BehaviorManager {
 	private ArrayList<GameBehavior> gameBehaviorLists;
 	private Queue<GameBehavior> addQueues, removeQueues;
 	
-	public BehaviorManager() {
-		this.gameBehaviorLists = new ArrayList<GameBehavior>();
-		
-		this.addQueues = new LinkedList<GameBehavior>();
-		this.removeQueues = new LinkedList<GameBehavior>();
-	}
-	
 	/*
 	 * GAME BEHAVIOR
 	 */
@@ -30,12 +23,12 @@ public class BehaviorManager {
 		removeQueues.add(e);
 	}
 	
-	public void init() {
-		for (GameBehavior e : gameBehaviorLists) {
-			e.init();
-		}
-
-		modifyList();
+	public void initialize() {
+		this.gameBehaviorLists = new ArrayList<GameBehavior>();
+		this.addQueues = new LinkedList<GameBehavior>();
+		this.removeQueues = new LinkedList<GameBehavior>();
+		
+		modifyBehaviorLists();
 	}
 	
 	public void update(float deltaTime) {
@@ -51,11 +44,12 @@ public class BehaviorManager {
 		// Camera update
 		Camera.getInstance().update();
 		
-		modifyList();
+		modifyBehaviorLists();
 	}
 	
-	private void modifyList() {
+	private void modifyBehaviorLists() {
 		// Add later to prevent iterator invalidation
+		if (!addQueues.isEmpty()) System.out.println("ADDING " + addQueues.size());
 		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());
 		while (!removeQueues.isEmpty()) gameBehaviorLists.remove(removeQueues.poll());
 	}

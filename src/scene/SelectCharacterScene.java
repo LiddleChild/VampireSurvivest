@@ -25,7 +25,7 @@ public class SelectCharacterScene extends BaseScene {
 
 	public SelectCharacterScene(String ID, Stage stage) {
 		super(ID, stage);
-
+		
 		background = new Sprite("mainmenu_background.jpg");
 		
 		int w = Window.WINDOW_WIDTH / 3;
@@ -56,7 +56,7 @@ public class SelectCharacterScene extends BaseScene {
 	}
 	
 	@Override
-	public void init() {
+	public void onLoadScene() {
 		
 	}
 

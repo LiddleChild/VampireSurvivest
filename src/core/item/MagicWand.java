@@ -4,10 +4,9 @@ import java.util.ArrayList;
 
 import core.Renderer;
 import core.collision.CollisionManager;
-import core.collision.Hitbox;
 import core.entity.Entity;
 import core.entity.HostileEntity;
-import core.item.fx.PurpleForceWave;
+import core.item.fx.GreenForceWave;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
@@ -19,27 +18,17 @@ public class MagicWand extends Item {
 	
 	private Sprite sprite;
 	private AnimatedSprite hitFxSprite;
-	private Hitbox[] hitboxes;
 	
 	private Vector2f position;
-	private int direction;
-	private ArrayList<PurpleForceWave> forceWaveLists;
+	private ArrayList<GreenForceWave> forceWaveLists;
 	
 	public MagicWand() {
-		super("Magic Wand", "item/magic_wand.png", 10.f, 2.f);
+		super("Magic Wand", "item/magic_wand.png", 10.f, 1.25f);
 		sprite = new Sprite(spritePath);
 		
-		hitboxes = new Hitbox[] {
-				new Hitbox(0, 0, 0, 0),
-				new Hitbox( Tile.SIZE, -Tile.SIZE, Tile.SIZE * 2, Tile.SIZE * 2),
-				new Hitbox(0, 0, 0, 0),
-				new Hitbox(-Tile.SIZE * 2, -Tile.SIZE, Tile.SIZE * 2, Tile.SIZE * 2)
-		};
-		
-		forceWaveLists = new ArrayList<PurpleForceWave>();
+		forceWaveLists = new ArrayList<GreenForceWave>();
 		
 		position = new Vector2f();
-		direction = 1;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
 		hitFxSprite.setFrameTime(0.03f);
@@ -52,10 +41,10 @@ public class MagicWand extends Item {
 	public void update(float deltaTime) {
 		attackTime += deltaTime;
 		
-		ArrayList<PurpleForceWave> deleteLists = new ArrayList<PurpleForceWave>();
+		ArrayList<GreenForceWave> deleteLists = new ArrayList<GreenForceWave>();
 		
 		hitFxSprite.update(deltaTime);
-		for (PurpleForceWave fw : forceWaveLists) {
+		for (GreenForceWave fw : forceWaveLists) {
 			fw.update(deltaTime);
 
 			// Check for hit entity and damage it
@@ -88,22 +77,20 @@ public class MagicWand extends Item {
 				position.y,
 				Tile.SIZE, Tile.SIZE * 2);
 		
-		hitFxSprite.setReverse(direction == 3);
-		hitFxSprite.render(
-				hitboxes[direction].getBound().x,
-				hitboxes[direction].getBound().y,
-				hitboxes[direction].getBound().width,
-				hitboxes[direction].getBound().height,
-				0.f);
-		for (PurpleForceWave fw : forceWaveLists) {
+		for (GreenForceWave fw : forceWaveLists) {
 			fw.render();
 		}
 	}
 	
 	@Override
 	public void attack() {
+		attackDamage = baseAttackDamage + 3f * (level - 1);
+		attackCooldownTime = baseAttackCooldownTime - 0.1f * (level - 1);
+		int size = Tile.SIZE + (level - 1) * 4;
+		
 		Entity temp = null;
 		Vector2f dist = new Vector2f(1000, 1000);
+		
 		for (Entity e : World.getInstance().getEnemyLists()) {
 			Vector2f d = e.getPosition().subtract(position);
 			
@@ -116,7 +103,7 @@ public class MagicWand extends Item {
 		if (temp != null && attackTime >= attackCooldownTime) {
 			attackTime = 0.f;
 			forceWaveLists.add(
-					new PurpleForceWave(position, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
+					new GreenForceWave(position, size, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
 		}
 	}
 	
@@ -125,17 +112,12 @@ public class MagicWand extends Item {
 	 */
 	@Override
 	public void setPosition(Vector2f position) {
-		for (int i = 0; i < hitboxes.length; i++) {
-			hitboxes[i].setPosition(position);
-		}
-		
 		this.position = position;
 	}
 
 	@Override
 	public void setDirection(Vector2f direction) {
-		if (direction.x < 0) this.direction = 3;
-		else if (direction.x > 0) this.direction = 1;
+		
 	}
 
 }

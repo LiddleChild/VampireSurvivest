@@ -26,7 +26,7 @@ public class StartingScene extends BaseScene {
 	}
 	
 	@Override
-	public void init() {
+	public void onLoadScene() {
 		
 	}
 

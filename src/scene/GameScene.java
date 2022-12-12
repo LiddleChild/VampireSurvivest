@@ -1,6 +1,8 @@
 package scene;
 
+import core.Camera;
 import core.behavior.BehaviorManager;
+import core.collision.CollisionManager;
 import core.ui.GameOverWindow;
 import core.ui.StatusWindow;
 import core.ui.UpgradeWindow;
@@ -14,12 +16,14 @@ import logic.GameLogic;
 import logic.GameState;
 import logic.Window;
 import util.ColorUtil;
+import util.Time;
 
 public class GameScene extends BaseScene {
 
 	private Color backgroundColor = ColorUtil.parseRGB2Color(43, 41, 41);
 	private ProgressBar expBar;
-	private Label level;
+	private Label level, timer;
+	private float lastTime;
 	
 	private UpgradeWindow upgradeWindow;
 	private StatusWindow statusWindow;
@@ -28,20 +32,29 @@ public class GameScene extends BaseScene {
 	public GameScene(String ID, Stage stage) {
 		super(ID, stage);
 		
-		expBar = new ProgressBar(0, 0, Window.WINDOW_WIDTH, 25, 100);
+		expBar = new ProgressBar(0, 0, Window.WINDOW_WIDTH, 30, 100);
 		expBar.setForegroundColor(ColorUtil.parseRGB2Color(86, 152, 204));
 		expBar.setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
 		expBar.setBorderSize(2);
 		expBar.setMaxProgress(GameLogic.getInstance().getMaxExp());
 		expBar.setProgress(GameLogic.getInstance().getExp());
 		
-		level = new Label("Level 1", Window.WINDOW_WIDTH - 10, 10);
+		level = new Label("Level 1", Window.WINDOW_WIDTH - 10, 15);
 		level.setColor(Color.WHITE);
-		level.setFontSize(15);
+		level.setFontSize(16);
 		level.setPosition(Position.RIGHT);
 		level.setShadowColor(Color.BLACK);
 		level.setTextShadow(true);
 		level.setShadowOffset(2);
+		
+		GameLogic.getInstance().setTimeCounter(0);
+		lastTime = Time.getNanoSecond();
+		
+		timer = new Label("", Window.WINDOW_WIDTH / 2, 15);
+		timer.setColor(Color.WHITE);
+		level.setFontSize(14);
+		timer.setShadowColor(Color.BLACK);
+		timer.setTextShadow(true);
 		
 		upgradeWindow = new UpgradeWindow();
 		statusWindow = new StatusWindow();
@@ -49,12 +62,12 @@ public class GameScene extends BaseScene {
 	}
 	
 	@Override
-	public void init() {
-		// Initialize world
-		new World();
-		
-		// Call init
-		BehaviorManager.getInstance().init();
+	public void onLoadScene() {
+		BehaviorManager.getInstance().initialize();
+		CollisionManager.getInstance().initialize();
+		World.getInstance().loadWorld();
+		World.getInstance().initialize();
+		Camera.getInstance().initialize();
 	}
 
 	@Override
@@ -63,10 +76,20 @@ public class GameScene extends BaseScene {
 		gc.setFill(backgroundColor);
 		gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		
-		// Call update
-		if (GameLogic.getInstance().getGameState() == GameState.PLAY)
+		// Update
+		if (GameLogic.getInstance().getGameState() == GameState.PLAY) {
 			BehaviorManager.getInstance().update(deltaTime);
+			
+			float currentTime = Time.getNanoSecond();
+			
+			if (currentTime - lastTime >= 1.f) {
+				lastTime = currentTime;
+
+				GameLogic.getInstance().setTimeCounter(GameLogic.getInstance().getTimeCounter() + 1);
+			}
+		}
 		
+		// Render
 		BehaviorManager.getInstance().render(deltaTime);
 		
 		// UPGRADE
@@ -81,6 +104,9 @@ public class GameScene extends BaseScene {
 		
 		level.setText(String.format("Level %d", GameLogic.getInstance().getLevel()));
 		level.update(deltaTime);
+		
+		timer.setText(GameLogic.getInstance().timeCounterToString());
+		timer.update(deltaTime);
 
 		// GAME OVER
 		if (GameLogic.getInstance().getGameState() == GameState.GAME_OVER) {

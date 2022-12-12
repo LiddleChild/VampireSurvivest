@@ -34,23 +34,6 @@ public class UpgradeWindow extends UIComponent {
 	private Label levelUp;
 	private ArrayList<UpgradeItem> upgradeItemLists;
 	
-/*
-
-TODO:
-Player upgrade
-	- Max health
-	- Movement speed
-
-Weapon upgrade
-	- Weapon attack damage
-	- Weapon attack speed
-	- Weapon hit box
-	
-Sword LV8
-	- Wave Force on attack
-	
- */
-	
 	public UpgradeWindow() {
 		backgroundColor = new Color(0, 0, 0, 0.5f);
 		
@@ -196,9 +179,7 @@ class UpgradeItem {
 			@Override
 			public void onClick() {
 				item.action.action();
-				GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() - GameLogic.getInstance().getMaxExp());
-				GameLogic.getInstance().setMaxExp(GameLogic.getInstance().getMaxExp() * 2);
-				GameLogic.getInstance().setGameState(GameState.PLAY);
+				GameLogic.getInstance().nextLevel();
 			}
 		});
 		

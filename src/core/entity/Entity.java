@@ -45,7 +45,7 @@ public abstract class Entity extends GameBehavior {
 		movable = new boolean[] { true, true, true, true };
 		
 		setMovementSpeed(4.f);
-		position = new Vector2f(World.getInstance().SPAWN_POINT);
+		position = new Vector2f(World.getInstance().getSpawnPoint());
 		direction = new Vector2f(0.f, 0.f);
 		
 		maxHealth = 100;
@@ -115,10 +115,6 @@ public abstract class Entity extends GameBehavior {
 	/*
 	 * MOVEMENT
 	 */
-	public void knockback(Vector2f direction, float amount) {
-		position.addEqual(direction.normalize().multiply(amount));
-	}
-	
 	protected void move(Vector2f direction) {
 		direction.normalize();
 		this.direction = direction;
@@ -213,6 +209,7 @@ public abstract class Entity extends GameBehavior {
 
 	public void setHealth(float health) {
 		if (health <= 0) {
+			health = 0;
 			onDeath();
 			return;
 		}

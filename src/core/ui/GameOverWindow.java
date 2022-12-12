@@ -33,6 +33,7 @@ public class GameOverWindow extends UIComponent {
 		back.setOnClick(new ButtonEventHandler() {
 			@Override
 			public void onClick() {
+				GameLogic.getInstance().initializeGameState();
 				GameLogic.getInstance().setCurrentScene(1);
 			}
 		});

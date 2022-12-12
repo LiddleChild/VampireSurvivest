@@ -11,23 +11,29 @@ import util.math.Vector2f;
 
 public class World {
 	private static World instance;
-	
-	public final int MAP_WIDTH, MAP_HEIGHT, MAP_MAX_LAYER;
-	public Vector2f SPAWN_POINT;
 
-	private Player player;
-
+	public Vector2f spawnPoint;
+	private int mapWidth, mapHeight, mapMaxLayer;
 	private Tile[][][] tileMaps;
 	private boolean[][] collisionMaps;
 	
 	private ArrayList<Coin> coins;
 	private ArrayList<Entity> enemyLists;
 	
-	public World() {
-		super();
+	private Player player;
+	
+	private Thread enemySpawnerThread;
+	private EnemySpawner enemySpawner;
+	
+	public static World getInstance() {
+		if (instance == null) {
+			instance = new World();
+		}
 		
-		instance = this;
-		
+		return instance;
+	}
+	
+	public void loadWorld() {
 		WorldLoader.load(SpriteSheet.tileset,
 				"world/map0.png",
 				"world/map1.png",
@@ -36,30 +42,34 @@ public class World {
 		
 		tileMaps = WorldLoader.getTileMaps();
 		collisionMaps = WorldLoader.getCollisionMaps();
-		SPAWN_POINT = WorldLoader.getSpawnPoint();
+		spawnPoint = WorldLoader.getSpawnPoint();
 		
-		MAP_WIDTH = tileMaps.length;
-		MAP_HEIGHT = tileMaps[0].length;
-		MAP_MAX_LAYER = tileMaps[0][0].length;
+		mapWidth = tileMaps.length;
+		mapHeight = tileMaps[0].length;
+		mapMaxLayer = tileMaps[0][0].length;
 		
-		if (SPAWN_POINT == null) {			
-			SPAWN_POINT = new Vector2f(
-					MAP_WIDTH / 2 * Tile.SIZE,
-					MAP_HEIGHT / 2 * Tile.SIZE);
+		if (spawnPoint == null) {			
+			spawnPoint = new Vector2f(
+					mapWidth / 2 * Tile.SIZE,
+					mapHeight / 2 * Tile.SIZE);
 		}
+	}
+	
+	public void initialize() {
+		coins = new ArrayList<Coin>();
+		enemyLists = new ArrayList<Entity>();
 		
 		player = new Player();
 		Camera.getInstance().setEntity(player);
 		
-		new Thread(new EnemySpawner(this), "enemy_spawner_thread").start();
+		if (enemySpawnerThread != null) {
+			enemySpawner.stop();
+			enemySpawnerThread.interrupt();
+		}
 		
-		coins = new ArrayList<Coin>();
-		enemyLists = new ArrayList<Entity>();
-
-//		spawnCoin(SPAWN_POINT.add(32.f));
-//		spawnCoin(SPAWN_POINT.add(32.f));
-//		spawnCoin(SPAWN_POINT.add(32.f));
-//		spawnCoin(SPAWN_POINT.add(32.f));
+		enemySpawner = new EnemySpawner();
+		enemySpawnerThread = new Thread(enemySpawner, "enemy_spawner_thread");
+		enemySpawnerThread.start();
 	}
 	
 	public void spawnCoin(Vector2f pos) {
@@ -71,11 +81,7 @@ public class World {
 	}
 	
 	public void removeEnemy(Entity e) {
-		enemyLists.remove(e);
-	}
-	
-	public static World getInstance() {
-		return instance;
+		enemyLists.remove(enemyLists.indexOf(e));
 	}
 	
 	/*
@@ -119,9 +125,9 @@ public class World {
 		int iy = (int) y;
 		int iLayer = (int) layer;
 		
-		if (ix < 0 || ix >= MAP_WIDTH ||
-				iy < 0 || iy >= MAP_HEIGHT ||
-				iLayer < 0 || iLayer >= MAP_MAX_LAYER)
+		if (ix < 0 || ix >= mapWidth ||
+				iy < 0 || iy >= mapHeight ||
+				iLayer < 0 || iLayer >= mapMaxLayer)
 			return null;
 		
 		return tileMaps[ix][iy][iLayer];
@@ -140,5 +146,25 @@ public class World {
 
 	public ArrayList<Entity> getEnemyLists() {
 		return enemyLists;
+	}
+
+	public ArrayList<Coin> getCoins() {
+		return coins;
+	}
+
+	public Vector2f getSpawnPoint() {
+		return spawnPoint;
+	}
+
+	public int getMapWidth() {
+		return mapWidth;
+	}
+
+	public int getMapHeight() {
+		return mapHeight;
+	}
+
+	public int getMapMaxLayer() {
+		return mapMaxLayer;
 	}
 }

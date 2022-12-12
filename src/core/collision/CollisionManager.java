@@ -17,7 +17,7 @@ public class CollisionManager {
 	private ArrayList<Entity> entityLists;
 	private Queue<Entity> addQueues, removeQueues;
 
-	public CollisionManager() {
+	public void initialize() {
 		entityLists = new ArrayList<Entity>();
 		this.addQueues = new LinkedList<Entity>();
 		this.removeQueues = new LinkedList<Entity>();

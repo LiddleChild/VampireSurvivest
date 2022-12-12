@@ -16,7 +16,7 @@ public class Enemy extends Entity implements HostileEntity {
 	private AnimatedSprite sprite;
 	
 	public Enemy(Vector2f spawn) {
-		super("enemy");
+		super("Undead");
 		
 		position = new Vector2f(spawn);
 		bound = new Rectangle(0, 0, 20, Tile.SIZE);
@@ -28,11 +28,6 @@ public class Enemy extends Entity implements HostileEntity {
 		
 		setMaxHealth(25.f);
 		setMovementSpeed(2.5f);
-	}
-	
-	@Override
-	public void init() {
-		
 	}
 
 	@Override
@@ -64,8 +59,8 @@ public class Enemy extends Entity implements HostileEntity {
 
 	@Override
 	protected void onDeath() {
-		World.getInstance().removeEnemy(this);
 		super.delete();
+		World.getInstance().removeEnemy(this);
 		World.getInstance().spawnCoin(position.add(new Vector2f(0, Tile.SIZE / 2)));
 	}
 
