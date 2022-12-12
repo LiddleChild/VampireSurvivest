@@ -34,7 +34,7 @@ public class Imp extends Entity implements HostileEntity {
 						(bound.height - Tile.SIZE) / 2));
 		
 		setMaxHealth(25.f);
-		setMovementSpeed(2.f);
+		setMovementSpeed(3.5f);
 		
 		explosionSprite = new AnimatedSprite("fx/explosion.png", 8, 10, 100, 100);
 		explosionSprite.setFrameTime(0.015f);
@@ -80,7 +80,7 @@ public class Imp extends Entity implements HostileEntity {
 				if (time >= detonateTime) {
 					isDetonated = true;
 					explosionSprite.setState(State.PLAY);
-					World.getInstance().getPlayer().knockback(World.getInstance().getPlayer().getPosition().subtract(position), 4.f);
+//					World.getInstance().getPlayer().knockback(World.getInstance().getPlayer().getPosition().subtract(position), 4.f);
 					World.getInstance().getPlayer().takeDamge(12.f);
 					CollisionManager.getInstance().remove(this);
 				}

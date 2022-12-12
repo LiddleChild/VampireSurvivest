@@ -56,10 +56,10 @@ public class World {
 		coins = new ArrayList<Coin>();
 		enemyLists = new ArrayList<Entity>();
 
-		spawnCoin(SPAWN_POINT.add(32.f));
-		spawnCoin(SPAWN_POINT.add(32.f));
-		spawnCoin(SPAWN_POINT.add(32.f));
-		spawnCoin(SPAWN_POINT.add(32.f));
+//		spawnCoin(SPAWN_POINT.add(32.f));
+//		spawnCoin(SPAWN_POINT.add(32.f));
+//		spawnCoin(SPAWN_POINT.add(32.f));
+//		spawnCoin(SPAWN_POINT.add(32.f));
 	}
 	
 	public void spawnCoin(Vector2f pos) {

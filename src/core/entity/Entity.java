@@ -38,8 +38,7 @@ public abstract class Entity extends GameBehavior {
 		
 		attackCooldownTime = 3.f;
 		lastAttackTime = 0.f;
-//		attackDamage = 5.f;
-		attackDamage = 100.f;
+		attackDamage = 5.f;
 		
 		CollisionManager.getInstance().add(this);
 		

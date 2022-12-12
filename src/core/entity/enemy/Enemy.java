@@ -27,7 +27,7 @@ public class Enemy extends Entity implements HostileEntity {
 						(bound.height - Tile.SIZE) / 2));
 		
 		setMaxHealth(25.f);
-		setMovementSpeed(1.5f);
+		setMovementSpeed(2.5f);
 	}
 	
 	@Override

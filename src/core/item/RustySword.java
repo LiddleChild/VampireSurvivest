@@ -22,7 +22,7 @@ public class RustySword extends Item {
 	private int direction;
 	
 	public RustySword() {
-		super("Rusty Sword", "item/rusty_sword.png", 25.f, 1.5f);
+		super("Rusty Sword", "item/rusty_sword.png", 25.f, 2.f);
 		sprite = new Sprite(spritePath);
 		
 		hitboxes = new Hitbox[] {

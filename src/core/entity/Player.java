@@ -27,6 +27,7 @@ public class Player extends Entity {
 		
 		PlayerCharacter c = GameLogic.getInstance().getCharacter();
 		item = c.getItem();
+		setMovementSpeed(c.getMovementSpeed());
 		
 		direction = new Vector2f(0.f, 0.f);
 
@@ -41,8 +42,6 @@ public class Player extends Entity {
 				.add(new Vector2f(
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2)));
-		
-		setMovementSpeed(5.f);
 	}
 	
 	@Override

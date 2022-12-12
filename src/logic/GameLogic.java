@@ -25,7 +25,6 @@ import scene.SelectCharacterScene;
 import scene.StartingScene;
 
 public class GameLogic {
-	
 	private Scene scene;
 	private Stage stage;
 	private ArrayList<BaseScene> sceneLists;
@@ -33,7 +32,6 @@ public class GameLogic {
 	
 	private GraphicsContext gc;
 	private Font defaultFont;
-	
 	/*
 	 * GAAME STATE
 	 */
@@ -54,7 +52,7 @@ public class GameLogic {
 		return instance;
 	}
 	
-	public void initalize(Stage stage) {
+	public void initalize(Stage stage) {	
 		maxExp = 100;
 		exp = 0;
 		level = 1;
@@ -110,7 +108,6 @@ public class GameLogic {
 		stage.setScene(scene);
 	}
 	
-	// Initialize keyboard handler
 	private void initializeKeyboardHandler() {
 		KeyboardHandler.initialize();
 		KeyboardHandler keyboardHandler = new KeyboardHandler();
@@ -118,7 +115,6 @@ public class GameLogic {
 		scene.setOnKeyReleased(keyboardHandler);
 	}
 	
-	// Initialize mouse handler
 	private void initializeMouseHandler() {
 		MouseHandler.initialize();
 		MouseHandler mouseHandler = new MouseHandler();
@@ -166,7 +162,6 @@ public class GameLogic {
 				fps++;	
 				lastTime = currentTime;
 			}
-			
 		}.start();
 	}
 	
