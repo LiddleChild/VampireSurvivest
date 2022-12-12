@@ -102,7 +102,7 @@ class CharacterButton {
 		label.setShadowOffset(2);
 		label.setTextShadow(true);
 		
-		img = new Image(path, x - w / 2 + 50, y, 75, 75);
+		img = new Image(path, x - w / 2 + 50, y, 75);
 		img.getBound().setBackgroundColor(new Color(0, 0, 0, 0));  
 		img.getBound().setBorderColor(Color.LIGHTGREY);
 		img.getBound().setBorderSize(2);

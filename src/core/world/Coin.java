@@ -53,9 +53,6 @@ public class Coin extends GameBehavior {
 				Tile.SIZE / 2,
 				Tile.SIZE / 2,
 				0.f);
-		
-//		Renderer.setFill(new Color(1, 0, 0, 0.5f));
-//		Renderer.fillRect(bound);
 	}
 	
 	/*

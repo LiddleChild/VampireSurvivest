@@ -12,18 +12,18 @@ import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import util.math.Vector2f;
 
-public class RustySword implements Item {
+public class RustySword extends Item {
 
 	private Sprite sprite;
 	private AnimatedSprite hitFxSprite;
 	private Hitbox[] hitboxes;
+	
 	private Vector2f position;
 	private int direction;
-	private float attackDamage, attackCooldownTime;
-	private float attackTime;
 	
 	public RustySword() {
-		sprite = new Sprite("rusty_sword.png");
+		super("Rusty Sword", "item/rusty_sword.png", 25.f, 1.5f);
+		sprite = new Sprite(spritePath);
 		
 		hitboxes = new Hitbox[] {
 				new Hitbox(0, 0, 0, 0),
@@ -34,10 +34,6 @@ public class RustySword implements Item {
 		
 		position = new Vector2f();
 		direction = 1;
-		
-		attackCooldownTime = 1.5f;
-		attackTime = 0.f;
-		attackDamage = 25.f;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
 		hitFxSprite.setFrameTime(0.025f);
@@ -75,7 +71,7 @@ public class RustySword implements Item {
 		if (attackTime >= attackCooldownTime) {
 			attackTime -= attackCooldownTime;
 			
-			ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(getHitboxes()[direction].getBound());
+			ArrayList<Entity> entityLists = CollisionManager.getInstance().isColliding(hitboxes[direction].getBound());
 			entityLists.forEach((e) -> e.takeDamge(attackDamage));
 			
 			hitFxSprite.setState(State.PLAY);
@@ -85,16 +81,6 @@ public class RustySword implements Item {
 	/*
 	 * GETTERS & SETTERS
 	 */
-	@Override
-	public float getAttackDamage() {
-		return attackDamage;
-	}
-	
-	@Override
-	public float getAttackCooldownTime() {
-		return attackCooldownTime;
-	}
-	
 	@Override
 	public void setPosition(Vector2f position) {
 		for (int i = 0; i < hitboxes.length; i++) {
@@ -108,21 +94,5 @@ public class RustySword implements Item {
 	public void setDirection(Vector2f direction) {
 		if (direction.x < 0) this.direction = 3;
 		else if (direction.x > 0) this.direction = 1;
-	}
-
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public Hitbox[] getHitboxes() {
-		return hitboxes;
-	}
-
-	public int getDirection() {
-		return direction;
-	}
-
-	public void setDirection(int direction) {
-		this.direction = direction;
 	}
 }

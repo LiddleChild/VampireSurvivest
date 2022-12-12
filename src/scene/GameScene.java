@@ -1,6 +1,7 @@
 package scene;
 
 import core.behavior.BehaviorManager;
+import core.ui.GameOverWindow;
 import core.ui.StatusWindow;
 import core.ui.UpgradeWindow;
 import core.ui.components.Label;
@@ -16,12 +17,13 @@ import util.ColorUtil;
 
 public class GameScene extends BaseScene {
 
-	private Color backgroundColor = new Color(43.0 / 255.0, 41.0 / 255.0, 41.0 / 255.0, 1.0);
+	private Color backgroundColor = ColorUtil.parseRGB2Color(43, 41, 41);
 	private ProgressBar expBar;
 	private Label level;
 	
 	private UpgradeWindow upgradeWindow;
 	private StatusWindow statusWindow;
+	private GameOverWindow gameOverWindow;
 	
 	public GameScene(String ID, Stage stage) {
 		super(ID, stage);
@@ -43,6 +45,7 @@ public class GameScene extends BaseScene {
 		
 		upgradeWindow = new UpgradeWindow();
 		statusWindow = new StatusWindow();
+		gameOverWindow = new GameOverWindow();
 	}
 	
 	@Override
@@ -66,9 +69,7 @@ public class GameScene extends BaseScene {
 		
 		BehaviorManager.getInstance().render(deltaTime);
 		
-		/*
-		 * UI
-		 */
+		// UPGRADE
 		if (GameLogic.getInstance().getGameState() == GameState.UPGRADE) {
 			upgradeWindow.update(deltaTime);
 			statusWindow.update(deltaTime);
@@ -80,6 +81,11 @@ public class GameScene extends BaseScene {
 		
 		level.setText(String.format("Level %d", GameLogic.getInstance().getLevel()));
 		level.update(deltaTime);
+
+		// GAME OVER
+		if (GameLogic.getInstance().getGameState() == GameState.GAME_OVER) {
+			gameOverWindow.update(deltaTime);
+		}
 	}
 	
 }

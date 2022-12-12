@@ -173,7 +173,6 @@ public class GameLogic {
 	/*
 	 * GETTERS & SETTERS
 	 */
-
 	public GraphicsContext getGraphicsContext() {
 		return gc;
 	}

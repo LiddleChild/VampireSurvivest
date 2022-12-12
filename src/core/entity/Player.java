@@ -9,6 +9,7 @@ import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import javafx.scene.input.KeyCode;
 import logic.GameLogic;
+import logic.GameState;
 import logic.PlayerCharacter;
 import util.math.Vector2f;
 
@@ -92,7 +93,7 @@ public class Player extends Entity {
 
 	@Override
 	protected void onDeath() {
-		
+		GameLogic.getInstance().setGameState(GameState.GAME_OVER);
 	}
 	
 	private void calculateDirection() {
@@ -107,6 +108,13 @@ public class Player extends Entity {
 		direction.y = dirY;
 		
 		move(direction);
+	}
+	
+	/*
+	 * GETTERS & SETTERS
+	 */
+	public Item getItem() {
+		return item;
 	}
 
 }

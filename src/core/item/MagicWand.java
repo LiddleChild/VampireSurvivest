@@ -7,6 +7,7 @@ import core.collision.CollisionManager;
 import core.collision.Hitbox;
 import core.entity.Entity;
 import core.entity.HostileEntity;
+import core.item.fx.PurpleForceWave;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
@@ -14,22 +15,19 @@ import core.world.Tile;
 import core.world.World;
 import util.math.Vector2f;
 
-public class MagicWand implements Item {
-
+public class MagicWand extends Item {
+	
 	private Sprite sprite;
 	private AnimatedSprite hitFxSprite;
 	private Hitbox[] hitboxes;
 	
 	private Vector2f position;
 	private int direction;
-	
-	private float attackDamage, attackCooldownTime;
-	private float attackTime;
-	
 	private ArrayList<PurpleForceWave> forceWaveLists;
 	
 	public MagicWand() {
-		sprite = new Sprite("magic_wand.png");
+		super("Magic Wand", "item/magic_wand.png", 10.f, 2.f);
+		sprite = new Sprite(spritePath);
 		
 		hitboxes = new Hitbox[] {
 				new Hitbox(0, 0, 0, 0),
@@ -42,10 +40,6 @@ public class MagicWand implements Item {
 		
 		position = new Vector2f();
 		direction = 1;
-		
-		attackCooldownTime = 2.f;
-		attackTime = 0.f;
-		attackDamage = 10.f;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
 		hitFxSprite.setFrameTime(0.03f);
@@ -121,23 +115,14 @@ public class MagicWand implements Item {
 		
 		if (temp != null && attackTime >= attackCooldownTime) {
 			attackTime = 0.f;
-			forceWaveLists.add(new PurpleForceWave(position, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
+			forceWaveLists.add(
+					new PurpleForceWave(position, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
 		}
 	}
 	
 	/*
 	 * GETTERS & SETTERS
 	 */
-	@Override
-	public float getAttackDamage() {
-		return attackDamage;
-	}
-	
-	@Override
-	public float getAttackCooldownTime() {
-		return attackCooldownTime;
-	}
-	
 	@Override
 	public void setPosition(Vector2f position) {
 		for (int i = 0; i < hitboxes.length; i++) {
@@ -151,22 +136,6 @@ public class MagicWand implements Item {
 	public void setDirection(Vector2f direction) {
 		if (direction.x < 0) this.direction = 3;
 		else if (direction.x > 0) this.direction = 1;
-	}
-
-	public Sprite getSprite() {
-		return sprite;
-	}
-
-	public Hitbox[] getHitboxes() {
-		return hitboxes;
-	}
-
-	public int getDirection() {
-		return direction;
-	}
-
-	public void setDirection(int direction) {
-		this.direction = direction;
 	}
 
 }

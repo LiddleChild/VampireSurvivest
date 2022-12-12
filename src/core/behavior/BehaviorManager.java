@@ -9,9 +9,6 @@ import core.Camera;
 public class BehaviorManager {	
 	private static BehaviorManager instance;
 	
-	enum State { INITIALIZING, RUNNING }
-	private State state = State.INITIALIZING;
-	
 	private ArrayList<GameBehavior> gameBehaviorLists;
 	private Queue<GameBehavior> addQueues, removeQueues;
 	
@@ -26,30 +23,22 @@ public class BehaviorManager {
 	 * GAME BEHAVIOR
 	 */
 	public void addBehavior(GameBehavior e) {
-		if (state == State.RUNNING) {
-			addQueues.add(e);
-		} else {
-			gameBehaviorLists.add(e);
-		}
+		addQueues.add(e);
 	}
 	
 	public void removeBehavior(GameBehavior e) {
-		if (state == State.RUNNING) {
-			removeQueues.add(e);
-		} else {
-			gameBehaviorLists.remove(e);
-		}
+		removeQueues.add(e);
 	}
 	
 	public void init() {
 		for (GameBehavior e : gameBehaviorLists) {
 			e.init();
 		}
+
+		modifyList();
 	}
 	
 	public void update(float deltaTime) {
-		state = State.RUNNING;
-		
 		// Sort behaviors by y-position and layer priority
 		gameBehaviorLists.sort(null);
 		
@@ -62,6 +51,10 @@ public class BehaviorManager {
 		// Camera update
 		Camera.getInstance().update();
 		
+		modifyList();
+	}
+	
+	private void modifyList() {
 		// Add later to prevent iterator invalidation
 		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());
 		while (!removeQueues.isEmpty()) gameBehaviorLists.remove(removeQueues.poll());

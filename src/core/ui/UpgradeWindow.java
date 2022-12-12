@@ -1,16 +1,18 @@
 package core.ui;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Random;
 
 import core.sprite.Sprite;
 import core.ui.components.Button;
 import core.ui.components.ButtonEventHandler;
+import core.ui.components.Image;
 import core.ui.components.Label;
+import core.ui.components.Position;
 import core.ui.components.SubWindow;
 import core.ui.components.UIComponent;
 import core.world.Tile;
+import core.world.World;
 import javafx.scene.paint.Color;
 import logic.GameLogic;
 import logic.GameState;
@@ -30,15 +32,16 @@ public class UpgradeWindow extends UIComponent {
 	
 	private SubWindow window;
 	private Label levelUp;
-	private ArrayList<String> upgradeLists;
-	private ArrayList<Button> items;
+	private ArrayList<UpgradeItem> upgradeItemLists;
 	
 /*
 
 TODO:
-Upgradable
+Player upgrade
 	- Max health
 	- Movement speed
+
+Weapon upgrade
 	- Weapon attack damage
 	- Weapon attack speed
 	- Weapon hit box
@@ -58,21 +61,15 @@ Sword LV8
 		int w = Window.WINDOW_WIDTH / 3;
 		int h = Window.WINDOW_HEIGHT * 3 / 4;
 		window = new SubWindow(Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2, w, h);
-		window.setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
+		window.setBackgroundColor(ColorUtil.parseRGB2Color(43, 41, 41));
 		window.setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
 		window.setBorderSize(2);
 		
 		levelUp = new Label("Level Up!", Window.WINDOW_WIDTH / 2, 120);
 		levelUp.setColor(Color.WHITE);
 		
-		upgradeLists = new ArrayList<String>();
-		upgradeLists.add("Max health");
-		upgradeLists.add("Movement speed");
-		upgradeLists.add("Weapon attack damage");
-		upgradeLists.add("Weapon attack speed");
-		upgradeLists.add("Weapon hit box");
+		upgradeItemLists = new ArrayList<UpgradeItem>();
 		
-		items = new ArrayList<Button>();
 		GameLogic.getInstance().setOnGameStateChangeTo(GameState.UPGRADE, new GameStateEvent() {
 			@Override
 			public void onStateChange() {
@@ -88,7 +85,7 @@ Sword LV8
 		levelUp.update(deltaTime);
 
 		for (int i = 0; i < 3; i++) {
-			items.get(i).update(deltaTime);
+			upgradeItemLists.get(i).update(deltaTime);
 		}
 	}
 	
@@ -117,41 +114,119 @@ Sword LV8
 	}
 	
 	public void addItems() {
-		Collections.shuffle(upgradeLists);
-		items.clear();
+		ArrayList<ItemData> itemLists = new ArrayList<ItemData>();
+		itemLists.add(new ItemData(
+				"Health Potion",
+				"Increases max health",
+				"item/potion_health.png",
+				() -> World.getInstance().getPlayer().setMaxHealth(World.getInstance().getPlayer().getMaxHealth() + 5.f)));
+		
+		itemLists.add(new ItemData(
+				"Swiftness Potion",
+				"Increases movement speed",
+				"item/potion_swiftness.png",
+				() -> World.getInstance().getPlayer().setMovementSpeed(World.getInstance().getPlayer().getMovementSpeed() + 0.25f)));
+		
+		itemLists.add(new ItemData(
+				World.getInstance().getPlayer().getItem().getName(),
+				"Upgrade to the next level",
+				World.getInstance().getPlayer().getItem().getSpritePath(),
+				() -> World.getInstance().getPlayer().getItem().increaseLevel()));
+		
+		upgradeItemLists.clear();
 		
 		for (int i = 0; i < 3; i++) {
-			Button btn = new Button(upgradeLists.get(i), Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + (i - 1) * 80, window.getBound().width - 10, 75);
-			btn.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(211, 191, 169));
-			btn.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
-			btn.getBound().setBorderSize(2);
-			btn.getBound().setBorderRadius(8);
-			btn.setOnClick(new ButtonEventHandler() {				
-				@Override
-				public void onClick() {
-					GameLogic.getInstance().setGameState(GameState.PLAY);
-					GameLogic.getInstance().setExp(0);
-					GameLogic.getInstance().setMaxExp(GameLogic.getInstance().getMaxExp() * 2);
-				}
-			});
+			ItemData itemData = itemLists.get(i);
+			UpgradeItem itm = new UpgradeItem(itemData,
+					Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + (i - 1) * 80,
+					window.getBound().width - 10, 75);
 			
-			items.add(btn);
+			upgradeItemLists.add(itm);
 		}
 	}
 }
 
 /*
- * COIN DATACLASS
+ * Coin DATACLASS
  */
 class Coin {
 	public int x, y, size, frame;
-	
 	public Coin() {
 		Random rand = new Random();
 		x = rand.nextInt(Window.WINDOW_WIDTH);
 		y = -rand.nextInt(Window.WINDOW_HEIGHT * 2);
 		size = rand.nextInt(Tile.SIZE / 4, Tile.SIZE);
 		frame = rand.nextInt(0, 3);
+	}
+}
+
+/*
+ * Item DATACLASS
+ */
+interface ItemAction {
+	void action();
+}
+class ItemData {
+	public String name, description, path;
+	public ItemAction action;
+	public ItemData(String name, String description, String path, ItemAction action) {
+		this.name = name;
+		this.description = description;
+		this.path = path;
+		this.action = action;
+	}
+}
+
+/*
+ * UpgradeButton UI
+ */
+class UpgradeItem {
+	
+	public Button button;
+	public Label label, label2;
+	private Image img;
+	
+	public UpgradeItem(ItemData item, int x, int y, int w, int h) {
+		button = new Button("", x, y, w, h);
+		button.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(59, 51, 50));
+		button.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		button.getBound().setBorderSize(2);
+		button.getBound().setBorderRadius(8);
+		button.setOnClick(new ButtonEventHandler() {				
+			@Override
+			public void onClick() {
+				item.action.action();
+				GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() - GameLogic.getInstance().getMaxExp());
+				GameLogic.getInstance().setMaxExp(GameLogic.getInstance().getMaxExp() * 2);
+				GameLogic.getInstance().setGameState(GameState.PLAY);
+			}
+		});
+		
+		label = new Label(item.name, x - w / 2 + 75, y - h / 6);
+		label.setFontSize(20);
+		label.setColor(Color.WHITE);
+		label.setPosition(Position.LEFT);
+		label.setShadowColor(Color.BLACK);
+		label.setShadowOffset(2);
+
+		label2 = new Label(item.description, x - w / 2 + 75, y + h / 6);
+		label2.setFontSize(14);
+		label2.setColor(Color.WHITE);
+		label2.setPosition(Position.LEFT);
+		label2.setShadowColor(Color.BLACK);
+		label2.setShadowOffset(2);
+		
+		img = new Image(item.path, x - w / 2 + 35, y, 55);
+		img.getBound().setBackgroundColor(new Color(0, 0, 0, 0));  
+		img.getBound().setBorderColor(Color.LIGHTGREY);
+		img.getBound().setBorderSize(2);
+	}
+	
+	public void update(float deltaTime) {
+		button.update(deltaTime);
+		label.update(deltaTime);
+		label2.update(deltaTime);
+		img.update(deltaTime);
 	}
 	
 }

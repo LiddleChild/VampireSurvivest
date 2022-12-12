@@ -1,4 +1,4 @@
-package core.item;
+package core.item.fx;
 
 import java.awt.Rectangle;
 

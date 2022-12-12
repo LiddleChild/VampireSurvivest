@@ -28,7 +28,7 @@ public class EnemySpawner implements Runnable {
 	@Override
 	public void run() {
 		float lastTime = Time.getNanoSecond();
-		while (GameLogic.getInstance().getGameState() != GameState.EXIT) {
+		while (GameLogic.getInstance().getGameState() == GameState.PLAY) {
 			float currentTime = Time.getNanoSecond();
 			float deltaTime = currentTime - lastTime;
 			
