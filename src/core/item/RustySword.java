@@ -3,6 +3,7 @@ package core.item;
 import java.util.ArrayList;
 
 import core.Renderer;
+import core.audio.AudioMedia;
 import core.collision.CollisionManager;
 import core.collision.Hitbox;
 import core.entity.Entity;
@@ -82,6 +83,7 @@ public class RustySword extends Item {
 			});
 			
 			hitFxSprite.setState(State.PLAY);
+			AudioMedia.SWING2.play();
 		}
 	}
 	

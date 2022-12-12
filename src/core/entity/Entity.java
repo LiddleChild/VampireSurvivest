@@ -4,6 +4,7 @@ import java.awt.Rectangle;
 import java.util.ArrayList;
 
 import core.Renderer;
+import core.audio.AudioMedia;
 import core.behavior.GameBehavior;
 import core.collision.CollisionManager;
 import core.world.Tile;
@@ -36,9 +37,9 @@ public abstract class Entity extends GameBehavior {
 		super(layer);
 		this.id = id;
 		
-		attackCooldownTime = 3.f;
+		attackCooldownTime = 1.75f;
 		lastAttackTime = 0.f;
-		attackDamage = 5.f;
+		attackDamage = 8.f;
 		
 		CollisionManager.getInstance().add(this);
 		
@@ -64,6 +65,7 @@ public abstract class Entity extends GameBehavior {
 	 */
 	@Override
 	protected void delete() {
+		AudioMedia.BIG_HIT.play();
 		CollisionManager.getInstance().remove(this);
 		super.delete();
 	}
@@ -98,6 +100,7 @@ public abstract class Entity extends GameBehavior {
 	 * ATTACK
 	 */
 	public void takeDamge(float damage) {
+		AudioMedia.HIT.play();
 		this.setHealth(getHealth() - damage);
 		onTakingDamage();
 	}

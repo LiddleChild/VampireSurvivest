@@ -3,6 +3,7 @@ package core.ui;
 import java.util.ArrayList;
 import java.util.Random;
 
+import core.audio.AudioMedia;
 import core.sprite.Sprite;
 import core.ui.components.Button;
 import core.ui.components.ButtonEventHandler;
@@ -57,6 +58,7 @@ public class UpgradeWindow extends UIComponent {
 			@Override
 			public void onStateChange() {
 				addItems();
+				AudioMedia.LEVEL_UP.play();
 			}
 		});
 	}

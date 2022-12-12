@@ -1,5 +1,6 @@
 package core.ui.components;
 
+import core.audio.AudioMedia;
 import core.inputHandler.MouseHandler;
 import javafx.scene.input.MouseButton;
 import javafx.scene.paint.Color;
@@ -9,6 +10,7 @@ public class Button extends UIComponent {
 	private Label label, rightHoverCursor, leftHoverCursor;
 	private SubWindow bound;
 	private Color hoverColor;
+	private boolean isHover;
 
 	private ButtonEventHandler event;
 	
@@ -33,6 +35,7 @@ public class Button extends UIComponent {
 		leftHoverCursor.setShadowColor(Color.BLACK);
 		
 		hoverColor = Color.WHITE;
+		isHover = false;
 	}
 
 	@Override
@@ -40,6 +43,12 @@ public class Button extends UIComponent {
 		if (bound.getBound().contains(MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y)) {
 			if (event != null && MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
 				event.onClick();
+				AudioMedia.CONFIRM.play();
+			}
+			
+			if (!isHover) {
+				isHover = true;
+				AudioMedia.SELECT.play();
 			}
 
 			leftHoverCursor.setColor(hoverColor);
@@ -47,6 +56,8 @@ public class Button extends UIComponent {
 			
 			rightHoverCursor.setColor(hoverColor);
 			rightHoverCursor.update(deltaTime);
+		} else {
+			isHover = false;
 		}
 		
 		bound.update(deltaTime);

@@ -49,8 +49,9 @@ public class BehaviorManager {
 	
 	private void modifyBehaviorLists() {
 		// Add later to prevent iterator invalidation
-		if (!addQueues.isEmpty()) System.out.println("ADDING " + addQueues.size());
+		if (!addQueues.isEmpty()) System.out.println("Adding " + addQueues.size() + " item(s)");
 		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());
+		if (!addQueues.isEmpty()) System.out.println("Removing " + addQueues.size() + " item(s)");
 		while (!removeQueues.isEmpty()) gameBehaviorLists.remove(removeQueues.poll());
 	}
 	

@@ -3,6 +3,7 @@ package core.item;
 import java.util.ArrayList;
 
 import core.Renderer;
+import core.audio.AudioMedia;
 import core.collision.CollisionManager;
 import core.entity.Entity;
 import core.entity.HostileEntity;
@@ -84,26 +85,29 @@ public class MagicWand extends Item {
 	
 	@Override
 	public void attack() {
-		attackDamage = baseAttackDamage + 3f * (level - 1);
+		attackDamage = baseAttackDamage + 2.5f * (level - 1);
 		attackCooldownTime = baseAttackCooldownTime - 0.1f * (level - 1);
-		int size = Tile.SIZE + (level - 1) * 4;
+		int waveSize = Tile.SIZE + (level - 1) * 4;
 		
-		Entity temp = null;
-		Vector2f dist = new Vector2f(1000, 1000);
-		
+		ArrayList<Entity> temp = new ArrayList<Entity>();
 		for (Entity e : World.getInstance().getEnemyLists()) {
 			Vector2f d = e.getPosition().subtract(position);
 			
-			if (d.getSize() <= 5.f * Tile.SIZE && d.compareTo(dist) < 0) {
-				dist = d;
-				temp = e;
+			if (d.getSize() <= 5.f * Tile.SIZE) {
+				temp.add(e);
 			}
 		}
 		
-		if (temp != null && attackTime >= attackCooldownTime) {
+		if (temp.size() > 0 && attackTime >= attackCooldownTime) {
 			attackTime = 0.f;
-			forceWaveLists.add(
-					new GreenForceWave(position, size, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
+			AudioMedia.FORCE_WAVE.play();
+			
+			int size = Math.min((level + 1) / 2, temp.size());
+			for (int i = 0; i < size; i++) {
+				Vector2f dist = temp.get(i).getPosition().subtract(position);
+				forceWaveLists.add(
+						new GreenForceWave(position, waveSize, (float) (Math.atan2(dist.y, dist.x) / Math.PI * 180.f)));
+			}
 		}
 	}
 	

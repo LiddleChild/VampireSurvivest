@@ -2,6 +2,7 @@ package core.world;
 
 import java.awt.Rectangle;
 
+import core.audio.AudioMedia;
 import core.behavior.GameBehavior;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
@@ -40,6 +41,7 @@ public class Coin extends GameBehavior {
 		}
 		
 		if (bound.intersects(World.getInstance().getPlayer().getBound())) {
+			AudioMedia.COLLECT.play();
 			GameLogic.getInstance().setExp(GameLogic.getInstance().getExp() + 25);
 			super.delete();
 		}

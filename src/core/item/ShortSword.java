@@ -3,6 +3,7 @@ package core.item;
 import java.util.ArrayList;
 
 import core.Renderer;
+import core.audio.AudioMedia;
 import core.collision.CollisionManager;
 import core.collision.Hitbox;
 import core.entity.Entity;
@@ -11,7 +12,6 @@ import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
-import javafx.scene.paint.Color;
 import util.math.Vector2f;
 
 public class ShortSword extends Item {
@@ -64,11 +64,6 @@ public class ShortSword extends Item {
 				hitboxes[direction].getBound().width,
 				hitboxes[direction].getBound().height,
 				0.f);
-		
-		for (int i = 0; i < hitboxes.length; i++) {
-			Renderer.setFill(new Color(1, 0, 0, 0.5f));
-			Renderer.fillRect(hitboxes[i].getBound());
-		}
 	}
 	
 	@Override
@@ -88,6 +83,7 @@ public class ShortSword extends Item {
 			});
 			
 			hitFxSprite.setState(State.PLAY);
+			AudioMedia.SWING1.play();
 		}
 	}
 	

@@ -1,17 +1,19 @@
 package core.ui;
 
+import core.audio.AudioMedia;
 import core.ui.components.Button;
 import core.ui.components.ButtonEventHandler;
 import core.ui.components.Label;
 import core.ui.components.UIComponent;
 import javafx.scene.paint.Color;
 import logic.GameLogic;
+import logic.GameState;
 import logic.Window;
 import util.ColorUtil;
 
 public class GameOverWindow extends UIComponent {
 	
-	private Color backgroundColor = new Color(1, 0.3f, 0.3f, 0.5f);
+	private Color backgroundColor = new Color(1, 0.2f, 0.2f, 0.65f);
 	private Label text;
 	private Button back;
 	
@@ -37,6 +39,8 @@ public class GameOverWindow extends UIComponent {
 				GameLogic.getInstance().setCurrentScene(1);
 			}
 		});
+		
+		GameLogic.getInstance().setOnGameStateChangeTo(GameState.GAME_OVER, () -> AudioMedia.GAME_OVER.play());
 	}
 	
 	@Override

@@ -2,6 +2,7 @@ package core.entity.enemy;
 
 import java.awt.Rectangle;
 
+import core.audio.AudioMedia;
 import core.collision.CollisionManager;
 import core.entity.Entity;
 import core.entity.HostileEntity;
@@ -18,8 +19,8 @@ public class Imp extends Entity implements HostileEntity {
 	private float detonateTime, time, explosionRange;
 	private boolean isDetonated;
 	
-	private float blinkTime;
-	private boolean showBlink;
+	private float blinkTime, blinkStartFrequency;
+	private boolean showBlink, lastShowBlink;
 
 	public Imp(Vector2f spawn) {
 		super("Imp");
@@ -50,6 +51,7 @@ public class Imp extends Entity implements HostileEntity {
 		
 		blinkTime = 0.f;
 		showBlink = true;
+		blinkStartFrequency = 0.1f;
 		
 		explosionRange = 3.f;
 	}
@@ -64,21 +66,27 @@ public class Imp extends Entity implements HostileEntity {
 				time += deltaTime;
 				blinkTime += deltaTime;
 				
-				if (blinkTime >= 0.2f / time) {
-					blinkTime -= 0.2f / time;
+				if (blinkTime >= blinkStartFrequency / time) {
+					blinkTime -= blinkStartFrequency / time;
 					showBlink = !showBlink;
 				}
 				
 				if (time >= detonateTime) {
 					isDetonated = true;
+					
+					AudioMedia.EXPLOSION.play();
 					explosionSprite.setState(State.PLAY);
 					World.getInstance().getPlayer().takeDamge(12.f);
+					
 					CollisionManager.getInstance().remove(this);
 				}
 			} else {
 				time = 0.f;
 				showBlink = true;
 			}
+			
+			if (!lastShowBlink && showBlink) AudioMedia.EXPLOSION_TICK.play();
+			lastShowBlink = showBlink;
 
 			if (direction.x < 0) sprite.setReverse(true);
 			else if (direction.x > 0) sprite.setReverse(false);
