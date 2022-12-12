@@ -5,8 +5,10 @@ import java.util.ArrayList;
 
 import core.Renderer;
 import core.audio.AudioMedia;
+import core.behavior.BehaviorManager;
 import core.behavior.GameBehavior;
 import core.collision.CollisionManager;
+import core.effect.HealthEffect;
 import core.world.Tile;
 import core.world.World;
 import javafx.scene.paint.Color;
@@ -65,9 +67,9 @@ public abstract class Entity extends GameBehavior {
 	 */
 	@Override
 	protected void delete() {
+		super.delete();
 		AudioMedia.BIG_HIT.play();
 		CollisionManager.getInstance().remove(this);
-		super.delete();
 	}
 	
 	/*
@@ -97,14 +99,25 @@ public abstract class Entity extends GameBehavior {
 	}
 	
 	/*
-	 * ATTACK
+	 * HEALTH
 	 */
 	public void takeDamge(float damage) {
 		AudioMedia.HIT.play();
+		BehaviorManager.getInstance().addBehavior(new HealthEffect(position, -damage));
+		
 		this.setHealth(getHealth() - damage);
 		onTakingDamage();
 	}
 	
+	public void heal(float heal) {
+		heal = (health + heal > maxHealth) ? maxHealth - health : heal;
+		BehaviorManager.getInstance().addBehavior(new HealthEffect(position, heal));
+		this.setHealth(getHealth() + heal);
+	}
+
+	/*
+	 * ATTACK
+	 */
 	protected void attack(Entity e) {
 		float currentTime = Time.getNanoSecond();
 		
@@ -212,12 +225,14 @@ public abstract class Entity extends GameBehavior {
 
 	public void setHealth(float health) {
 		if (health <= 0) {
-			health = 0;
+			this.health = 0;
 			onDeath();
 			return;
+		} else if (health > maxHealth) {
+			this.health = maxHealth;
+		} else {			
+			this.health = health;
 		}
-		
-		this.health = health;
 	}
 
 	public float getMaxHealth() {

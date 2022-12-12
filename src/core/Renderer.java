@@ -6,6 +6,8 @@ import core.sprite.Sprite;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
+import javafx.scene.text.Font;
+import logic.GameLogic;
 import logic.Window;
 import util.math.Mathf;
 import util.math.Vector2f;
@@ -17,12 +19,14 @@ public class Renderer {
 	
 	private static Vector2f offset;
 	private static float alpha, rotation;
+	private static Font font;
 	
 	public static void initialize(GraphicsContext gc) {
 		 Renderer.gc = gc;
 		 Renderer.offset = new Vector2f();
 		 Renderer.alpha = 1.f;
 		 Renderer.rotation = 0.f;
+		 Renderer.font = GameLogic.getInstance().getDefaultFont();
 	}
 	
 	public static Vector2f translateCamera(float x, float y) {
@@ -51,6 +55,14 @@ public class Renderer {
 	
 	public static void setRenderRotation(float rotation) {
 		Renderer.rotation = rotation;
+	}
+	
+	public static void setFont(Font font) {
+		Renderer.font = font;
+	}
+	
+	public static void setFontSize(int fontSize) {
+		Renderer.font = Font.font(font.getFamily(), fontSize);
 	}
 	
 	/*
@@ -124,6 +136,16 @@ public class Renderer {
 		alpha = 1.f;
 		rotation = 0.f;
 		offset.setZero();
+	}
+	
+	/*
+	 * DrawString
+	 */
+	public static void drawString(String text, float x, float y) {
+		Vector2f t = translateCamera(x, y);
+		
+		gc.setFont(font);
+		gc.fillText(text, t.x, t.y);
 	}
 	
 }

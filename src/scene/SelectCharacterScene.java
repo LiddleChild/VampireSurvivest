@@ -4,7 +4,6 @@ import java.util.ArrayList;
 
 import core.sprite.Sprite;
 import core.ui.components.Button;
-import core.ui.components.ButtonEventHandler;
 import core.ui.components.Image;
 import core.ui.components.Label;
 import core.ui.components.Position;
@@ -86,12 +85,9 @@ class CharacterButton {
 		button.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
 		button.getBound().setBorderSize(2);
 		button.getBound().setBorderRadius(8);
-		button.setOnClick(new ButtonEventHandler() {
-			@Override
-			public void onClick() {
-				GameLogic.getInstance().setCharacter(character);
-				GameLogic.getInstance().nextScene();
-			}
+		button.setOnClick(() -> {
+			GameLogic.getInstance().setCharacter(character);
+			GameLogic.getInstance().nextScene();
 		});
 		
 		label = new Label(name, x + w / 2 - 30, y);

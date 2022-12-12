@@ -32,11 +32,12 @@ public class GameLogic {
 	
 	private GraphicsContext gc;
 	private Font defaultFont;
+	
 	/*
-	 * GAAME STATE
+	 * GAME STATE
 	 */
 	private GameState gameState;
-	private Map<GameState, GameStateEvent> gameStateEventMaps;
+	private Map<GameState, Runnable> gameStateEventMaps;
 	private float maxExp, exp;
 	private int level, timeCounter;
 	private PlayerCharacter character;
@@ -54,7 +55,7 @@ public class GameLogic {
 	}
 	
 	public void initalize(Stage stage) {
-		gameStateEventMaps = new HashMap<GameState, GameStateEvent>();
+		gameStateEventMaps = new HashMap<GameState, Runnable>();
 		
 		this.defaultFont = Font.loadFont(ClassLoader.getSystemResourceAsStream("font/ARCADEPI.TTF"), 20);
 		
@@ -89,13 +90,13 @@ public class GameLogic {
 		timeCounter = 0;
 
 		gameState = GameState.PLAY;
-		setCurrentScene(1); // CHANGE
+		setCurrentScene(0);
 		
 		character = PlayerCharacter.BRAVES;
 	}
 	
 	private void initializeWindow() {
-		stage.setTitle("A Game Window");
+		stage.setTitle("Vampire Survivest");
 		stage.setResizable(false);
 		stage.show();
 		
@@ -151,7 +152,7 @@ public class GameLogic {
 				time += deltaTime;
 				if (time >= 1.f) {
 					time -= 1.f;
-					stage.setTitle(String.format("A Game Window, %3d fps", fps));
+					stage.setTitle(String.format("Vampire Survivest, %3d fps", fps));
 					fps = 0;
 				}
 				
@@ -232,11 +233,11 @@ public class GameLogic {
 		this.gameState = gameState;
 		
 		if (gameStateEventMaps.get(gameState) != null) {
-			gameStateEventMaps.get(gameState).onStateChange();
+			gameStateEventMaps.get(gameState).run();
 		}
 	}
 	
-	public void setOnGameStateChangeTo(GameState gameState, GameStateEvent e) {
+	public void setOnGameStateChangeTo(GameState gameState, Runnable e) {
 		gameStateEventMaps.put(gameState, e);
 	}
 

@@ -2,12 +2,12 @@ package core.entity.enemy;
 
 import java.util.Random;
 
-import core.Renderer;
 import core.world.Tile;
 import core.world.World;
 import logic.GameLogic;
 import logic.GameState;
 import util.Time;
+import util.math.Vector2f;
 
 public class EnemySpawner implements Runnable {
 	
@@ -21,7 +21,7 @@ public class EnemySpawner implements Runnable {
 	public EnemySpawner() {
 		random = new Random();
 		
-		nextSpawnTime = 3.f;
+		nextSpawnTime = 5.f;
 		time = nextSpawnTime;
 	}
 
@@ -50,23 +50,27 @@ public class EnemySpawner implements Runnable {
 	}
 	
 	private void spawnEnemy() {
-		int count = 3;
-		float spawnRate = 0.1f / (World.getInstance().getMapWidth() * World.getInstance().getMapHeight());
+		// enemy count +2 every 1 min
+		int enemyCount = 3 + GameLogic.getInstance().getTimeCounter() / 60 * 2;
+		float spawnRate = 1.f / (World.getInstance().getMapWidth() * World.getInstance().getMapHeight());
 		
-		while (count > 0) {
+		while (enemyCount > 0) {
 			for (int x = 0; x < World.getInstance().getMapWidth(); x++) {
 				for (int y = 0; y < World.getInstance().getMapHeight(); y++) {
+					float range = new Vector2f(x * Tile.SIZE, y * Tile.SIZE).subtract(World.getInstance().getPlayer().getPosition()).getSize();
 					if (random.nextFloat() < spawnRate &&
-							!World.getInstance().isCoordSolidTile(x, y) &&
-							!Renderer.checkInsideWindow(x * Tile.SIZE, y * Tile.SIZE, Tile.SIZE, Tile.SIZE)) {
-						
-						int rand = random.nextInt(100);
-						if (rand <= 25) {							
+							range >= 16.f * Tile.SIZE &&
+							range <= 32.f * Tile.SIZE &&
+							!World.getInstance().isCoordSolidTile(x, y)) {
+												
+						float rand = random.nextFloat();
+						if (rand <= 0.2) {
 							World.getInstance().addEnemy(new Imp(World.getInstance().coord2Pos(x, y)));
 						} else {
 							World.getInstance().addEnemy(new Enemy(World.getInstance().coord2Pos(x, y)));
 						}
-						count--;
+						
+						enemyCount--;
 					}
 				}
 			}

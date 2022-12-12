@@ -2,8 +2,6 @@ package core.collision;
 
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import core.entity.Entity;
 import core.world.World;
@@ -14,13 +12,18 @@ public class CollisionManager {
 	enum State { IDLE, RUNNING }
 	private State state = State.IDLE;
 	
-	private ArrayList<Entity> entityLists;
-	private Queue<Entity> addQueues, removeQueues;
+	private ArrayList<Entity> entityLists, addQueues, removeQueues;
 
 	public void initialize() {
 		entityLists = new ArrayList<Entity>();
-		this.addQueues = new LinkedList<Entity>();
-		this.removeQueues = new LinkedList<Entity>();
+		addQueues = new ArrayList<Entity>();
+		removeQueues = new ArrayList<Entity>();
+	}
+	
+	public void reset() {
+		entityLists.clear();
+		addQueues.clear();
+		removeQueues.clear();
 	}
 	
 	/*
@@ -43,8 +46,11 @@ public class CollisionManager {
 		
 
 		// Prevent iterator invalidation
-		while (!addQueues.isEmpty()) entityLists.add(addQueues.poll());
-		while (!removeQueues.isEmpty()) entityLists.remove(removeQueues.poll());
+		entityLists.addAll(addQueues);
+		addQueues.clear();
+		
+		entityLists.removeAll(removeQueues);
+		removeQueues.clear();
 		state = State.IDLE;
 		
 		return collidedEntity;

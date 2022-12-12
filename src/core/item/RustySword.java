@@ -65,6 +65,11 @@ public class RustySword extends Item {
 				hitboxes[direction].getBound().height,
 				0.f);
 	}
+
+	@Override
+	public void reset() {
+		
+	}
 	
 	@Override
 	public void attack() {

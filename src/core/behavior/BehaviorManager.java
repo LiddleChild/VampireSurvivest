@@ -1,16 +1,13 @@
 package core.behavior;
 
 import java.util.ArrayList;
-import java.util.LinkedList;
-import java.util.Queue;
 
 import core.Camera;
 
 public class BehaviorManager {	
 	private static BehaviorManager instance;
 	
-	private ArrayList<GameBehavior> gameBehaviorLists;
-	private Queue<GameBehavior> addQueues, removeQueues;
+	private ArrayList<GameBehavior> gameBehaviorLists, addQueues, removeQueues;
 	
 	/*
 	 * GAME BEHAVIOR
@@ -24,10 +21,18 @@ public class BehaviorManager {
 	}
 	
 	public void initialize() {
-		this.gameBehaviorLists = new ArrayList<GameBehavior>();
-		this.addQueues = new LinkedList<GameBehavior>();
-		this.removeQueues = new LinkedList<GameBehavior>();
+		gameBehaviorLists = new ArrayList<GameBehavior>();
+		addQueues = new ArrayList<GameBehavior>();
+		removeQueues = new ArrayList<GameBehavior>();
 		
+		modifyBehaviorLists();
+	}
+	
+	public void reset() {
+		gameBehaviorLists.clear();
+		addQueues.clear();
+		removeQueues.clear();
+
 		modifyBehaviorLists();
 	}
 	
@@ -49,10 +54,11 @@ public class BehaviorManager {
 	
 	private void modifyBehaviorLists() {
 		// Add later to prevent iterator invalidation
-		if (!addQueues.isEmpty()) System.out.println("Adding " + addQueues.size() + " item(s)");
-		while (!addQueues.isEmpty()) gameBehaviorLists.add(addQueues.poll());
-		if (!addQueues.isEmpty()) System.out.println("Removing " + addQueues.size() + " item(s)");
-		while (!removeQueues.isEmpty()) gameBehaviorLists.remove(removeQueues.poll());
+		gameBehaviorLists.addAll(addQueues);
+		addQueues.clear();
+		
+		gameBehaviorLists.removeAll(removeQueues);
+		removeQueues.clear();
 	}
 	
 	public void render(float deltaTime) {

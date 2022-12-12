@@ -33,7 +33,7 @@ public class World {
 		return instance;
 	}
 	
-	public void loadWorld() {
+	public void initialize() {
 		WorldLoader.load(SpriteSheet.tileset,
 				"world/map0.png",
 				"world/map1.png",
@@ -53,9 +53,7 @@ public class World {
 					mapWidth / 2 * Tile.SIZE,
 					mapHeight / 2 * Tile.SIZE);
 		}
-	}
-	
-	public void initialize() {
+		
 		coins = new ArrayList<Coin>();
 		enemyLists = new ArrayList<Entity>();
 		

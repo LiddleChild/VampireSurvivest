@@ -17,7 +17,8 @@ public class Camera {
 	private float interpThreshold = 0.05f;
 	private float interpAmount = 0.045f;
 	
-	public void initialize() {halfScreenOffset = new Vector2f(
+	public void initialize() {
+		halfScreenOffset = new Vector2f(
 			Window.WINDOW_WIDTH - Tile.SIZE,
 			Window.WINDOW_HEIGHT - Tile.SIZE)
 			.multiply(0.5f);

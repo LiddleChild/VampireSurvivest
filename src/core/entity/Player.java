@@ -27,6 +27,7 @@ public class Player extends Entity {
 		
 		PlayerCharacter c = GameLogic.getInstance().getCharacter();
 		item = c.getItem();
+		item.reset();
 		setMovementSpeed(c.getMovementSpeed());
 		
 		direction = new Vector2f(0.f, 0.f);

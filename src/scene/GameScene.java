@@ -1,15 +1,19 @@
 package scene;
 
 import core.Camera;
+import core.audio.AudioMedia;
 import core.behavior.BehaviorManager;
 import core.collision.CollisionManager;
+import core.inputHandler.KeyboardHandler;
 import core.ui.GameOverWindow;
+import core.ui.PauseWindow;
 import core.ui.StatusWindow;
 import core.ui.UpgradeWindow;
 import core.ui.components.Label;
 import core.ui.components.Position;
 import core.ui.components.ProgressBar;
 import core.world.World;
+import javafx.scene.input.KeyCode;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.GameLogic;
@@ -28,6 +32,7 @@ public class GameScene extends BaseScene {
 	private UpgradeWindow upgradeWindow;
 	private StatusWindow statusWindow;
 	private GameOverWindow gameOverWindow;
+	private PauseWindow pauseWindow;
 	
 	public GameScene(String ID, Stage stage) {
 		super(ID, stage);
@@ -59,15 +64,21 @@ public class GameScene extends BaseScene {
 		upgradeWindow = new UpgradeWindow();
 		statusWindow = new StatusWindow();
 		gameOverWindow = new GameOverWindow();
+		pauseWindow = new PauseWindow();
 	}
 	
 	@Override
 	public void onLoadScene() {
 		BehaviorManager.getInstance().initialize();
 		CollisionManager.getInstance().initialize();
-		World.getInstance().loadWorld();
 		World.getInstance().initialize();
 		Camera.getInstance().initialize();
+
+		AudioMedia.BGM.stop();
+
+		AudioMedia.BGM_BATTLE.play();
+		AudioMedia.BGM_BATTLE.setRepeat(true);
+		AudioMedia.BGM_BATTLE.setVolume(0.25f);
 	}
 
 	@Override
@@ -76,7 +87,7 @@ public class GameScene extends BaseScene {
 		gc.setFill(backgroundColor);
 		gc.fillRect(0, 0, Window.WINDOW_WIDTH, Window.WINDOW_HEIGHT);
 		
-		// Update
+		// PLAY
 		if (GameLogic.getInstance().getGameState() == GameState.PLAY) {
 			BehaviorManager.getInstance().update(deltaTime);
 			
@@ -84,7 +95,8 @@ public class GameScene extends BaseScene {
 			
 			if (currentTime - lastTime >= 1.f) {
 				lastTime = currentTime;
-
+				
+				//Update
 				GameLogic.getInstance().setTimeCounter(GameLogic.getInstance().getTimeCounter() + 1);
 			}
 		}
@@ -95,6 +107,20 @@ public class GameScene extends BaseScene {
 		// UPGRADE
 		if (GameLogic.getInstance().getGameState() == GameState.UPGRADE) {
 			upgradeWindow.update(deltaTime);
+			statusWindow.update(deltaTime);
+		}
+		
+		if (KeyboardHandler.isKeyPressed(KeyCode.ESCAPE)) {
+			if (GameLogic.getInstance().getGameState() == GameState.PLAY)
+				GameLogic.getInstance().setGameState(GameState.PAUSE);
+
+			else if (GameLogic.getInstance().getGameState() == GameState.PAUSE)
+				GameLogic.getInstance().setGameState(GameState.PLAY);
+		}
+		
+		// PAUSE
+		if (GameLogic.getInstance().getGameState() == GameState.PAUSE) {
+			pauseWindow.update(deltaTime);
 			statusWindow.update(deltaTime);
 		}
 		

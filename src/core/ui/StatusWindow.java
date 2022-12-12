@@ -15,26 +15,27 @@ public class StatusWindow extends UIComponent {
 
 	private Label playerTitle, itemTitle;
 	
-	private StatItem movementSpeed, maxHealth, attackDamage, attackSpeed;
+	private StatItem movementSpeed, maxHealth, attackDamage, attackSpeed, weaponLevel;
 	
 	public StatusWindow() {
-		window = new SubWindow(100, Window.WINDOW_HEIGHT / 2, 200, 150);
+		window = new SubWindow(100, Window.WINDOW_HEIGHT / 2, 200, 160);
 		
-		playerTitle = new Label("Player Status", 15, Window.WINDOW_HEIGHT / 2 - 55);
+		playerTitle = new Label("Player Status", 15, Window.WINDOW_HEIGHT / 2 - 60);
 		playerTitle.setColor(Color.WHITE);
 		playerTitle.setFontSize(16);
 		playerTitle.setPosition(Position.LEFT);
 		
-		movementSpeed = new StatItem(15, Window.WINDOW_HEIGHT / 2 - 35);
-		maxHealth = new StatItem(15, Window.WINDOW_HEIGHT / 2 - 20);
+		movementSpeed = new StatItem(15, Window.WINDOW_HEIGHT / 2 - 40);
+		maxHealth = new StatItem(15, Window.WINDOW_HEIGHT / 2 - 25);
 		
-		itemTitle = new Label("Item Status", 15, Window.WINDOW_HEIGHT / 2 + 15);
+		itemTitle = new Label("Item Status", 15, Window.WINDOW_HEIGHT / 2 + 10);
 		itemTitle.setColor(Color.WHITE);
 		itemTitle.setFontSize(16);
 		itemTitle.setPosition(Position.LEFT);
 
-		attackDamage = new StatItem(15, Window.WINDOW_HEIGHT / 2 + 35);
-		attackSpeed = new StatItem(15, Window.WINDOW_HEIGHT / 2 + 50);
+		weaponLevel = new StatItem(15, Window.WINDOW_HEIGHT / 2 + 30);
+		attackDamage = new StatItem(15, Window.WINDOW_HEIGHT / 2 + 45);
+		attackSpeed = new StatItem(15, Window.WINDOW_HEIGHT / 2 + 60);
 	}
 	
 	@Override
@@ -46,6 +47,7 @@ public class StatusWindow extends UIComponent {
 		maxHealth.update("Max Health", World.getInstance().getPlayer().getMaxHealth(), deltaTime);
 		
 		itemTitle.update(deltaTime);
+		weaponLevel.update("Weapon level", World.getInstance().getPlayer().getItem().getLevel(), deltaTime);
 		attackDamage.update("Attack damage", World.getInstance().getPlayer().getItem().getAttackDamage(), deltaTime);
 		attackSpeed.update("Attack speed", 1.f / World.getInstance().getPlayer().getItem().getAttackCooldownTime(), deltaTime);
 	}

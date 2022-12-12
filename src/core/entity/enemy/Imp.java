@@ -10,13 +10,15 @@ import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
+import logic.GameLogic;
 import util.math.Vector2f;
 
 public class Imp extends Entity implements HostileEntity {
 	
 	private AnimatedSprite sprite, explosionSprite;
 	
-	private float detonateTime, time, explosionRange;
+	private float baseDetonateTime, detonateTime, time;
+	private float baseEplosionRange, explosionRange;
 	private boolean isDetonated;
 	
 	private float blinkTime, blinkStartFrequency;
@@ -33,9 +35,6 @@ public class Imp extends Entity implements HostileEntity {
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2));
 		
-		setMaxHealth(25.f);
-		setMovementSpeed(3.5f);
-		
 		explosionSprite = new AnimatedSprite("fx/explosion.png", 8, 10, 100, 100);
 		explosionSprite.setFrameTime(0.015f);
 		explosionSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
@@ -45,19 +44,25 @@ public class Imp extends Entity implements HostileEntity {
 			super.delete();
 		});
 		
+		setMaxHealth(25.f);
+		setMovementSpeed(3.5f);
+		
 		isDetonated = false;
-		detonateTime = 2.f;
+		baseDetonateTime = 2.f;
 		time = 0.f;
 		
 		blinkTime = 0.f;
 		showBlink = true;
 		blinkStartFrequency = 0.1f;
 		
-		explosionRange = 3.f;
+		baseEplosionRange = 3.f;
 	}
 
 	@Override
 	public void update() {
+		explosionRange = baseEplosionRange + GameLogic.getInstance().getLevel() * 0.25f;
+		detonateTime = baseDetonateTime + GameLogic.getInstance().getLevel() - 0.1f;
+		
 		if (!isDetonated) {			
 			Vector2f playerPos = World.getInstance().getPlayer().getPosition();
 			super.move(playerPos.subtract(position));

@@ -9,10 +9,11 @@ import javafx.scene.input.KeyEvent;
 
 public class KeyboardHandler implements EventHandler<KeyEvent> {
 	
-	private static Set<KeyCode> keydowns;
+	private static Set<KeyCode> keydowns, lastKeydowns;
 	
 	public static void initialize() {
 		keydowns = new TreeSet<KeyCode>();
+		lastKeydowns = new TreeSet<KeyCode>();
 	}
 
 	@Override
@@ -25,7 +26,19 @@ public class KeyboardHandler implements EventHandler<KeyEvent> {
 	}
 	
 	public static boolean onKeyPressed(KeyCode k) {
-		return keydowns.contains((Object) k);
+		return keydowns.contains(k);
+	}
+	
+	public static boolean isKeyPressed(KeyCode k) {
+		if (keydowns.contains(k)) {
+			if (lastKeydowns.contains(k)) return false;
+			
+			lastKeydowns.add(k);
+			return true;
+		}
+		
+		lastKeydowns.remove(k);
+		return false;
 	}
 	
 }

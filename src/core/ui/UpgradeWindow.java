@@ -6,7 +6,6 @@ import java.util.Random;
 import core.audio.AudioMedia;
 import core.sprite.Sprite;
 import core.ui.components.Button;
-import core.ui.components.ButtonEventHandler;
 import core.ui.components.Image;
 import core.ui.components.Label;
 import core.ui.components.Position;
@@ -17,7 +16,6 @@ import core.world.World;
 import javafx.scene.paint.Color;
 import logic.GameLogic;
 import logic.GameState;
-import logic.GameStateEvent;
 import logic.Window;
 import util.ColorUtil;
 
@@ -54,12 +52,9 @@ public class UpgradeWindow extends UIComponent {
 		
 		upgradeItemLists = new ArrayList<UpgradeItem>();
 		
-		GameLogic.getInstance().setOnGameStateChangeTo(GameState.UPGRADE, new GameStateEvent() {
-			@Override
-			public void onStateChange() {
-				addItems();
-				AudioMedia.LEVEL_UP.play();
-			}
+		GameLogic.getInstance().setOnGameStateChangeTo(GameState.UPGRADE, () -> {
+			addItems();
+			AudioMedia.LEVEL_UP.play();
 		});
 	}
 	
@@ -69,7 +64,7 @@ public class UpgradeWindow extends UIComponent {
 		window.update(deltaTime);
 		levelUp.update(deltaTime);
 
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < upgradeItemLists.size(); i++) {
 			upgradeItemLists.get(i).update(deltaTime);
 		}
 	}
@@ -104,23 +99,34 @@ public class UpgradeWindow extends UIComponent {
 				"Health Potion",
 				"Increases max health",
 				"item/potion_health.png",
-				() -> World.getInstance().getPlayer().setMaxHealth(World.getInstance().getPlayer().getMaxHealth() + 5.f)));
+				() -> {
+					World.getInstance().getPlayer().setMaxHealth(World.getInstance().getPlayer().getMaxHealth() + 5.f);
+					World.getInstance().getPlayer().heal(World.getInstance().getPlayer().getMaxHealth());
+				}
+			));
 		
 		itemLists.add(new ItemData(
 				"Swiftness Potion",
 				"Increases movement speed",
 				"item/potion_swiftness.png",
-				() -> World.getInstance().getPlayer().setMovementSpeed(World.getInstance().getPlayer().getMovementSpeed() + 0.25f)));
+				() -> {
+					World.getInstance().getPlayer().setMovementSpeed(World.getInstance().getPlayer().getMovementSpeed() + 0.25f);
+				}
+			));
 		
-		itemLists.add(new ItemData(
+		if (World.getInstance().getPlayer().getItem().getLevel() < 8)
+			itemLists.add(new ItemData(
 				World.getInstance().getPlayer().getItem().getName(),
 				"Upgrade to the next level",
 				World.getInstance().getPlayer().getItem().getSpritePath(),
-				() -> World.getInstance().getPlayer().getItem().increaseLevel()));
+				() -> {
+					World.getInstance().getPlayer().getItem().increaseLevel();
+				}
+			));
 		
 		upgradeItemLists.clear();
 		
-		for (int i = 0; i < 3; i++) {
+		for (int i = 0; i < itemLists.size(); i++) {
 			ItemData itemData = itemLists.get(i);
 			UpgradeItem itm = new UpgradeItem(itemData,
 					Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + (i - 1) * 80,
@@ -177,12 +183,9 @@ class UpgradeItem {
 		button.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
 		button.getBound().setBorderSize(2);
 		button.getBound().setBorderRadius(8);
-		button.setOnClick(new ButtonEventHandler() {				
-			@Override
-			public void onClick() {
-				item.action.action();
-				GameLogic.getInstance().nextLevel();
-			}
+		button.setOnClick(() -> {
+			item.action.action();
+			GameLogic.getInstance().nextLevel();
 		});
 		
 		label = new Label(item.name, x - w / 2 + 75, y - h / 6);

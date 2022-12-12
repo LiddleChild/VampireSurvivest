@@ -1,8 +1,8 @@
 package scene;
 
+import core.audio.AudioMedia;
 import core.sprite.Sprite;
 import core.ui.components.Button;
-import core.ui.components.ButtonEventHandler;
 import core.ui.components.Label;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
@@ -19,7 +19,7 @@ public class MainMenuScene extends BaseScene {
 	public MainMenuScene(String ID, Stage stage) {
 		super(ID, stage);
 		
-		title = new Label("VAMPIRE SURVIVORS",
+		title = new Label("VAMPIRE SURVIVEST",
 				Window.WINDOW_WIDTH / 2,
 				Window.WINDOW_HEIGHT / 2 - 100);
 		title.setFontSize(45);
@@ -32,11 +32,8 @@ public class MainMenuScene extends BaseScene {
 		startButton.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
 		startButton.getBound().setBorderSize(2);
 		startButton.getLabel().setColor(Color.WHITE);
-		startButton.setOnClick(new ButtonEventHandler() {
-			@Override
-			public void onClick() {
-				GameLogic.getInstance().nextScene();
-			}
+		startButton.setOnClick(() -> {
+			GameLogic.getInstance().nextScene();
 		});
 		
 		background = new Sprite("mainmenu_background.jpg");
@@ -44,7 +41,9 @@ public class MainMenuScene extends BaseScene {
 	
 	@Override
 	public void onLoadScene() {
-		
+		AudioMedia.BGM.play();
+		AudioMedia.BGM.setRepeat(true);
+		AudioMedia.BGM.setVolume(0.25f);
 	}
 
 	@Override

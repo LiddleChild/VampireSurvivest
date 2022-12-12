@@ -12,7 +12,7 @@ public class Button extends UIComponent {
 	private Color hoverColor;
 	private boolean isHover;
 
-	private ButtonEventHandler event;
+	private Runnable event;
 	
 	public Button(String text, int x, int y, int w, int h) {
 		label = new Label(text, x, y);
@@ -42,7 +42,7 @@ public class Button extends UIComponent {
 	public void update(float deltaTime) {
 		if (bound.getBound().contains(MouseHandler.getMousePosition().x, MouseHandler.getMousePosition().y)) {
 			if (event != null && MouseHandler.isMouseDown(MouseButton.PRIMARY)) {
-				event.onClick();
+				event.run();
 				AudioMedia.CONFIRM.play();
 			}
 			
@@ -67,8 +67,7 @@ public class Button extends UIComponent {
 	/*
 	 * GETTERS & SETTERS
 	 */
-
-	public void setOnClick(ButtonEventHandler event) {
+	public void setOnClick(Runnable event) {
 		this.event = event;
 	}
 

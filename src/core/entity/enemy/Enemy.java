@@ -9,6 +9,7 @@ import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import core.world.Tile;
 import core.world.World;
+import logic.GameLogic;
 import util.math.Vector2f;
 
 public class Enemy extends Entity implements HostileEntity {
@@ -26,7 +27,7 @@ public class Enemy extends Entity implements HostileEntity {
 						(bound.width  - Tile.SIZE) / 2,
 						(bound.height - Tile.SIZE) / 2));
 		
-		setMaxHealth(25.f);
+		setMaxHealth(25.f + (GameLogic.getInstance().getLevel() - 1) / 2 * 2 * 4.5f);
 		setMovementSpeed(2.5f);
 	}
 

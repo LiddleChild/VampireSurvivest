@@ -1,7 +1,9 @@
 package logic;
 
 import core.item.Item;
-import core.item.ItemCollection;
+import core.item.MagicWand;
+import core.item.RustySword;
+import core.item.ShortSword;
 
 public enum PlayerCharacter {
 	
@@ -10,9 +12,9 @@ public enum PlayerCharacter {
 	 * - Default item
 	 */
 	
-	BRAVES(		"entity/braves.png",		ItemCollection.SHORT_SWORD,  5.f),
-	KNIGHT(		"entity/knight.png",		ItemCollection.RUSTY_SWORD,	3.5f),
-	SPELLCASTER("entity/spellcaster.png",	ItemCollection.MAGIC_WAND,	 5.f);
+	BRAVES(		"entity/braves.png",		new ShortSword(), 5.f),
+	KNIGHT(		"entity/knight.png",		new RustySword(), 4.f),
+	SPELLCASTER("entity/spellcaster.png",	new MagicWand() , 5.f);
 	
 	private String spritePath;
 	private Item item;
