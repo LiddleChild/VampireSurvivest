@@ -1,7 +1,7 @@
 .metadata
 bin/
 tmp/
-res/ref/
+ref/
 *.tmp
 *.bak
 *.swp

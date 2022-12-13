@@ -70,7 +70,7 @@ public class Imp extends Entity implements HostileEntity {
 	@Override
 	public void update() {
 		explosionRange = baseEplosionRange + GameLogic.getInstance().getLevel() * 0.25f;
-		detonateTime = baseDetonateTime + GameLogic.getInstance().getLevel() - 0.1f;
+		detonateTime = baseDetonateTime - GameLogic.getInstance().getLevel() * 0.075f;
 		
 		if (!isDetonated) {			
 			Vector2f playerPos = World.getInstance().getPlayer().getPosition();

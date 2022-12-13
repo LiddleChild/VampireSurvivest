@@ -151,7 +151,7 @@ public class World {
 	}
 
 	public ArrayList<Entity> getEnemyLists() {
-		return enemyLists;
+		return new ArrayList<Entity>(enemyLists);
 	}
 
 	public ArrayList<Coin> getCoins() {
