@@ -4,20 +4,28 @@ import java.util.ArrayList;
 import java.util.Random;
 
 import core.audio.AudioMedia;
+import core.game.world.Tile;
+import core.game.world.World;
 import core.sprite.Sprite;
-import core.ui.components.Button;
-import core.ui.components.Image;
-import core.ui.components.Label;
-import core.ui.components.Position;
-import core.ui.components.SubWindow;
-import core.ui.components.UIComponent;
-import core.world.Tile;
-import core.world.World;
+import core.ui.component.Button;
+import core.ui.component.Image;
+import core.ui.component.Label;
+import core.ui.component.Position;
+import core.ui.component.SubWindow;
+import core.ui.component.UIComponent;
 import javafx.scene.paint.Color;
 import logic.GameLogic;
 import logic.GameState;
 import logic.Window;
 import util.ColorUtil;
+
+/*
+ * 
+ * UpgradeWindow
+ * - Shows on level up
+ * - Select upgrades and back to game
+ * 
+ */
 
 public class UpgradeWindow extends UIComponent {
 	private final int COIN_SIZE = 500, GRAVITY = Window.WINDOW_HEIGHT / 2;
@@ -43,8 +51,8 @@ public class UpgradeWindow extends UIComponent {
 		int w = Window.WINDOW_WIDTH / 3;
 		int h = Window.WINDOW_HEIGHT * 3 / 4;
 		window = new SubWindow(Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2, w, h);
-		window.setBackgroundColor(ColorUtil.parseRGB2Color(43, 41, 41));
-		window.setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		window.setBackgroundColor(ColorUtil.parseRGBToColor(43, 41, 41));
+		window.setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		window.setBorderSize(2);
 		
 		levelUp = new Label("Level Up!", Window.WINDOW_WIDTH / 2, 120);
@@ -179,8 +187,8 @@ class UpgradeItem {
 	
 	public UpgradeItem(ItemData item, int x, int y, int w, int h) {
 		button = new Button("", x, y, w, h);
-		button.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(59, 51, 50));
-		button.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		button.getBound().setBackgroundColor(ColorUtil.parseRGBToColor(59, 51, 50));
+		button.getBound().setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		button.getBound().setBorderSize(2);
 		button.getBound().setBorderRadius(8);
 		button.setOnClick(() -> {

@@ -8,6 +8,14 @@ import javafx.scene.image.PixelReader;
 import javafx.scene.paint.Color;
 import util.ColorUtil;
 
+/*
+ * 
+ * SpriteSheet
+ * - Loads SpriteSheet from resources
+ * - Maps color sheets to sprite sheets
+ * 
+ */
+
 public class SpriteSheet {
 	
 	public static SpriteSheet tileset = new SpriteSheet("world/tilesheets.png", "world/colorsheets.png", 64);
@@ -46,11 +54,14 @@ public class SpriteSheet {
 			for (int y = 0; y < tileHeight; y++) {
 				Color c = reader.getColor(x * size, y * size);
 				
-				colorMaps.put(ColorUtil.parseColor2Int(c), new Sprite(this, x, y));
+				colorMaps.put(ColorUtil.parseColorToInt(c), new Sprite(this, x, y));
 			}
 		}
 	}
 	
+	/*
+	 * GETTERS & SETTERS
+	 */
 	public Image getImage() {
 		return image;
 	}

@@ -1,13 +1,19 @@
 package util.math;
 
+/*
+ * 
+ * Vector2f
+ * - a 2D float vector
+ * 
+ */
+
 public class Vector2f implements Comparable<Vector2f> {
 	
 	public float x, y;
 	
 	/*
-	 * CONSTRUCTOR
+	 * OVERLOADING Constructor
 	 */
-	
 	public Vector2f() {
 		this(0.f, 0.f);
 	}
@@ -27,7 +33,7 @@ public class Vector2f implements Comparable<Vector2f> {
 	}
 	
 	/*
-	 * ADDITION
+	 * Addition
 	 */
 	public Vector2f addEqual(Vector2f other) {
 		x += other.x;
@@ -45,7 +51,7 @@ public class Vector2f implements Comparable<Vector2f> {
 	}
 	
 	/*
-	 * SUBSTRACTION 
+	 * Substraction 
 	 */
 	public Vector2f subtractEqual(Vector2f other) {
 		x -= other.x;
@@ -63,7 +69,7 @@ public class Vector2f implements Comparable<Vector2f> {
 	}
 	
 	/*
-	 * MULTIPLICATION
+	 * Multiplication
 	 */
 	public Vector2f multiplyEqual(float other) {
 		x *= other;
@@ -76,6 +82,9 @@ public class Vector2f implements Comparable<Vector2f> {
 		return new Vector2f(x * other, y * other);
 	}
 	
+	/*
+	 * Vector operations
+	 */
 	public float getSize() {
 		return (float) Math.sqrt(x * x + y * y);
 	}
@@ -88,6 +97,15 @@ public class Vector2f implements Comparable<Vector2f> {
 		return this;
 	}
 	
+	public void setZero() {
+		x = 0;
+		y = 0;
+	}
+	
+	public Vector2f round() {
+		return new Vector2f(Math.round(x), Math.round(y));
+	}
+	
 	@Override
 	public String toString() {
 		return String.format("[%.2f %.2f]", x, y);
@@ -98,15 +116,14 @@ public class Vector2f implements Comparable<Vector2f> {
 		return Float.compare(getSize(), other.getSize());
 	}
 	
-	public void setZero() {
-		x = 0;
-		y = 0;
-	}
-	
 	public boolean isZero() {
 		return (x == 0.f && y == 0.f);
 	}
 	
+	/*
+	 * Vector direction
+	 * - is 'other' Vector2f is in certain directions
+	 */
 	public boolean isInNorth(Vector2f other) {
 		float sy = Math.abs(other.y - y);
 		float sx = Math.abs(other.x - x);

@@ -1,15 +1,21 @@
 package core.behavior;
 
+/*
+ * 
+ * GameBehavior
+ * - A base class for all game objects which provides
+ *		update, render, delete method
+ * 
+ */
+
 public abstract class GameBehavior implements Comparable<GameBehavior> {
 	
-	private int layerPriority, yPriority;
-
 	protected float deltaTime;
+	private int layerPriority, yPriority;
 	
 	/*
-	 * CONSTRUCTOR
+	 * OVERLOADING Constructor
 	 */
-	
 	public GameBehavior() {
 		this(0);
 	}

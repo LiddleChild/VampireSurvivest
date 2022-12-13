@@ -4,14 +4,49 @@ import java.util.ArrayList;
 
 import core.Camera;
 
+/*
+ * 
+ * BehaviorManager
+ * - Manages all GameBehaviors
+ * - Update and render all GameBehaviors
+ * - ddQueues and removeQueues are used to prevent iterator invalidation
+ * 
+ */
+
 public class BehaviorManager {	
 	private static BehaviorManager instance;
 	
 	private ArrayList<GameBehavior> gameBehaviorLists, addQueues, removeQueues;
 	
-	/*
-	 * GAME BEHAVIOR
-	 */
+	public void initialize() {
+		gameBehaviorLists = new ArrayList<GameBehavior>();
+		addQueues = new ArrayList<GameBehavior>();
+		removeQueues = new ArrayList<GameBehavior>();
+	}
+	
+	public void reset() {
+		gameBehaviorLists.clear();
+		addQueues.clear();
+		removeQueues.clear();
+	}
+	
+	public void update(float deltaTime) {
+		// Sort behaviors by y-position then layer priority
+		gameBehaviorLists.sort(null);
+		
+		// Update GameBehaviors
+		for (GameBehavior e : gameBehaviorLists) {
+			e.updateDeltaTime(deltaTime);
+			e.update();
+		}
+		
+		// Update Camera
+		Camera.getInstance().update();
+		
+		// Add or remove queued element
+		modifyBehaviorLists();
+	}
+	
 	public void addBehavior(GameBehavior e) {
 		addQueues.add(e);
 	}
@@ -20,56 +55,24 @@ public class BehaviorManager {
 		removeQueues.add(e);
 	}
 	
-	public void initialize() {
-		gameBehaviorLists = new ArrayList<GameBehavior>();
-		addQueues = new ArrayList<GameBehavior>();
-		removeQueues = new ArrayList<GameBehavior>();
-		
-		modifyBehaviorLists();
-	}
-	
-	public void reset() {
-		gameBehaviorLists.clear();
-		addQueues.clear();
-		removeQueues.clear();
-
-		modifyBehaviorLists();
-	}
-	
-	public void update(float deltaTime) {
-		// Sort behaviors by y-position and layer priority
-		gameBehaviorLists.sort(null);
-		
-		// Call update
-		for (GameBehavior e : gameBehaviorLists) {
-			e.updateDeltaTime(deltaTime);
-			e.update();
-		}
-		
-		// Camera update
-		Camera.getInstance().update();
-		
-		modifyBehaviorLists();
-	}
-	
-	private void modifyBehaviorLists() {
+	public void modifyBehaviorLists() {
 		// Add later to prevent iterator invalidation
 		gameBehaviorLists.addAll(addQueues);
 		addQueues.clear();
 		
+		// Remove ...
 		gameBehaviorLists.removeAll(removeQueues);
 		removeQueues.clear();
 	}
 	
 	public void render(float deltaTime) {
-		// Call render
 		for (GameBehavior e : gameBehaviorLists) {
 			e.render();
 		}
 	}
 	
 	/*
-	 * Singleton pattern
+	 * SINGLETON
 	 */
 	public static BehaviorManager getInstance() {
 		if (instance == null) {

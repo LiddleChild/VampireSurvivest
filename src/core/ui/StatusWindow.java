@@ -1,13 +1,21 @@
 package core.ui;
 
-import core.ui.components.Label;
-import core.ui.components.Position;
-import core.ui.components.SubWindow;
-import core.ui.components.UIComponent;
-import core.world.World;
+import core.game.world.World;
+import core.ui.component.Label;
+import core.ui.component.Position;
+import core.ui.component.SubWindow;
+import core.ui.component.UIComponent;
 import javafx.scene.paint.Color;
 import logic.Window;
 import util.ColorUtil;
+
+/*
+ * 
+ * StatusWindow
+ * - Show player statuss
+ * - Show item statuss
+ * 
+ */
 
 public class StatusWindow extends UIComponent {
 
@@ -63,7 +71,7 @@ class StatItem {
 		item.setPosition(Position.LEFT);
 
 		item2 = new Label("", x + 175, y);
-		item2.setColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		item2.setColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		item2.setFontSize(12);
 		item2.setPosition(Position.RIGHT);
 	}

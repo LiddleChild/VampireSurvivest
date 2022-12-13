@@ -4,6 +4,14 @@ import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.util.Duration;
 
+/*
+ * 
+ * AudioMedia:
+ * - Load audio sources
+ * - A collection of all AudioMedia
+ * 
+ */
+
 public class AudioMedia {
 
 	public static final AudioMedia SELECT = new AudioMedia("audio/select.wav");

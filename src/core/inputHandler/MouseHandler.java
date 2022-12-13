@@ -8,6 +8,13 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import util.math.Vector2f;
 
+/*
+ * 
+ * MouseHandler
+ * - Handle mosue inputs
+ * 
+ */
+
 public class MouseHandler implements EventHandler<MouseEvent> {
 	
 	private static Set<String> mousedowns;

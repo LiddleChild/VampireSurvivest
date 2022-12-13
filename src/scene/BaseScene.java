@@ -4,6 +4,13 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.stage.Stage;
 import logic.GameLogic;
 
+/*
+ * 
+ * BaseScene
+ * - A parent of all scenes
+ * 
+ */
+
 public abstract class BaseScene {
 	
 	protected Stage stage;

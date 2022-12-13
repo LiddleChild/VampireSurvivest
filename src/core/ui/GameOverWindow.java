@@ -1,14 +1,22 @@
 package core.ui;
 
 import core.audio.AudioMedia;
-import core.ui.components.Button;
-import core.ui.components.Label;
-import core.ui.components.UIComponent;
+import core.ui.component.Button;
+import core.ui.component.Label;
+import core.ui.component.UIComponent;
 import javafx.scene.paint.Color;
 import logic.GameLogic;
 import logic.GameState;
 import logic.Window;
 import util.ColorUtil;
+
+/*
+ * 
+ * GameOverWindow
+ * - Render game over overlay
+ * - A button back to main menu
+ * 
+ */
 
 public class GameOverWindow extends UIComponent {
 	
@@ -22,14 +30,14 @@ public class GameOverWindow extends UIComponent {
 		text = new Label("GAME OVER",
 				Window.WINDOW_WIDTH / 2,
 				Window.WINDOW_HEIGHT / 2 - 100);
-		text.setColor(ColorUtil.parseRGB2Color(243, 186, 10));
+		text.setColor(ColorUtil.parseRGBToColor(243, 186, 10));
 		text.setFontSize(50);
 		text.setTextShadow(true);
 		text.setShadowColor(Color.BLACK);
 
 		quit = new Button("QUIT", Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + 100, 180, 50);
-		quit.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
-		quit.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		quit.getBound().setBackgroundColor(ColorUtil.parseRGBToColor(34, 34, 34));
+		quit.getBound().setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		quit.getBound().setBorderSize(2);
 		quit.getLabel().setColor(Color.WHITE);
 		quit.setOnClick(() -> {

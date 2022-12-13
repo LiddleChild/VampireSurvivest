@@ -1,8 +1,8 @@
 package core;
 
-import core.entity.Entity;
-import core.world.Tile;
-import core.world.World;
+import core.game.entity.Entity;
+import core.game.world.Tile;
+import core.game.world.World;
 import logic.Window;
 import util.math.Vector2f;
 
@@ -37,11 +37,32 @@ public class Camera {
 			position.addEqual(diff);
 		}
 	}
+
+	public Vector2f translateToCameraPosition(float x, float y) {
+		return new Vector2f(x, y).add(Camera.getInstance().getPosition()).round();
+	}
+	
+	public boolean isInCameraView(float x, float y, float w, float h) {
+		Vector2f t = translateToCameraPosition(x, y);
+		
+		return (t.x > -w && t.x < Window.WINDOW_WIDTH &&
+				t.y > -h && t.y < Window.WINDOW_HEIGHT);
+	}
+
+	/*
+	 * SINGLETON
+	 */
+	public static Camera getInstance() {
+		if (instance == null) {
+			instance = new Camera();
+		}
+		
+		return instance;
+	}
 	
 	/*
 	 * GETTER & SETTER
 	 */
-	
 	public void setPosition(Vector2f vec) {
 		this.position = vec;
 	}
@@ -68,20 +89,6 @@ public class Camera {
 		return getPosition().y;
 	}
 	
-	/*
-	 * SINGLETON
-	 */
-	public static Camera getInstance() {
-		if (instance == null) {
-			instance = new Camera();
-		}
-		
-		return instance;
-	}
-	
-	/*
-	 * GETTERS & SETTERS
-	 */
 	public void setEntity(Entity entity) {
 		this.entity = entity;
 	}

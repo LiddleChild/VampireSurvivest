@@ -8,6 +8,14 @@ import core.sprite.Sprite;
 import core.sprite.animation.AnimationState.State;
 import util.math.Vector2f;
 
+/*
+ * 
+ * AnimatedSprite
+ * - Plays animation sprite
+ * - Uses state for animation management
+ * 
+ */
+
 public class AnimatedSprite {
 	
 	private int frameWidth, frameHeight;
@@ -24,7 +32,7 @@ public class AnimatedSprite {
 	private State state;
 	private Map<State, AnimationState> intervals;
 	
-	private AnimatedSpriteEvent event;
+	private Runnable event;
 	
 	public AnimatedSprite(String path, int frameRow, int frameCol, int frameWidth, int frameHeight) {
 		this(path, frameRow, frameCol, frameWidth, frameHeight, frameRow * frameCol);
@@ -64,7 +72,7 @@ public class AnimatedSprite {
 		if (time >= frameTime) {
 			time -= frameTime;
 			if (frame >= intervals.get(state).getEndFrame() - 1) {
-				if (event != null) event.onEnd();
+				if (event != null) event.run();
 
 				state = intervals.get(state).getNextStage();
 				frame = intervals.get(state).getStartFrame();
@@ -121,7 +129,7 @@ public class AnimatedSprite {
 		return sprite.getHeight();
 	}
 	
-	public void setEventHandler(AnimatedSpriteEvent event) {
+	public void setEventHandler(Runnable event) {
 		this.event = event;
 	}
 	

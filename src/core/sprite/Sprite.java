@@ -4,6 +4,14 @@ import javafx.scene.image.Image;
 import javafx.scene.image.PixelReader;
 import javafx.scene.image.WritableImage;
 
+/*
+ * 
+ * Sprite
+ * - Create sprite from resources
+ * - Create sprite from SpreadSheet
+ * 
+ */
+
 public class Sprite implements Comparable<Sprite> {
 	
 	private int x, y, size;
@@ -28,6 +36,9 @@ public class Sprite implements Comparable<Sprite> {
 		image = new WritableImage(reader, x, y, size, size);
 	}
 	
+	/*
+	 * GETTERS & SETTERS
+	 */
 	public Image getImage() { 
 		return image;
 	}

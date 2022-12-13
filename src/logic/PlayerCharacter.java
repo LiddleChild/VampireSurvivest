@@ -1,16 +1,18 @@
 package logic;
 
-import core.item.Item;
-import core.item.MagicWand;
-import core.item.RustySword;
-import core.item.ShortSword;
+import core.game.item.Item;
+import core.game.item.MagicWand;
+import core.game.item.RustySword;
+import core.game.item.ShortSword;
+
+/*
+ * 
+ * PlayerCharacter
+ * - holds character sprite, default weapon, default movement speed
+ * 
+ */
 
 public enum PlayerCharacter {
-	
-	/*
-	 * - Sprite
-	 * - Default item
-	 */
 	
 	BRAVES(		"entity/braves.png",		new ShortSword(), 5.f),
 	KNIGHT(		"entity/knight.png",		new RustySword(), 4.f),

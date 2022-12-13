@@ -8,11 +8,17 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import logic.GameLogic;
-import logic.Window;
-import util.math.Mathf;
 import util.math.Vector2f;
 
+/*
+ * 
+ * Renderer
+ * - 
+ * 
+ */
+
 public class Renderer {
+	
 	private static GraphicsContext gc;
 	
 	private static Paint paint;
@@ -27,18 +33,6 @@ public class Renderer {
 		 Renderer.alpha = 1.f;
 		 Renderer.rotation = 0.f;
 		 Renderer.font = GameLogic.getInstance().getDefaultFont();
-	}
-	
-	public static Vector2f translateCamera(float x, float y) {
-		return Mathf.round(new Vector2f(x, y)
-				.add(Camera.getInstance().getPosition()));
-	}
-	
-	public static boolean checkInsideWindow(float x, float y, float w, float h) {
-		Vector2f t = translateCamera(x, y);
-		
-		return (t.x > -w && t.x < Window.WINDOW_WIDTH &&
-				t.y > -h && t.y < Window.WINDOW_HEIGHT);
 	}
 	
 	/*
@@ -86,17 +80,17 @@ public class Renderer {
 	}
 	
 	public static void fillRect(float x, float y, float w, float h) {
-		Vector2f t = translateCamera(x, y);
+		Vector2f t = Camera.getInstance().translateToCameraPosition(x, y);
 		
-		if (checkInsideWindow(x, y, w, h)) {
+		if (Camera.getInstance().isInCameraView(x, y, w, h)) {
 			gc.fillRect(t.x, t.y, w, h);
 		}
 	}
 	
 	public static void fillRectWithBound(float x, float y, float w, float h) {
-		Vector2f t = translateCamera(x, y);
+		Vector2f t = Camera.getInstance().translateToCameraPosition(x, y);
 		
-		if (checkInsideWindow(x, y, w, h)) {
+		if (Camera.getInstance().isInCameraView(x, y, w, h)) {
 			gc.fillRect(t.x, t.y, w, h);
 			
 			gc.setFill(Color.WHITE);
@@ -112,10 +106,10 @@ public class Renderer {
 	}
 	
 	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float dx, float dy, float dw, float dh) {
-		Vector2f t = translateCamera(x, y);
+		Vector2f t = Camera.getInstance().translateToCameraPosition(x, y);
 		float ox = offset.x, oy = offset.y;
 		
-		if (checkInsideWindow(x, y, w, h)) {
+		if (Camera.getInstance().isInCameraView(x, y, w, h)) {
 			if (alpha < 1.f) gc.setGlobalAlpha(alpha);
 			
 			if (rotation != 0.f) {
@@ -142,7 +136,7 @@ public class Renderer {
 	 * DrawString
 	 */
 	public static void drawString(String text, float x, float y) {
-		Vector2f t = translateCamera(x, y);
+		Vector2f t = Camera.getInstance().translateToCameraPosition(x, y);
 		
 		gc.setFont(font);
 		gc.fillText(text, t.x, t.y);

@@ -4,6 +4,13 @@ import java.awt.Rectangle;
 
 import util.math.Vector2f;
 
+/*
+ * 
+ * Hitbox
+ * - A rectangle hitbox
+ * 
+ */
+
 public class Hitbox {
 	
 	private int ox, oy, ow, oh;

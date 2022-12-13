@@ -7,6 +7,13 @@ import javafx.event.EventHandler;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 
+/*
+ * 
+ * KeyboardHandler
+ * - Handle keyboard inputs
+ * 
+ */
+
 public class KeyboardHandler implements EventHandler<KeyEvent> {
 	
 	private static Set<KeyCode> keydowns, lastKeydowns;

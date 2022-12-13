@@ -1,7 +1,15 @@
 package util.math;
 
+/*
+ * 
+ * Mathf
+ * - fast inverse square root
+ * 
+ */
+
 public class Mathf {
 	
+	// Copied from Internet
 	public static float invSqrt(float x) {
 	    float xhalf = 0.5f * x;
 	    int i = Float.floatToIntBits(x);
@@ -9,12 +17,6 @@ public class Mathf {
 	    x = Float.intBitsToFloat(i);
 	    x *= (1.5f - xhalf * x * x);
 	    return x;
-	}
-	
-	public static Vector2f round(Vector2f vec) {
-		return new Vector2f(
-				Math.round(vec.x),
-				Math.round(vec.y));
 	}
 	
 }

@@ -1,5 +1,12 @@
 package util;
 
+/*
+ * 
+ * Time
+ * - get nanosecond time in float
+ * 
+ */
+
 public class Time {
 	
 	public static float getNanoSecond() {

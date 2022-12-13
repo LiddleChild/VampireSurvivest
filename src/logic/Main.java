@@ -2,6 +2,14 @@ package logic;
 import javafx.application.Application;
 import javafx.stage.Stage;
 
+/*
+ * *** Includes 'javafx.web' to VM Arguments for using MediaPlayer ***
+ *  
+ * Main:
+ * - starts application
+ * 
+ */
+
 public class Main extends Application {
 
 	@Override

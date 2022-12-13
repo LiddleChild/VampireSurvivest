@@ -1,13 +1,22 @@
 package core.ui;
 
-import core.ui.components.Button;
-import core.ui.components.Label;
-import core.ui.components.UIComponent;
+import core.ui.component.Button;
+import core.ui.component.Label;
+import core.ui.component.UIComponent;
 import javafx.scene.paint.Color;
 import logic.GameLogic;
 import logic.GameState;
 import logic.Window;
 import util.ColorUtil;
+
+/*
+ * 
+ * PauseWindow
+ * - A pause window overlay
+ * - Back to game button
+ * - Quit to main menu button
+ * 
+ */
 
 public class PauseWindow extends UIComponent {
 	
@@ -27,8 +36,8 @@ public class PauseWindow extends UIComponent {
 		text.setShadowColor(Color.BLACK);
 
 		back = new Button("BACK", Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + 100, 180, 50);
-		back.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
-		back.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		back.getBound().setBackgroundColor(ColorUtil.parseRGBToColor(34, 34, 34));
+		back.getBound().setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		back.getBound().setBorderSize(2);
 		back.getLabel().setColor(Color.WHITE);
 		back.setOnClick(() -> {
@@ -36,8 +45,8 @@ public class PauseWindow extends UIComponent {
 		});
 
 		quit = new Button("QUIT", Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2 + 160, 180, 50);
-		quit.getBound().setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
-		quit.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		quit.getBound().setBackgroundColor(ColorUtil.parseRGBToColor(34, 34, 34));
+		quit.getBound().setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		quit.getBound().setBorderSize(2);
 		quit.getLabel().setColor(Color.WHITE);
 		quit.setOnClick(() -> {

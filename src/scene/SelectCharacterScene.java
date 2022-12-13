@@ -3,17 +3,27 @@ package scene;
 import java.util.ArrayList;
 
 import core.sprite.Sprite;
-import core.ui.components.Button;
-import core.ui.components.Image;
-import core.ui.components.Label;
-import core.ui.components.Position;
-import core.ui.components.SubWindow;
+import core.ui.component.Button;
+import core.ui.component.Image;
+import core.ui.component.Label;
+import core.ui.component.Position;
+import core.ui.component.SubWindow;
 import javafx.scene.paint.Color;
 import javafx.stage.Stage;
 import logic.GameLogic;
 import logic.PlayerCharacter;
 import logic.Window;
 import util.ColorUtil;
+
+/*
+ * 
+ * SelectCharacterScene
+ * - provides a page for selecting character
+ * 
+ * CharacterButton
+ * - create a button for each character
+ * 
+ */
 
 public class SelectCharacterScene extends BaseScene {
 
@@ -30,8 +40,8 @@ public class SelectCharacterScene extends BaseScene {
 		int w = Window.WINDOW_WIDTH / 3;
 		int h = Window.WINDOW_HEIGHT * 3 / 4;
 		window = new SubWindow(Window.WINDOW_WIDTH / 2, Window.WINDOW_HEIGHT / 2, w, h);
-		window.setBackgroundColor(ColorUtil.parseRGB2Color(34, 34, 34));
-		window.setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		window.setBackgroundColor(ColorUtil.parseRGBToColor(34, 34, 34));
+		window.setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		window.setBorderSize(2);
 
 		title = new Label("Character Selection", Window.WINDOW_WIDTH / 2, 130);
@@ -82,7 +92,7 @@ class CharacterButton {
 	public CharacterButton(String name, String path, PlayerCharacter character, int x, int y, int w, int h) {
 		button = new Button("", x, y, w, h);
 		button.getBound().setBackgroundColor(Color.GREY);
-		button.getBound().setBorderColor(ColorUtil.parseRGB2Color(255, 204, 104));
+		button.getBound().setBorderColor(ColorUtil.parseRGBToColor(255, 204, 104));
 		button.getBound().setBorderSize(2);
 		button.getBound().setBorderRadius(8);
 		button.setOnClick(() -> {

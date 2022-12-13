@@ -1,5 +1,13 @@
 package core.sprite.animation;
 
+/*
+ * 
+ * AnimationState
+ * - Holds current state, next state
+ * - Holds start and stop frame index
+ * 
+ */
+
 public class AnimationState {
 	public static enum State { IDLE, PLAY }
 	

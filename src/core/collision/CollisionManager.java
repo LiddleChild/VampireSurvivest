@@ -3,8 +3,15 @@ package core.collision;
 import java.awt.Rectangle;
 import java.util.ArrayList;
 
-import core.entity.Entity;
-import core.world.World;
+import core.game.entity.Entity;
+import core.game.world.World;
+
+/*
+ * 
+ * CollisionManager
+ * - Manages all Entity collisions
+ * 
+ */
 
 public class CollisionManager {
 	private static CollisionManager instance;
@@ -35,22 +42,22 @@ public class CollisionManager {
 	
 	public ArrayList<Entity> isColliding(Rectangle rect) {
 		state = State.RUNNING;
+		
 		ArrayList<Entity> collidedEntity = new ArrayList<Entity>();
 		
 		for (Entity other : entityLists) {
 			if (rect.intersects(other.getBound())) {
-				
 				collidedEntity.add(other);
 			}
 		}
 		
-
 		// Prevent iterator invalidation
 		entityLists.addAll(addQueues);
 		addQueues.clear();
 		
 		entityLists.removeAll(removeQueues);
 		removeQueues.clear();
+		
 		state = State.IDLE;
 		
 		return collidedEntity;
