@@ -30,9 +30,12 @@ public abstract class Item {
 		this.attackTime = 1.f;
 	}
 	
+	public void reset() {
+		this.level = 1;
+	}
+	
 	public abstract void update(float deltaTime);
 	public abstract void render();
-	public abstract void reset();
 	public abstract void attack();
 	
 	public abstract void setPosition(Vector2f position);

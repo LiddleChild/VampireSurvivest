@@ -96,6 +96,7 @@ public class MagicWand extends Item {
 
 	@Override
 	public void reset() {
+		super.reset();
 		forceWaveLists.clear();
 	}
 	

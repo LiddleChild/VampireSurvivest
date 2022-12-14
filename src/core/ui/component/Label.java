@@ -33,7 +33,7 @@ public class Label extends UIComponent {
 		setText(text);
 		setTextShadow(false);
 		setPosition(Position.CENTER);
-		setFont(GameLogic.getInstance().getDefaultFont());		
+		setFont(GameLogic.getInstance().getDefaultFont());
 		setColor(Color.BLACK);
 		setShadowColor(Color.WHITE);
 		setShadowOffset(3);

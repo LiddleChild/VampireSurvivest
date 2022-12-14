@@ -45,7 +45,7 @@ public class CollisionManager {
 		
 		ArrayList<Entity> collidedEntity = new ArrayList<Entity>();
 		
-		for (Entity other : entityLists) {
+		for (Entity other : new ArrayList<Entity>(entityLists)) {
 			if (rect.intersects(other.getBound())) {
 				collidedEntity.add(other);
 			}
