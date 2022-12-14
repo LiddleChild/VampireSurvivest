@@ -52,8 +52,10 @@ public class Undead extends Entity implements HostileEntity {
 		if (direction.x < 0) sprite.setReverse(true);
 		else if (direction.x > 0) sprite.setReverse(false);
 
-		sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
-		sprite.update(deltaTime);
+		if (sprite != null) {
+			sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+			sprite.update(deltaTime);
+		}
 	}
 
 	@Override

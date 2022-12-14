@@ -105,7 +105,7 @@ public class Imp extends Entity implements HostileEntity {
 			if (direction.x < 0) sprite.setReverse(true);
 			else if (direction.x > 0) sprite.setReverse(false);
 			
-			if (sprite != null) {				
+			if (sprite != null) {		
 				sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
 				sprite.update(deltaTime);
 			}
