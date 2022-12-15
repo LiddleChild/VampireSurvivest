@@ -69,7 +69,7 @@ public class Player extends Entity {
 		if (direction.x < 0) sprite.setReverse(true);
 		else if (direction.x > 0) sprite.setReverse(false);
 		
-		sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+		sprite.setCurrentState((direction.isZero()) ? State.IDLE : State.PLAY);
 		sprite.update(deltaTime);
 		
 		item.update(deltaTime);

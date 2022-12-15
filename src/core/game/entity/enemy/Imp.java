@@ -27,7 +27,7 @@ public class Imp extends Entity implements HostileEntity {
 	private AnimatedSprite sprite, explosionSprite;
 	
 	private float baseDetonateTime, detonateTime, time;
-	private float baseEplosionRange, explosionRange;
+	private float baseExplosionRange, explosionRange;
 	private boolean isDetonated;
 	
 	private float blinkTime, blinkStartFrequency;
@@ -45,9 +45,9 @@ public class Imp extends Entity implements HostileEntity {
 						(bound.height - Tile.SIZE) / 2));
 		
 		explosionSprite = new AnimatedSprite("fx/explosion.png", 8, 10, 100, 100);
-		explosionSprite.setFrameTime(0.015f);
-		explosionSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
-		explosionSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 81);
+		explosionSprite.setTimePerFrame(0.015f);
+		explosionSprite.setStateData(State.IDLE, State.IDLE, -1, -1);
+		explosionSprite.setStateData(State.PLAY, State.IDLE, 0, 81);
 		explosionSprite.setEventHandler(() -> {
 			World.getInstance().removeEnemy(this);
 			super.delete();
@@ -64,12 +64,12 @@ public class Imp extends Entity implements HostileEntity {
 		showBlink = true;
 		blinkStartFrequency = 0.1f;
 		
-		baseEplosionRange = 3.f;
+		baseExplosionRange = 3.f;
 	}
 
 	@Override
 	public void update() {
-		explosionRange = baseEplosionRange + GameLogic.getInstance().getLevel() * 0.25f;
+		explosionRange = baseExplosionRange + GameLogic.getInstance().getLevel() * 0.25f;
 		detonateTime = baseDetonateTime - GameLogic.getInstance().getLevel() * 0.075f;
 		
 		if (!isDetonated) {			
@@ -89,7 +89,7 @@ public class Imp extends Entity implements HostileEntity {
 					isDetonated = true;
 					
 					AudioMedia.EXPLOSION.play();
-					explosionSprite.setState(State.PLAY);
+					explosionSprite.setCurrentState(State.PLAY);
 					World.getInstance().getPlayer().takeDamge(12.f);
 					
 					CollisionManager.getInstance().remove(this);
@@ -106,7 +106,7 @@ public class Imp extends Entity implements HostileEntity {
 			else if (direction.x > 0) sprite.setReverse(false);
 			
 			if (sprite != null) {		
-				sprite.setState((direction.isZero()) ? State.IDLE : State.PLAY);
+				sprite.setCurrentState((direction.isZero()) ? State.IDLE : State.PLAY);
 				sprite.update(deltaTime);
 			}
 		} else {

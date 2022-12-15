@@ -21,7 +21,7 @@ public class AnimatedSprite {
 	private int frameWidth, frameHeight;
 	private int frame, frameCol;
 	
-	private float frameTime, time;
+	private float timePerFrame, time;
 	
 	private Sprite sprite;
 	
@@ -29,8 +29,8 @@ public class AnimatedSprite {
 	
 	private Vector2f offset;
 	
-	private State state;
-	private Map<State, AnimationState> intervals;
+	private State currentState;
+	private Map<State, AnimationState> animationState;
 	
 	private Runnable event;
 	
@@ -47,35 +47,31 @@ public class AnimatedSprite {
 				
 		frame = 1;
 		time = 0;
-		frameTime = 0.1f;
+		timePerFrame = 0.1f;
 		
 		offset = new Vector2f(0.f, 0.f);
 		
-		state = State.IDLE;
+		setCurrentState(State.IDLE);
 		
-		intervals = new HashMap<State, AnimationState>();
-		setStateIntervals(State.IDLE, State.IDLE, 0, 1);
-		setStateIntervals(State.PLAY, State.IDLE, 1, frameCount);
+		animationState = new HashMap<State, AnimationState>();
+		setStateData(State.IDLE, State.IDLE, 0, 1);
+		setStateData(State.PLAY, State.IDLE, 1, frameCount);
 	}
 	
-	public void setStateIntervals(State state, State nextState, int start, int end) {
-		intervals.put(state, new AnimationState(state, nextState, start, end));
-	}
-	
-	public void setState(State state) {	
-		this.state = state;
+	public void setStateData(State state, State nextState, int start, int end) {
+		animationState.put(state, new AnimationState(state, nextState, start, end));
 	}
 	
 	public void update(float deltaTime) {
 		time += deltaTime;
 
-		if (time >= frameTime) {
-			time -= frameTime;
-			if (frame >= intervals.get(state).getEndFrame() - 1) {
+		if (time >= timePerFrame) {
+			time -= timePerFrame;
+			if (frame >= animationState.get(currentState).getEndFrame() - 1) {
 				if (event != null) event.run();
 
-				state = intervals.get(state).getNextStage();
-				frame = intervals.get(state).getStartFrame();
+				currentState = animationState.get(currentState).getNextStage();
+				frame = animationState.get(currentState).getStartFrame();
 			} else {
 				frame++;
 			}
@@ -117,8 +113,8 @@ public class AnimatedSprite {
 		return offset;
 	}
 
-	public void setFrameTime(float frameTime) {
-		this.frameTime = frameTime;
+	public void setTimePerFrame(float timePerFrame) {
+		this.timePerFrame = timePerFrame;
 	}
 	
 	public int getWidth() {
@@ -131,6 +127,10 @@ public class AnimatedSprite {
 	
 	public void setEventHandler(Runnable event) {
 		this.event = event;
+	}
+	
+	public void setCurrentState(State state) {	
+		this.currentState = state;
 	}
 	
 }

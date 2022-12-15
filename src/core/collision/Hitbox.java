@@ -6,32 +6,32 @@ import util.math.Vector2f;
 
 /*
  * 
- * Hitbox
- * - A rectangle hitbox
+ * HitboriginalX
+ * - A rectangle hitboriginalX
  * 
  */
 
 public class Hitbox {
 	
-	private int ox, oy, ow, oh;
+	private int originalX, originalY, originalWidth, originalHeight;
 	private Rectangle bound;
 	
 	public Hitbox(int x, int y, int w, int h) {
-		this.ox = x;
-		this.oy = y;
-		this.ow = w;
-		this.oh = h;
-		bound = new Rectangle(ox, oy, ow, oh);
+		this.originalX = x;
+		this.originalY = y;
+		this.originalWidth = w;
+		this.originalHeight = h;
+		bound = new Rectangle(originalX, originalY, originalWidth, originalHeight);
 	}
 	
 	public void setPosition(Vector2f vec) {
-		bound.x = ox + (int) vec.x - (bound.width - ow) / 2;
-		bound.y = oy + (int) vec.y - (bound.height - oh) / 2;
+		bound.x = originalX + (int) vec.x - (bound.width - originalWidth) / 2;
+		bound.y = originalY + (int) vec.y - (bound.height - originalHeight) / 2;
 	}
 	
 	public void setSize(int s) {
-		bound.width = ow + s;
-		bound.height = oh + s;
+		bound.width = originalWidth + s;
+		bound.height = originalHeight + s;
 	}
 
 	public Rectangle getBound() {

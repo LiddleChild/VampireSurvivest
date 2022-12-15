@@ -116,9 +116,6 @@ public class World {
 				(int) (y / Tile.SIZE));
 	}
 	
-	public Vector2f pos2Coord(Vector2f pos) {
-		return posToCoord(pos.x, pos.y);
-	}
 	public Vector2f coordToPos(int x, int y) {
 		return new Vector2f(x * Tile.SIZE, y * Tile.SIZE);
 	}

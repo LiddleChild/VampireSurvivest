@@ -105,7 +105,7 @@ public class Renderer {
 		drawSprite(sprite, x, y, w, h, 0, 0, sprite.getWidth(), sprite.getHeight());
 	}
 	
-	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float dx, float dy, float dw, float dh) {
+	public static void drawSprite(Sprite sprite, float x, float y, float w, float h, float spriteX, float spriteY, float spriteWidth, float spriteHeight) {
 		Vector2f t = Camera.getInstance().translateToCameraPosition(x, y);
 		float ox = offset.x, oy = offset.y;
 		
@@ -117,11 +117,11 @@ public class Renderer {
 				gc.translate(t.x + ox + w / 2, t.y + oy + h / 2);
 				gc.rotate(rotation);
 				
-				gc.drawImage(sprite.getImage(), dx, dy, dw, dh, ox - (w / 2 + ox), oy - (h / 2 + oy), w, h);
+				gc.drawImage(sprite.getImage(), spriteX, spriteY, spriteWidth, spriteHeight, ox - (w / 2 + ox), oy - (h / 2 + oy), w, h);
 				
 				gc.restore();
 			} else {
-				gc.drawImage(sprite.getImage(), dx, dy, dw, dh, t.x + ox, t.y + oy, w, h);
+				gc.drawImage(sprite.getImage(), spriteX, spriteY, spriteWidth, spriteHeight, t.x + ox, t.y + oy, w, h);
 			}
 			
 			if (alpha < 1.f) gc.setGlobalAlpha(1.f);

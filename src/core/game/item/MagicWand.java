@@ -31,22 +31,23 @@ public class MagicWand extends Item {
 	private Vector2f position;
 	private ArrayList<GreenForceWave> forceWaveLists;
 	
-	private float baseAttackRange, attackRange;
+	private final float BASE_ATTACK_RANGE;;
+	private float attackRange;
 	
 	public MagicWand() {
 		super("Magic Wand", "item/magic_wand.png", 10.f, 1.25f);
-		sprite = new Sprite(spritePath);
+		sprite = new Sprite(SPRITE_PATH);
 	
-		baseAttackRange = 5.f;
+		BASE_ATTACK_RANGE = 5.f;
 		forceWaveLists = new ArrayList<GreenForceWave>();
 		
 		position = new Vector2f();
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
-		hitFxSprite.setFrameTime(0.03f);
-		hitFxSprite.setState(State.IDLE);
-		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
-		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
+		hitFxSprite.setTimePerFrame(0.03f);
+		hitFxSprite.setCurrentState(State.IDLE);
+		hitFxSprite.setStateData(State.IDLE, State.IDLE, -1, -1);
+		hitFxSprite.setStateData(State.PLAY, State.IDLE, 0, 5);
 	}
 	
 	@Override
@@ -102,9 +103,9 @@ public class MagicWand extends Item {
 	
 	@Override
 	public void attack() {
-		attackRange = baseAttackRange + 0.5f * (level - 1);
-		attackDamage = baseAttackDamage + 2.5f * (level - 1);
-		attackCooldownTime = baseAttackCooldownTime - 0.1f * (level - 1);
+		attackRange = BASE_ATTACK_RANGE + 0.5f * (level - 1);
+		attackDamage = BASE_ATTACK_DAMAGE + 2.5f * (level - 1);
+		attackCooldownTime = BASE_ATTACK_COOLDOWN_TIME - 0.1f * (level - 1);
 		int waveSize = Tile.SIZE + (level - 1) * 4;
 		
 		ArrayList<Entity> temp = new ArrayList<Entity>();

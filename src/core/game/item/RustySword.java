@@ -32,7 +32,7 @@ public class RustySword extends Item {
 	
 	public RustySword() {
 		super("Rusty Sword", "item/rusty_sword.png", 25.f, 1.5f);
-		sprite = new Sprite(spritePath);
+		sprite = new Sprite(SPRITE_PATH);
 		
 		hitboxes = new Hitbox[] {
 				new Hitbox( Tile.SIZE, -Tile.SIZE, Tile.SIZE * 2, Tile.SIZE * 2),
@@ -43,10 +43,10 @@ public class RustySword extends Item {
 		direction = 0;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
-		hitFxSprite.setFrameTime(0.025f);
-		hitFxSprite.setState(State.IDLE);
-		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
-		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
+		hitFxSprite.setTimePerFrame(0.025f);
+		hitFxSprite.setCurrentState(State.IDLE);
+		hitFxSprite.setStateData(State.IDLE, State.IDLE, -1, -1);
+		hitFxSprite.setStateData(State.PLAY, State.IDLE, 0, 5);
 	}
 	
 	@Override
@@ -75,8 +75,8 @@ public class RustySword extends Item {
 	
 	@Override
 	public void attack() {
-		attackDamage = baseAttackDamage + 3f * (level - 1);
-		attackCooldownTime = baseAttackCooldownTime - 0.1f * (level - 1);
+		attackDamage = BASE_ATTACK_DAMAGE + 3f * (level - 1);
+		attackCooldownTime = BASE_ATTACK_COOLDOWN_TIME - 0.1f * (level - 1);
 		for (int i = 0; i < hitboxes.length; i++) {
 			hitboxes[i].setSize(4 * (level - 1));
 		}
@@ -89,7 +89,7 @@ public class RustySword extends Item {
 				if (e instanceof HostileEntity) e.takeDamge(attackDamage);
 			});
 			
-			hitFxSprite.setState(State.PLAY);
+			hitFxSprite.setCurrentState(State.PLAY);
 			AudioMedia.SWING2.play();
 		}
 	}

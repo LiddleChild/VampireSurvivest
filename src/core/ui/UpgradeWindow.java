@@ -28,7 +28,8 @@ import util.ColorUtil;
  */
 
 public class UpgradeWindow extends UIComponent {
-	private final int COIN_SIZE = 500, GRAVITY = Window.WINDOW_HEIGHT / 2;
+	private final int COIN_SIZE = 500;
+	private final int GRAVITY = Window.WINDOW_HEIGHT / 2;
 	private final float COIN_FRAME_TIME = 0.15f;
 	
 	private Color backgroundColor;
@@ -162,13 +163,10 @@ class Coin {
 /*
  * Item DATACLASS
  */
-interface ItemAction {
-	void action();
-}
 class ItemData {
 	public String name, description, path;
-	public ItemAction action;
-	public ItemData(String name, String description, String path, ItemAction action) {
+	public Runnable action;
+	public ItemData(String name, String description, String path, Runnable action) {
 		this.name = name;
 		this.description = description;
 		this.path = path;
@@ -192,7 +190,7 @@ class UpgradeItem {
 		button.getBound().setBorderSize(2);
 		button.getBound().setBorderRadius(8);
 		button.setOnClick(() -> {
-			item.action.action();
+			item.action.run();
 			GameLogic.getInstance().nextLevel();
 		});
 		

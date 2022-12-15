@@ -33,7 +33,7 @@ public class GreenForceWave {
 		bound = new Rectangle((int) position.x, (int) position.y, size, size);
 		
 		sprite = new AnimatedSprite("fx/wind_projectile_green.png", 2, 3, 32, 32);
-		sprite.setStateIntervals(State.IDLE, State.IDLE, 0, 5);
+		sprite.setStateData(State.IDLE, State.IDLE, 0, 5);
 	}
 	
 	public void update(float deltaTime) {

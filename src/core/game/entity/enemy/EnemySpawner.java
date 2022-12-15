@@ -20,16 +20,13 @@ public class EnemySpawner implements Runnable {
 	
 	private Random random;
 	
-	private final float nextSpawnTime;
+	private static final float NEXT_SPAWN_TIME = 5.f;
 	private float time;
 	
 	private boolean running;
 	
 	public EnemySpawner() {
 		random = new Random();
-		
-		nextSpawnTime = 5.f;
-		time = nextSpawnTime;
 	}
 
 	@Override
@@ -44,7 +41,7 @@ public class EnemySpawner implements Runnable {
 			float currentTime = Time.getNanoSecond();
 			float deltaTime = currentTime - lastTime;
 			
-			if (time >= nextSpawnTime) {
+			if (time >= NEXT_SPAWN_TIME) {
 				time = 0.f;
 				
 				spawnEnemy();

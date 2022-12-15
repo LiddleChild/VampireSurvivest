@@ -32,7 +32,7 @@ public class ShortSword extends Item {
 	
 	public ShortSword() {
 		super("Short Sword", "item/short_sword.png", 25.f, 1.f);
-		sprite = new Sprite(spritePath);
+		sprite = new Sprite(SPRITE_PATH);
 		
 		hitboxes = new Hitbox[] {
 				new Hitbox( Tile.SIZE, 0, Tile.SIZE, Tile.SIZE),
@@ -43,10 +43,10 @@ public class ShortSword extends Item {
 		direction = 0;
 
 		hitFxSprite = new AnimatedSprite("fx/hit_animation.png", 1, 5, 128, 228);
-		hitFxSprite.setFrameTime(0.025f);
-		hitFxSprite.setState(State.IDLE);
-		hitFxSprite.setStateIntervals(State.IDLE, State.IDLE, -1, -1);
-		hitFxSprite.setStateIntervals(State.PLAY, State.IDLE, 0, 5);
+		hitFxSprite.setTimePerFrame(0.025f);
+		hitFxSprite.setCurrentState(State.IDLE);
+		hitFxSprite.setStateData(State.IDLE, State.IDLE, -1, -1);
+		hitFxSprite.setStateData(State.PLAY, State.IDLE, 0, 5);
 	}
 	
 	@Override
@@ -75,8 +75,8 @@ public class ShortSword extends Item {
 	
 	@Override
 	public void attack() {
-		attackDamage = baseAttackDamage + 2.5f * (level - 1);
-		attackCooldownTime = baseAttackCooldownTime - 0.05f * (level - 1);
+		attackDamage = BASE_ATTACK_DAMAGE + 2.5f * (level - 1);
+		attackCooldownTime = BASE_ATTACK_COOLDOWN_TIME - 0.05f * (level - 1);
 		for (int i = 0; i < hitboxes.length; i++) {
 			hitboxes[i].setSize(6 * (level - 1));
 		}
@@ -89,7 +89,7 @@ public class ShortSword extends Item {
 				if (e instanceof HostileEntity) e.takeDamge(attackDamage);
 			});
 			
-			hitFxSprite.setState(State.PLAY);
+			hitFxSprite.setCurrentState(State.PLAY);
 			AudioMedia.SWING1.play();
 		}
 	}

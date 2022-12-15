@@ -14,8 +14,8 @@ public class Camera {
 	private Entity entity;
 	private Vector2f position;
 	
-	private float interpThreshold = 0.05f;
-	private float interpAmount = 0.045f;
+	private float interpolationThreshold = 0.05f;
+	private float interpolationAmount = 0.045f;
 	
 	public void initialize() {
 		halfScreenOffset = new Vector2f(
@@ -30,9 +30,9 @@ public class Camera {
 		if (entity != null) {
 			Vector2f diff = entity.getPosition()
 					.subtract(position)
-					.multiply(interpAmount);
+					.multiply(interpolationAmount);
 			
-			if (diff.getSize() < interpThreshold) return;
+			if (diff.getSize() < interpolationThreshold) return;
 			
 			position.addEqual(diff);
 		}

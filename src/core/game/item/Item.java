@@ -12,20 +12,20 @@ import util.math.Vector2f;
 
 public abstract class Item {
 
-	protected final String name, spritePath;
-	protected final float baseAttackDamage, baseAttackCooldownTime;
+	protected final String NAME, SPRITE_PATH;
+	protected final float BASE_ATTACK_DAMAGE, BASE_ATTACK_COOLDOWN_TIME;
 	
 	protected float attackDamage, attackCooldownTime, attackTime;
 	protected Vector2f position, direction;
 	protected int level;
 	
-	public Item(String name, String spritePath, float baseAttackDamage, float baseAttackCooldownTime) {
-		this.name = name;
-		this.spritePath = spritePath;
-		this.baseAttackDamage = baseAttackDamage;
-		this.attackDamage = baseAttackDamage;
-		this.baseAttackCooldownTime = baseAttackCooldownTime;
-		this.attackCooldownTime = baseAttackCooldownTime;
+	public Item(String NAME, String SPRITE_PATH, float BASE_ATTACK_DAMAGE, float BASE_ATTACK_COOLDOWN_TIME) {
+		this.NAME = NAME;
+		this.SPRITE_PATH = SPRITE_PATH;
+		this.BASE_ATTACK_DAMAGE = BASE_ATTACK_DAMAGE;
+		this.attackDamage = BASE_ATTACK_DAMAGE;
+		this.BASE_ATTACK_COOLDOWN_TIME = BASE_ATTACK_COOLDOWN_TIME;
+		this.attackCooldownTime = BASE_ATTACK_COOLDOWN_TIME;
 		this.level = 1;
 		this.attackTime = 1.f;
 	}
@@ -61,11 +61,11 @@ public abstract class Item {
 	}
 	
 	public String getSpritePath() {
-		return spritePath;
+		return SPRITE_PATH;
 	}
 	
 	public String getName() {
-		return String.format("%s", name, level);
+		return String.format("%s", NAME, level);
 	}
 	
 }

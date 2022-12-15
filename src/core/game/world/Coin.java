@@ -31,8 +31,8 @@ public class Coin extends GameBehavior {
 		this.position = position;
 
 		sprite = new AnimatedSprite("coin.png", 1, 4, 64, 64);
-		sprite.setFrameTime(0.125f);
-		sprite.setStateIntervals(State.IDLE, State.IDLE, 0, 3);
+		sprite.setTimePerFrame(0.125f);
+		sprite.setStateData(State.IDLE, State.IDLE, 0, 3);
 		
 		bound = new Rectangle((int) position.x, (int) position.y, 16, 16);
 		time = 0.f;
