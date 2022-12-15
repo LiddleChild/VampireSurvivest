@@ -7,7 +7,7 @@ import core.game.entity.Entity;
 import core.game.entity.Player;
 import core.game.entity.enemy.EnemySpawner;
 import core.sprite.SpriteSheet;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

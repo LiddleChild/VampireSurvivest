@@ -14,7 +14,7 @@ import core.game.world.World;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

@@ -1,4 +1,4 @@
-package util.math;
+package util;
 
 /*
  * 
@@ -90,7 +90,15 @@ public class Vector2f implements Comparable<Vector2f> {
 	}
 	
 	public Vector2f normalize() {
-		float amount = Mathf.invSqrt(x * x + y * y);
+		float amount = x * x + y * y;
+		
+		// Copied from Internet
+		float xhalf = 0.5f * amount;
+	    int i = Float.floatToIntBits(amount);
+	    i = 0x5f3759df - (i >> 1);
+	    amount = Float.intBitsToFloat(i);
+	    amount *= (1.5f - xhalf * amount * amount);
+		
 		x *= amount;
 		y *= amount;
 		

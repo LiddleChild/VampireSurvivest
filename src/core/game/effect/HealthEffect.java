@@ -4,7 +4,7 @@ import core.Renderer;
 import core.behavior.BehaviorManager;
 import core.behavior.GameBehavior;
 import javafx.scene.paint.Color;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

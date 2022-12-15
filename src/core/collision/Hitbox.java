@@ -2,7 +2,7 @@ package core.collision;
 
 import java.awt.Rectangle;
 
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

@@ -11,7 +11,7 @@ import javafx.scene.input.KeyCode;
 import logic.GameLogic;
 import logic.GameState;
 import logic.PlayerCharacter;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

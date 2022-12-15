@@ -8,7 +8,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.Paint;
 import javafx.scene.text.Font;
 import logic.GameLogic;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

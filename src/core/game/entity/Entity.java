@@ -13,7 +13,7 @@ import core.game.world.Tile;
 import core.game.world.World;
 import javafx.scene.paint.Color;
 import util.Time;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

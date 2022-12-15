@@ -6,7 +6,7 @@ import java.util.Map;
 import core.Renderer;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimationState.State;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

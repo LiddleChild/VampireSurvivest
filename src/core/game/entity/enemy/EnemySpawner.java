@@ -7,7 +7,7 @@ import core.game.world.World;
 import logic.GameLogic;
 import logic.GameState;
 import util.Time;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

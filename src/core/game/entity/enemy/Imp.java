@@ -11,7 +11,7 @@ import core.game.world.World;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
 import logic.GameLogic;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

@@ -12,7 +12,7 @@ import core.game.world.Tile;
 import core.sprite.Sprite;
 import core.sprite.animation.AnimatedSprite;
 import core.sprite.animation.AnimationState.State;
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 

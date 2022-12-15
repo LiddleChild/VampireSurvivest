@@ -1,6 +1,6 @@
 package core.game.item;
 
-import util.math.Vector2f;
+import util.Vector2f;
 
 /*
  * 
