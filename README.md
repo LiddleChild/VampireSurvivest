@@ -5,7 +5,7 @@
 - 2 hostile entities: Undead, Imp.
 
 ### Main Menu
-![main_menu](docs/main_menu.png)
+![main_menu](docs/main_menu.png | width=)
 
 ### Character Selection
 ![character_selection](docs/character_selection.png)
@@ -15,6 +15,9 @@
 
 ### Game Over
 ![game_over](docs/game_over.png)
+
+## Running the game
+`java -jar --module-path "<PATH_TO_JAVAFX_LIB>" --add-modules javafx.controls,javafx.fxml,javafx.web '.\Vampire Survivest.jar'`
 
 ## Reference
 - DungeonTieset II by **0x72** [https://0x72.itch.io/dungeontileset-ii](https://0x72.itch.io/dungeontileset-ii)
