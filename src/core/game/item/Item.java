@@ -56,6 +56,11 @@ public abstract class Item {
 		return level;
 	}
 	
+	// Temporary hack
+	public void setMaxLevel() {
+		this.level = 8;
+	}
+	
 	public void increaseLevel() {
 		level++;
 	}

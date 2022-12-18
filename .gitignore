@@ -6,7 +6,6 @@ ref/
 *.bak
 *.swp
 *~.nib
-*.pdf
 local.properties
 .settings/
 .loadpath
