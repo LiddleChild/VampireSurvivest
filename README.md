@@ -5,7 +5,7 @@
 - 2 hostile entities: Undead, Imp.
 
 ### Main Menu
-![main_menu](docs/main_menu.png | width=)
+![main_menu](docs/main_menu.png)
 
 ### Character Selection
 ![character_selection](docs/character_selection.png)
